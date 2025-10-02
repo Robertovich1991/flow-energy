@@ -1,0 +1,41 @@
+{
+  "appTagline": "настройся на нужную волну",
+  "tabs": {
+    "home": "Главная",
+    "cards": "Карты",
+    "streams": "Потоки",
+    "profile": "Профиль"
+  },
+  "cta": {
+    "viewCard": "Посмотреть карту",
+    "startStream": "Запустить поток",
+    "buy": "Купить",
+    "preview": "Предпросмотр",
+    "getAccess": "Получить доступ",
+    "confirm": "Подтвердить"
+  },
+  "sections": {
+    "popular": "Популярные сегодня",
+    "categories": "Разделы",
+    "subcategories": "Подразделы"
+  },
+  "fields": {
+    "name": "Имя"
+  },
+  "messages": {
+    "cardWillBeReady": "Карта будет готова в течение часа — вернитесь позже."
+  },
+  "plans": {
+    "hour": "1 час",
+    "day": "1 день",
+    "week": "1 неделя",
+    "month": "1 месяц",
+    "year": "1 год"
+  },
+  "langs": {
+    "ru": "Русский",
+    "en": "English",
+    "es": "Español",
+    "de": "Deutsch"
+  }
+}

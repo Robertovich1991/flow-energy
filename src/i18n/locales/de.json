@@ -1,0 +1,41 @@
+{
+  "appTagline": "stimme dich auf die richtige Welle ein",
+  "tabs": {
+    "home": "Start",
+    "cards": "Karten",
+    "streams": "Ströme",
+    "profile": "Profil"
+  },
+  "cta": {
+    "viewCard": "Karte ansehen",
+    "startStream": "Stream starten",
+    "buy": "Kaufen",
+    "preview": "Vorschau",
+    "getAccess": "Zugang erhalten",
+    "confirm": "Bestätigen"
+  },
+  "sections": {
+    "popular": "Heute im Trend",
+    "categories": "Kategorien",
+    "subcategories": "Unterkategorien"
+  },
+  "fields": {
+    "name": "Name"
+  },
+  "messages": {
+    "cardWillBeReady": "Deine Karte ist innerhalb einer Stunde bereit — bitte später zurückkehren."
+  },
+  "plans": {
+    "hour": "1 Stunde",
+    "day": "1 Tag",
+    "week": "1 Woche",
+    "month": "1 Monat",
+    "year": "1 Jahr"
+  },
+  "langs": {
+    "ru": "Русский",
+    "en": "English",
+    "es": "Español",
+    "de": "Deutsch"
+  }
+}

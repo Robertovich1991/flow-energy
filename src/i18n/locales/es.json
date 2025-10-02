@@ -1,0 +1,41 @@
+{
+  "appTagline": "sintoniza la energía adecuada",
+  "tabs": {
+    "home": "Inicio",
+    "cards": "Cartas",
+    "streams": "Flujos",
+    "profile": "Perfil"
+  },
+  "cta": {
+    "viewCard": "Ver carta",
+    "startStream": "Iniciar flujo",
+    "buy": "Comprar",
+    "preview": "Vista previa",
+    "getAccess": "Obtener acceso",
+    "confirm": "Confirmar"
+  },
+  "sections": {
+    "popular": "Tendencias de hoy",
+    "categories": "Categorías",
+    "subcategories": "Subcategorías"
+  },
+  "fields": {
+    "name": "Nombre"
+  },
+  "messages": {
+    "cardWillBeReady": "Tu carta estará lista en una hora — vuelve más tarde."
+  },
+  "plans": {
+    "hour": "1 hora",
+    "day": "1 día",
+    "week": "1 semana",
+    "month": "1 mes",
+    "year": "1 año"
+  },
+  "langs": {
+    "ru": "Русский",
+    "en": "English",
+    "es": "Español",
+    "de": "Deutsch"
+  }
+}

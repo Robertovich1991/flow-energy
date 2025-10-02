@@ -1,0 +1,63 @@
+{
+  "appTagline": "tune into the right vibe",
+  "tabs": {
+    "home": "Home",
+    "cards": "Cards",
+    "streams": "Streams",
+    "profile": "Profile"
+  },
+  "cta": {
+    "viewCard": "View card",
+    "startStream": "Start stream",
+    "buy": "Buy",
+    "preview": "Preview",
+    "getAccess": "Get access",
+    "confirm": "Confirm",
+    "login": "Login",
+    "signUp": "Sign up"
+  },
+  "sections": {
+    "popular": "Trending today",
+    "categories": "Categories",
+    "subcategories": "Subcategories"
+  },
+  "fields": {
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password"
+  },
+  "messages": {
+    "cardWillBeReady": "Your card will be ready within an hour — please return later."
+  },
+  "plans": {
+    "hour": "1 hour",
+    "day": "1 day",
+    "week": "1 week",
+    "month": "1 month",
+    "year": "1 year"
+  },
+  "langs": {
+    "ru": "Русский",
+    "en": "English",
+    "es": "Español",
+    "de": "Deutsch"
+  },
+  "auth": {
+    "welcome": "Welcome back",
+    "loginSubtitle": "Sign in to continue your journey",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "signUpLink": "Sign up",
+    "createAccount": "Create Account",
+    "signUpSubtitle": "Join us and start your journey",
+    "hasAccount": "Already have an account?",
+    "loginLink": "Login"
+  },
+  "coins": {
+    "title": "Buy Coins",
+    "subtitle": "Choose your coin package",
+    "buy": "Buy",
+    "balance": "Balance"
+  }
+}
