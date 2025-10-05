@@ -59,5 +59,12 @@
     "subtitle": "Choose your coin package",
     "buy": "Buy",
     "balance": "Balance"
+  },
+  "Errors": {
+    "Required": "This field is required",
+    "Invalid_Email": "Please enter a valid email address",
+    "Password_Mismatch": "Passwords do not match",
+    "Name_Too_Short": "Name must be at least 2 characters long",
+    "Password_Too_Short": "Password must be at least 8 characters long"
   }
 }

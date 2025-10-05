@@ -12,7 +12,9 @@
     "buy": "Купить",
     "preview": "Предпросмотр",
     "getAccess": "Получить доступ",
-    "confirm": "Подтвердить"
+    "confirm": "Подтвердить",
+    "login": "Войти",
+    "signUp": "Регистрация"
   },
   "sections": {
     "popular": "Популярные сегодня",
@@ -20,7 +22,10 @@
     "subcategories": "Подразделы"
   },
   "fields": {
-    "name": "Имя"
+    "name": "Имя",
+    "email": "Email",
+    "password": "Пароль",
+    "confirmPassword": "Подтвердите пароль"
   },
   "messages": {
     "cardWillBeReady": "Карта будет готова в течение часа — вернитесь позже."
@@ -37,5 +42,23 @@
     "en": "English",
     "es": "Español",
     "de": "Deutsch"
+  },
+  "auth": {
+    "welcome": "Добро пожаловать",
+    "loginSubtitle": "Войдите, чтобы продолжить",
+    "forgotPassword": "Забыли пароль?",
+    "noAccount": "Нет аккаунта?",
+    "signUpLink": "Регистрация",
+    "createAccount": "Создать аккаунт",
+    "signUpSubtitle": "Присоединяйтесь к нам",
+    "hasAccount": "Уже есть аккаунт?",
+    "loginLink": "Войти"
+  },
+  "Errors": {
+    "Required": "Это поле обязательно",
+    "Invalid_Email": "Пожалуйста, введите корректный email адрес",
+    "Password_Mismatch": "Пароли не совпадают",
+    "Name_Too_Short": "Имя должно содержать минимум 2 символа",
+    "Password_Too_Short": "Пароль должен содержать минимум 8 символов"
   }
 }

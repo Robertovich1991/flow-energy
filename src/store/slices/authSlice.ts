@@ -1,15 +1,27 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createSlice, Dispatch, PayloadAction, } from '@reduxjs/toolkit'
 import mainApi, { setScanMeApiAuthorization } from '../../services/instance/MainInstance';
-import { IChangePassord, IRegister, IResendCodeConfirm } from '../../interfaces/types';
-import i18n from "../../local/i18next/i18n"
 import { IError, setError } from './administrativSlice';
-import { clearUserInfo } from './streamSlice';
 
 export interface ILogin {
   email: string,
   password: string,
-  returnSecureToken: boolean
+}
+
+export interface IChangePassord {
+  oldPassword: string,
+  newPassword: string
+}
+
+export interface IRegister {
+  name: string
+  email: string,
+  password: string,
+  password_confirmation: string
+}
+
+export interface IResendCodeConfirm {
+  email: string
 }
 
 export interface IAuthState {
@@ -28,23 +40,34 @@ export const authSlice = createSlice({
     },
   },
 })
-export const login = (data: ILogin, cb: (email: string) => void) => async (dispatch: Dispatch) => {
+export const login = (data: ILogin, cb: (email: string) => void, errorCb?: (error: string) => void) => async (dispatch: Dispatch) => {
   try {
-    const response = await mainApi.post(`user/authenticate`, data);
-    if (response.data) {
+    const response = await mainApi.post(`auth/login`, data);
+
+    if (response.data && response.data.success === true) {
+console.log(response.data,'response.data',response.data.data.token,'ppppppppppppppppppppppppppppppppppppppppppppppppppp');
+
       setScanMeApiAuthorization(response.data.token)
-      AsyncStorage.setItem('accessToken', JSON.stringify(response.data.token));
-      AsyncStorage.setItem('userEmail', JSON.stringify(response.data.email));
+      AsyncStorage.setItem('accessToken', JSON.stringify(response.data.data.token));
+      AsyncStorage.setItem('userEmail', JSON.stringify(response.data.data.user));
       dispatch(setIsLogined(true));
-      cb && cb(response?.data?.email)
+      cb && cb(response?.data?.user)
     }
   } catch (err: any) {
-    const data: any = {
-      title: i18n.t(`Errors.Error_message_title`),
-      text: err?.response?.data?.message,
-      buttonTitle: 'OK'
+    console.log(err, '999999999999999999999');
+
+    // Handle 401 specifically
+    if (err?.response?.status === 401) {
+      errorCb && errorCb('You are not authorized');
+    } else {
+      // For other errors, use global error handling
+      const data: IError = {
+        title: 'Error',
+        text: err?.response?.data?.message || 'Login failed',
+        buttonTitle: 'OK'
+      }
+      dispatch(setError(data))
     }
-    dispatch(setError(data))
   }
 };
 
@@ -55,8 +78,8 @@ export const passwordReset = (data: any, cb: () => void) => async (dispatch: Dis
       cb()
     }
   } catch (err: any) {
-    const data: any = {
-      title: i18n.t(`Errors.Error_message_title`),
+    const data: IError = {
+      title: 'Error',
       text: "No account find with this email",
       buttonTitle: 'OK'
     }
@@ -70,8 +93,8 @@ export const changePassword = (data: IChangePassord, cb: () => void) => async (d
       cb()
     }
   } catch (err: any) {
-    const data: any = {
-      title: i18n.t(`Errors.Error_message_title`),
+    const data: IError = {
+      title: 'Error',
       text: "Error while changing password",
       buttonTitle: 'OK'
     }
@@ -79,19 +102,22 @@ export const changePassword = (data: IChangePassord, cb: () => void) => async (d
   }
 };
 
-export const register = (data: IRegister, cb?: () => void) => async (dispatch: Dispatch) => {
+export const register = (data: IRegister, cb?: () => void) => async () => {
   try {
-    const response = await mainApi.post(`user/register`, data);
-    if (response.status === 200) {
+    console.log(data,'------------------------');
+    
+    const response = await mainApi.post(`auth/register`, data);
+    if (response.status === 201) {
       cb && cb()
     }
+   // if (response.status === 200) {
+      console.log(response,'response...............................................');
+      
+  //    cb && cb()
+  //  }
   } catch (err: any) {
-    const data: IError = {
-      title: i18n.t(`Errors.Error_message_title`),
-      text: err?.response?.data?.message,
-      buttonTitle: 'OK'
-    }
-    dispatch(setError(data))
+  console.log(err,'oooooooooooooooooooooooooooooooooooooooo');
+  
   }
 };
 export const codeConfirmation = (verificationCode: string, cb?: () => void) => async (dispatch: Dispatch) => {
@@ -105,8 +131,8 @@ export const codeConfirmation = (verificationCode: string, cb?: () => void) => a
   } catch (err: any) {
 
     const data: IError = {
-      title: i18n.t(`Errors.Error_message_title`),
-      text: err?.response?.data?.message,
+      title: 'Error',
+      text: err?.response?.data?.message || 'Verification failed',
       buttonTitle: 'OK'
     }
     dispatch(setError(data))
@@ -120,8 +146,8 @@ export const resendConfirmationCode = (data: IResendCodeConfirm, cb?: () => void
     }
   } catch (err: any) {
     const data: IError = {
-      title: i18n.t(`Errors.Error_message_title`),
-      text: err?.response?.data?.message,
+      title: 'Error',
+      text: err?.response?.data?.message || 'Failed to resend code',
       buttonTitle: 'OK'
     }
     dispatch(setError(data))
@@ -132,7 +158,7 @@ export const signOut = () => async (dispatch: Dispatch) => {
     await AsyncStorage.removeItem('accessToken');
     await AsyncStorage.removeItem('userEmail');
     dispatch(setIsLogined(false));
-    dispatch(clearUserInfo());
+    //   dispatch(clearUserInfo());
   } catch (err) {
     console.error('Failed to clear AsyncStorage during sign-out', err);
   }

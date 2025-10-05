@@ -18,3 +18,15 @@ export type Stream = { id: number; categoryId: number; code: string; title: stri
 export type PassPlanKey = 'hour'|'day'|'week'|'month'|'year';
 
 export type AccessGrant = { streamId: number; endsAt?: number; };
+
+export interface ILoginData {
+  email: string;
+  password: string;
+}
+
+export interface ISignUpData {
+  name: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+}

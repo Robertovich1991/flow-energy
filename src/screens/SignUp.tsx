@@ -5,46 +5,40 @@ import { theme } from '../theme';
 import { PrimaryButton } from '../components/Buttons';
 import { useNavigation } from '@react-navigation/native';
 import Icon from '../components/Icon';
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { ISignUpData } from '../store/types';
+import { register } from '../store/slices/authSlice';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../store/config/configStore';
 
 export default function SignUp() {
   const { t } = useTranslation();
   const nav = useNavigation<any>();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm<ISignUpData>();
+const dispatch = useDispatch<AppDispatch>()
 
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const handleSignUp = () => {
-    if (!name || !email || !password || !confirmPassword) {
-      Alert.alert('Error', 'Please fill in all fields');
-      return;
+  const onSubmit: SubmitHandler<ISignUpData> = async (data) => {
+    try {
+      dispatch(
+        register(data, () => {
+          Alert.alert('Success', 'User registered successfully! Please login to your account', [
+            {
+              text: 'OK',
+              onPress: () => nav.navigate('Login')
+            }
+          ]);
+        })
+      );
+    } catch (error) {
+      console.error('SignUp error:', error);
     }
-
-    if (!validateEmail(email)) {
-      Alert.alert('Error', 'Please enter a valid email address');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match');
-      return;
-    }
-
-    if (password.length < 6) {
-      Alert.alert('Error', 'Password must be at least 6 characters long');
-      return;
-    }
-
-    // TODO: Implement actual sign up logic
-    Alert.alert('Success', 'Account created successfully!');
-    nav.navigate('Tabs');
   };
 
   const handleLogin = () => {
@@ -63,81 +57,149 @@ export default function SignUp() {
         <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
             <Icon name="user" size={18} color={theme.colors.subtext} />
-            <TextInput
-              style={styles.input}
-              placeholder={t('fields.name')}
-              placeholderTextColor={theme.colors.subtext}
-              value={name}
-              onChangeText={setName}
-              autoCapitalize="words"
-              autoCorrect={false}
+            <Controller
+              control={control}
+              name="name"
+              rules={{
+                required: t("Errors.Required"),
+                minLength: {
+                  value: 2,
+                  message: t("Errors.Name_Too_Short"),
+                },
+              }}
+              render={({ field: { onChange, value } }) => (
+                <TextInput
+                  style={styles.input}
+                  placeholder={t('fields.name')}
+                  placeholderTextColor={theme.colors.subtext}
+                  value={value}
+                  onChangeText={onChange}
+                  autoCapitalize="words"
+                  autoCorrect={false}
+                />
+              )}
             />
           </View>
+          {errors.name && (
+            <Text style={styles.fieldErrorText}>{errors.name.message}</Text>
+          )}
         </View>
 
         <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
             <Icon name="mail" size={18} color={theme.colors.subtext} />
-            <TextInput
-              style={styles.input}
-              placeholder={t('fields.email')}
-              placeholderTextColor={theme.colors.subtext}
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
+            <Controller
+              control={control}
+              name="email"
+              rules={{
+                required: t("Errors.Required"),
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: t("Errors.Invalid_Email"),
+                },
+              }}
+              render={({ field: { onChange, value } }) => (
+                <TextInput
+                  style={styles.input}
+                  placeholder={t('fields.email')}
+                  placeholderTextColor={theme.colors.subtext}
+                  value={value}
+                  onChangeText={onChange}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
+              )}
             />
           </View>
+          {errors.email && (
+            <Text style={styles.fieldErrorText}>{errors.email.message}</Text>
+          )}
         </View>
 
         <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
             <Icon name="lock" size={18} color={theme.colors.subtext} />
-            <TextInput
-              style={styles.input}
-              placeholder={t('fields.password')}
-              placeholderTextColor={theme.colors.subtext}
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry={!showPassword}
-              autoCapitalize="none"
-              autoCorrect={false}
+            <Controller
+              control={control}
+              name="password"
+              rules={{
+                required: t("Errors.Required"),
+                minLength: {
+                  value: 8,
+                  message: t("Errors.Password_Too_Short"),
+                },
+              }}
+              render={({ field: { onChange, value } }) => (
+                <>
+                  <TextInput
+                    style={styles.input}
+                    placeholder={t('fields.password')}
+                    placeholderTextColor={theme.colors.subtext}
+                    value={value}
+                    onChangeText={onChange}
+                    secureTextEntry={!showPassword}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                  />
+                  <TouchableOpacity
+                    onPress={() => setShowPassword(!showPassword)}
+                    style={styles.eyeButton}
+                  >
+                    <Icon name={showPassword ? "eye-off" : "eye"} size={18} color={theme.colors.subtext} />
+                  </TouchableOpacity>
+                </>
+              )}
             />
-            <TouchableOpacity
-              onPress={() => setShowPassword(!showPassword)}
-              style={styles.eyeButton}
-            >
-              <Icon name={showPassword ? "eye-off" : "eye"} size={18} color={theme.colors.subtext} />
-            </TouchableOpacity>
           </View>
+          {errors.password && (
+            <Text style={styles.fieldErrorText}>{errors.password.message}</Text>
+          )}
         </View>
 
         <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
             <Icon name="lock" size={18} color={theme.colors.subtext} />
-            <TextInput
-              style={styles.input}
-              placeholder={t('fields.confirmPassword')}
-              placeholderTextColor={theme.colors.subtext}
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              secureTextEntry={!showConfirmPassword}
-              autoCapitalize="none"
-              autoCorrect={false}
+            <Controller
+              control={control}
+              name="password_confirmation"
+              rules={{
+                required: t("Errors.Required"),
+                validate: (value) => {
+                  const password = watch('password');
+                  return value === password || t("Errors.Password_Mismatch");
+                },
+              }}
+              render={({ field: { onChange, value } }) => (
+                <>
+                  <TextInput
+                    style={styles.input}
+                    placeholder={t('fields.confirmPassword')}
+                    placeholderTextColor={theme.colors.subtext}
+                    value={value}
+                    onChangeText={onChange}
+                    secureTextEntry={!showConfirmPassword}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                  />
+                  <TouchableOpacity
+                    onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                    style={styles.eyeButton}
+                  >
+                    <Icon name={showConfirmPassword ? "eye-off" : "eye"} size={18} color={theme.colors.subtext} />
+                  </TouchableOpacity>
+                </>
+              )}
             />
-            <TouchableOpacity
-              onPress={() => setShowConfirmPassword(!showConfirmPassword)}
-              style={styles.eyeButton}
-            >
-              <Icon name={showConfirmPassword ? "eye-off" : "eye"} size={18} color={theme.colors.subtext} />
-            </TouchableOpacity>
           </View>
+          {errors.confirmPassword && (
+            <Text style={styles.fieldErrorText}>{errors.confirmPassword.message}</Text>
+          )}
         </View>
 
         <PrimaryButton 
           label={t('cta.signUp')} 
-          onPress={handleSignUp}
+          onPress={handleSubmit(onSubmit)}
           style={styles.signUpButton}
         />
 
@@ -183,6 +245,13 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginBottom: 16,
+  },
+  fieldErrorText: {
+    color: '#FF4444',
+    fontSize: 12,
+    fontWeight: '500',
+    marginTop: 4,
+    marginLeft: 4,
   },
   inputWrapper: {
     flexDirection: 'row',

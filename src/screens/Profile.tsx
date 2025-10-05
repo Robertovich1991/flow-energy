@@ -1,19 +1,54 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { useApp } from '../store/app';
 import { useNavigation } from '@react-navigation/native';
 import { PrimaryButton, GhostButton } from '../components/Buttons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Profile() {
   const { t, i18n } = useTranslation();
   const nav = useNavigation<any>();
   const lang = useApp(s=>s.lang);
   const setLang = useApp(s=>s.setLang);
+  const [userEmail, setUserEmail] = useState<string>('');
+  const [userName, setUserName] = useState<string>('');
 
   const set = (l: any) => { setLang(l); i18n.changeLanguage(l); };
+
+  useEffect(() => {
+    const logAsyncStorage = async () => {
+      try {
+        const accessToken = await AsyncStorage.getItem('accessToken');
+        const storedUserEmail = await AsyncStorage.getItem('userEmail');
+        
+        console.log('=== AsyncStorage Data ===');
+        console.log('accessToken:', accessToken);
+        console.log('userEmail:', storedUserEmail);
+        console.log('========================');
+        
+        // Set user information for display
+        if (storedUserEmail) {
+          const parsedData = JSON.parse(storedUserEmail);
+          
+          // Handle both string and object formats
+          if (typeof parsedData === 'string') {
+            setUserEmail(parsedData);
+            setUserName(parsedData.split('@')[0]);
+          } else if (typeof parsedData === 'object' && parsedData.email) {
+            setUserEmail(parsedData.email);
+            setUserName(parsedData.name || parsedData.email.split('@')[0]);
+          }
+        }
+      } catch (error) {
+        console.error('Error reading AsyncStorage:', error);
+      }
+    };
+
+    logAsyncStorage();
+  }, []);
 
   const handleLogout = () => {
     console.log('Logout button pressed'); // Debug log
@@ -63,6 +98,15 @@ export default function Profile() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{t('tabs.profile')}</Text>
+      
+      {userEmail && (
+        <View style={styles.userInfoCard}>
+          <Text style={styles.userInfoLabel}>User Information:</Text>
+          <Text style={styles.userInfoText}>Name: {userName}</Text>
+          <Text style={styles.userInfoText}>Email: {userEmail}</Text>
+        </View>
+      )}
+      
       <View style={styles.card}><Text style={styles.row}>Язык:</Text>
         <View style={{flexDirection:'row', flexWrap:'wrap'}}>
           {(['ru','en','es','de'] as const).map(l => (
@@ -94,6 +138,25 @@ export default function Profile() {
 const styles = StyleSheet.create({
   container: { flex:1, backgroundColor: theme.colors.bg, padding:16 },
   title: { color:'#fff', fontSize: 32, fontWeight:'900' },
+  userInfoCard: { 
+    borderColor: theme.colors.border, 
+    borderWidth:2, 
+    borderRadius:16, 
+    padding:12, 
+    marginTop:12,
+    backgroundColor: theme.colors.card
+  },
+  userInfoLabel: { 
+    color: '#fff', 
+    fontSize: 16, 
+    fontWeight: '700',
+    marginBottom: 8
+  },
+  userInfoText: { 
+    color: theme.colors.subtext, 
+    fontSize: 14,
+    marginBottom: 4
+  },
   card: { borderColor: theme.colors.border, borderWidth:2, borderRadius:16, padding:12, marginTop:12 },
   row: { color: theme.colors.subtext },
   lang: { borderColor: theme.colors.border, borderWidth:2, borderRadius:20, paddingHorizontal:12, paddingVertical:8, marginRight:8, marginTop:8 },

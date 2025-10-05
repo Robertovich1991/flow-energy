@@ -7,11 +7,12 @@ import { useNavigation } from '@react-navigation/native';
 import Icon from '../components/Icon';
 
 const COIN_PACKAGES = [
-  { coins: 100, price: '$0.99' },
-  { coins: 1000, price: '$9.99' },
-  { coins: 3000, price: '$29.99' },
-  { coins: 5000, price: '$49.99' },
-  { coins: 10000, price: '$99.99' },
+  { coins: 10, price: '$10' },
+  { coins: 50, price: '$50' },
+  { coins: 100, price: '$100' },
+  { coins: 500, price: '$500' },
+  { coins: 1000, price: '$1000' },
+  { coins: 3000, price: '$3000' },
 ];
 
 export default function CoinsPurchaseModal() {

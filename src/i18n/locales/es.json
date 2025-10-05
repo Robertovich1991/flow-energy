@@ -12,7 +12,9 @@
     "buy": "Comprar",
     "preview": "Vista previa",
     "getAccess": "Obtener acceso",
-    "confirm": "Confirmar"
+    "confirm": "Confirmar",
+    "login": "Iniciar sesión",
+    "signUp": "Registrarse"
   },
   "sections": {
     "popular": "Tendencias de hoy",
@@ -20,7 +22,10 @@
     "subcategories": "Subcategorías"
   },
   "fields": {
-    "name": "Nombre"
+    "name": "Nombre",
+    "email": "Email",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar contraseña"
   },
   "messages": {
     "cardWillBeReady": "Tu carta estará lista en una hora — vuelve más tarde."
@@ -37,5 +42,23 @@
     "en": "English",
     "es": "Español",
     "de": "Deutsch"
+  },
+  "auth": {
+    "welcome": "Bienvenido de vuelta",
+    "loginSubtitle": "Inicia sesión para continuar tu viaje",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "noAccount": "¿No tienes cuenta?",
+    "signUpLink": "Regístrate",
+    "createAccount": "Crear cuenta",
+    "signUpSubtitle": "Únete a nosotros y comienza tu viaje",
+    "hasAccount": "¿Ya tienes cuenta?",
+    "loginLink": "Iniciar sesión"
+  },
+  "Errors": {
+    "Required": "Este campo es obligatorio",
+    "Invalid_Email": "Por favor, ingresa un email válido",
+    "Password_Mismatch": "Las contraseñas no coinciden",
+    "Name_Too_Short": "El nombre debe tener al menos 2 caracteres",
+    "Password_Too_Short": "La contraseña debe tener al menos 8 caracteres"
   }
 }
