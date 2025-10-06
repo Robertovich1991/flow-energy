@@ -1,6 +1,7 @@
 
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 
 type Props = {
@@ -25,6 +26,7 @@ const colorPalettes = [
 ];
 
 export const CardTile: React.FC<Props> = ({title, price, intensity, colors, onPress}) => {
+  const { t } = useTranslation();
   const randomColors = useMemo(() => {
     if (colors) return colors;
     const randomIndex = Math.floor(Math.random() * colorPalettes.length);
@@ -36,7 +38,7 @@ export const CardTile: React.FC<Props> = ({title, price, intensity, colors, onPr
       <View style={[styles.gradient,{backgroundColor: randomColors[0]}]} />
       <Text style={styles.title}>{title}</Text>
       {price && <View style={styles.badge}><Text style={styles.badgeText}>{price}</Text></View>}
-      {typeof intensity === 'number' && <Text style={styles.meta}>Интенсивность {intensity}%</Text>}
+      {typeof intensity === 'number' && <Text style={styles.meta}>{t('fields.intensity')} {intensity}%</Text>}
     </TouchableOpacity>
   );
 }

@@ -25,7 +25,8 @@
     "name": "Name",
     "email": "Email",
     "password": "Passwort",
-    "confirmPassword": "Passwort bestätigen"
+    "confirmPassword": "Passwort bestätigen",
+    "intensity": "Intensität"
   },
   "messages": {
     "cardWillBeReady": "Deine Karte ist innerhalb einer Stunde bereit — bitte später zurückkehren."
@@ -42,6 +43,15 @@
     "en": "English",
     "es": "Español",
     "de": "Deutsch"
+  },
+  "profile": {
+    "myCards": "Meine Karten",
+    "userInfo": "Benutzerinformationen:",
+    "nameLabel": "Name:",
+    "emailLabel": "Email:",
+    "subscriptionUnlimited": "Abonnement — unbegrenzte Streams",
+    "logout": "Abmelden",
+    "deleteAccount": "Konto löschen"
   },
   "auth": {
     "welcome": "Willkommen zurück",
