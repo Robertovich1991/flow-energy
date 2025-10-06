@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity,  } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { PrimaryButton } from '../components/Buttons';
@@ -32,6 +32,7 @@ export default function Login() {
   };
   console.log(errors);
 
+  
   // const handleLogin = () => {
   //   if (!email || !password) {
   //     Alert.alert('Error', 'Please fill in all fields');
@@ -88,7 +89,7 @@ export default function Login() {
   return (
     <ScrollView style={styles.container} contentInsetAdjustmentBehavior="automatic">
       <View style={styles.header}>
-        <Text style={styles.brand}>Flow</Text>
+        <Text style={styles.brand}>The Flow</Text>
         <Text style={styles.welcome}>{t('auth.welcome')}</Text>
         <Text style={styles.subtitle}>{t('auth.loginSubtitle')}</Text>
       </View>

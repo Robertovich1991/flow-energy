@@ -13,7 +13,8 @@ type IconName =
   | 'eye'
   | 'eye-off'
   | 'user'
-  | 'coin';
+  | 'coin'
+  | 'download';
 
 type Props = {
   name: IconName;
@@ -101,6 +102,14 @@ export const Icon: React.FC<Props> = ({ name, size = 18, color = '#FFFFFF' }) =>
       return (
         <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
           <Path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+        </Svg>
+      );
+    case 'download':
+      return (
+        <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+          <Path d="M12 3v10" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+          <Path d="M7 11l5 5 5-5" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+          <Path d="M5 20h14" stroke={color} strokeWidth={2} strokeLinecap="round" />
         </Svg>
       );
     default:

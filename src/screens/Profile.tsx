@@ -5,12 +5,15 @@ import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { useApp } from '../store/app';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { signOut } from '../store/slices/authSlice';
 import { PrimaryButton, GhostButton } from '../components/Buttons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Profile() {
   const { t, i18n } = useTranslation();
   const nav = useNavigation<any>();
+  const dispatch = useDispatch();
   const lang = useApp(s=>s.lang);
   const setLang = useApp(s=>s.setLang);
   const [userEmail, setUserEmail] = useState<string>('');
@@ -62,7 +65,7 @@ export default function Profile() {
             text: 'Logout', 
             onPress: () => {
               console.log('Logout confirmed, navigating to Login'); // Debug log
-              // TODO: Implement actual logout logic (clear tokens, etc.)
+              dispatch(signOut() as any);
               nav.navigate('Login');
             }
           }
@@ -101,9 +104,9 @@ export default function Profile() {
       
       {userEmail && (
         <View style={styles.userInfoCard}>
-          <Text style={styles.userInfoLabel}>User Information:</Text>
-          <Text style={styles.userInfoText}>Name: {userName}</Text>
-          <Text style={styles.userInfoText}>Email: {userEmail}</Text>
+          <Text style={styles.userInfoLabel}>{t('profile.userInfo')}</Text>
+          <Text style={styles.userInfoText}>{t('profile.nameLabel')} {userName}</Text>
+          <Text style={styles.userInfoText}>{t('profile.emailLabel')} {userEmail}</Text>
         </View>
       )}
       
@@ -116,17 +119,19 @@ export default function Profile() {
           ))}
         </View>
       </View>
-      <View style={styles.card}><Text style={styles.row}>Мои карты</Text></View>
-      <View style={styles.card}><Text style={styles.row}>Подписка — безлимитные потоки</Text></View>
+      <TouchableOpacity style={styles.card} onPress={() => nav.navigate('MyCards')}>
+        <Text style={styles.row}>{t('profile.myCards')}</Text>
+      </TouchableOpacity>
+      <View style={styles.card}><Text style={styles.row}>{t('profile.subscriptionUnlimited')}</Text></View>
       
       <View style={styles.actionsContainer}>
         <PrimaryButton 
-          label="Logout" 
+          label={t('profile.logout')} 
           onPress={handleLogout}
           style={styles.logoutButton}
         />
         <GhostButton 
-          label="Delete Account" 
+          label={t('profile.deleteAccount')} 
           onPress={handleDeleteAccount}
           style={styles.deleteButton}
         />

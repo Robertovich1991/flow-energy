@@ -25,7 +25,8 @@
     "name": "Имя",
     "email": "Email",
     "password": "Пароль",
-    "confirmPassword": "Подтвердите пароль"
+    "confirmPassword": "Подтвердите пароль",
+    "intensity": "Интенсивность"
   },
   "messages": {
     "cardWillBeReady": "Карта будет готова в течение часа — вернитесь позже."
@@ -42,6 +43,21 @@
     "en": "English",
     "es": "Español",
     "de": "Deutsch"
+  },
+  "profile": {
+    "myCards": "Мои карты",
+    "userInfo": "Информация о пользователе:",
+    "nameLabel": "Имя:",
+    "emailLabel": "Email:",
+    "subscriptionUnlimited": "Подписка — безлимитные потоки",
+    "logout": "Выйти",
+    "deleteAccount": "Удалить аккаунт"
+  },
+  "coins": {
+    "title": "Купить монеты",
+    "subtitle": "Выберите пакет монет",
+    "buy": "Купить",
+    "balance": "Баланс"
   },
   "auth": {
     "welcome": "Добро пожаловать",

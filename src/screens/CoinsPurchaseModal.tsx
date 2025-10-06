@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Alert, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { PrimaryButton } from '../components/Buttons';
 import { useNavigation } from '@react-navigation/native';
-import Icon from '../components/Icon';
+// replaced vector coin icon with raster image asset
 
 const COIN_PACKAGES = [
   { coins: 10, price: '$10' },
@@ -12,7 +12,6 @@ const COIN_PACKAGES = [
   { coins: 100, price: '$100' },
   { coins: 500, price: '$500' },
   { coins: 1000, price: '$1000' },
-  { coins: 3000, price: '$3000' },
 ];
 
 export default function CoinsPurchaseModal() {
@@ -42,7 +41,7 @@ export default function CoinsPurchaseModal() {
     <ScrollView style={styles.container} contentInsetAdjustmentBehavior="automatic">
       <View style={styles.header}>
         <View style={styles.balanceContainer}>
-          <Icon name="coin" size={20} color={theme.colors.accentLuckA} />
+          <Image source={require('../assets/images/flowcoin.png')} style={{ width: 20, height: 20 }} />
           <Text style={styles.balanceText}>{userCoins.toLocaleString()}</Text>
         </View>
         <Text style={styles.title}>{t('coins.title')}</Text>
@@ -54,7 +53,7 @@ export default function CoinsPurchaseModal() {
           <View key={index} style={styles.packageCard}>
             <View style={styles.packageHeader}>
               <View style={styles.coinContainer}>
-                <Icon name="coin" size={24} color={theme.colors.accentLuckA} />
+                <Image source={require('../assets/images/flowcoin.png')} style={{ width: 24, height: 24 }} />
                 <Text style={styles.coinAmount}>{package_.coins.toLocaleString()}</Text>
               </View>
               <Text style={styles.packagePrice}>{package_.price}</Text>

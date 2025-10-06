@@ -1,8 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { theme } from '../theme';
-import Icon from './Icon';
 
 interface CoinsHeaderProps {
   coinCount: number;
@@ -18,7 +17,7 @@ export default function CoinsHeader({ coinCount }: CoinsHeaderProps) {
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container}>
       <View style={styles.coinContainer}>
-        <Icon name="coin" size={16} color={theme.colors.accentLuckA} />
+        <Image source={require('../assets/images/flowcoin.png')} style={{ width: 16, height: 16 }} />
         <Text style={styles.coinText}>{coinCount.toLocaleString()}</Text>
       </View>
     </TouchableOpacity>

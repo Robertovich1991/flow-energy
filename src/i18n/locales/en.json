@@ -25,7 +25,8 @@
     "name": "Name",
     "email": "Email",
     "password": "Password",
-    "confirmPassword": "Confirm Password"
+    "confirmPassword": "Confirm Password",
+    "intensity": "Intensity"
   },
   "messages": {
     "cardWillBeReady": "Your card will be ready within an hour — please return later."
@@ -42,6 +43,15 @@
     "en": "English",
     "es": "Español",
     "de": "Deutsch"
+  },
+  "profile": {
+    "myCards": "My Cards",
+    "userInfo": "User Information:",
+    "nameLabel": "Name:",
+    "emailLabel": "Email:",
+    "subscriptionUnlimited": "Subscription — unlimited streams",
+    "logout": "Logout",
+    "deleteAccount": "Delete Account"
   },
   "auth": {
     "welcome": "Welcome back",

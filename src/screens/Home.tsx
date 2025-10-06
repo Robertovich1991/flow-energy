@@ -25,7 +25,7 @@ export default function Home() {
   }, [])
   return (
     <ScrollView style={styles.container} contentInsetAdjustmentBehavior="automatic">
-      <Text style={styles.brand}>Flow</Text>
+      <Text style={styles.brand}>The Flow</Text>
       <Text style={styles.tagline}>{t('appTagline')}</Text>
 
       <View style={styles.hero}>
