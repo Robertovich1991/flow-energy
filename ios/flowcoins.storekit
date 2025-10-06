@@ -1,0 +1,155 @@
+{
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
+  "identifier" : "815ECD1D",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "10.0",
+      "familyShareable" : false,
+      "internalID" : "6753660718",
+      "localizations" : [
+        {
+          "description" : "10 coins package",
+          "displayName" : "Coins-10",
+          "locale" : "en_GB"
+        }
+      ],
+      "productID" : "coin10",
+      "referenceName" : "10 coins pack",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "100.0",
+      "familyShareable" : false,
+      "internalID" : "6753661150",
+      "localizations" : [
+        {
+          "description" : "100 coins package",
+          "displayName" : "Coins-100",
+          "locale" : "en_GB"
+        }
+      ],
+      "productID" : "coin100",
+      "referenceName" : "100 coins pack",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "1000.0",
+      "familyShareable" : false,
+      "internalID" : "6753661206",
+      "localizations" : [
+        {
+          "description" : "1000 coins package",
+          "displayName" : "Coins-1000",
+          "locale" : "en_GB"
+        }
+      ],
+      "productID" : "coin1000",
+      "referenceName" : "1000 coins pack",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "50.0",
+      "familyShareable" : false,
+      "internalID" : "6753661044",
+      "localizations" : [
+        {
+          "description" : "50 coins package",
+          "displayName" : "Coins-50",
+          "locale" : "en_GB"
+        }
+      ],
+      "productID" : "coin50",
+      "referenceName" : "50 coins pack",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "500.0",
+      "familyShareable" : false,
+      "internalID" : "6753661205",
+      "localizations" : [
+        {
+          "description" : "500 coins package",
+          "displayName" : "Coins-500",
+          "locale" : "en_GB"
+        }
+      ],
+      "productID" : "coin500",
+      "referenceName" : "500 coins pack",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6753660624",
+    "_developerTeamID" : "9RBQZ3ZN9L",
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 781394868.29068005,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ]
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

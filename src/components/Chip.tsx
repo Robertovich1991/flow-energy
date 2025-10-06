@@ -13,9 +13,14 @@ export const Chip: React.FC<Props> = ({label, active, onPress, style}) => (
 
 const styles = StyleSheet.create({
   base: { paddingHorizontal: 16, paddingVertical: 10, borderRadius: 24, marginRight: 8, marginBottom: 8 },
-  active: { backgroundColor: theme.colors.primary },
+  active: { 
+    backgroundColor: theme.colors.primary, 
+    paddingHorizontal: 20, 
+    paddingVertical: 12,
+    transform: [{ scale: 1.05 }]
+  },
   inactive: { borderWidth: 2, borderColor: theme.colors.border },
   text: { fontWeight: '800' },
-  textActive: { color: '#000' },
-  textInactive: { color: theme.colors.text },
+  textActive: { color: '#000', fontSize: 16 },
+  textInactive: { color: theme.colors.text, fontSize: 14 },
 });

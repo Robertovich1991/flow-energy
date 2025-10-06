@@ -43,6 +43,7 @@ export const authSlice = createSlice({
 export const login = (data: ILogin, cb: (email: string) => void, errorCb?: (error: string) => void) => async (dispatch: Dispatch) => {
   try {
     const response = await mainApi.post(`auth/login`, data);
+console.log(response);
 
     if (response.data && response.data.success === true) {
 console.log(response.data,'response.data',response.data.data.token,'ppppppppppppppppppppppppppppppppppppppppppppppppppp');
