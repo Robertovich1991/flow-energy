@@ -1,5 +1,5 @@
-import React, { useMemo, useRef, useCallback } from 'react';
-import { View, FlatList, Image, Dimensions, StatusBar, TouchableWithoutFeedback, Animated, TouchableOpacity } from 'react-native';
+import React, { useMemo, useRef, useCallback, useState } from 'react';
+import { View, FlatList, Image, Dimensions, StatusBar, TouchableWithoutFeedback, Animated, TouchableOpacity, Alert, Platform, Share } from 'react-native';
 import Icon from '../components/Icon';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { theme } from '../theme';
@@ -18,6 +18,8 @@ export default function ImageGallery() {
   const { width, height } = Dimensions.get('window');
   const images = useMemo(() => route.params?.images ?? [], [route.params]);
   const initialIndex = route.params?.initialIndex ?? 0;
+  const [currentImageIndex, setCurrentImageIndex] = useState(initialIndex);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('gestureEnd', () => {
@@ -32,6 +34,54 @@ export default function ImageGallery() {
     }, 0);
   }, [initialIndex]);
 
+  const downloadImage = async () => {
+    if (isDownloading) return;
+    
+    const currentImageUrl = images[currentImageIndex];
+    if (!currentImageUrl) return;
+
+    setIsDownloading(true);
+    
+    try {
+      // Use React Native's Share API to save the image
+      const result = await Share.share({
+        url: currentImageUrl,
+        message: Platform.OS === 'ios' 
+          ? 'Save this image to your Photos app' 
+          : 'Save this image to your device'
+      });
+
+      if (result.action === Share.sharedAction) {
+        Alert.alert(
+          'Image Shared',
+          Platform.OS === 'ios' 
+            ? 'You can save the image to your Photos app from the share menu.'
+            : 'You can save the image to your device from the share menu.',
+          [{ text: 'OK' }]
+        );
+      } else if (result.action === Share.dismissedAction) {
+        // User dismissed the share dialog
+        console.log('Share dialog dismissed');
+      }
+      
+    } catch (error) {
+      console.error('Share error:', error);
+      Alert.alert(
+        'Error',
+        'Unable to share the image. Please try again.',
+        [{ text: 'OK' }]
+      );
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  const onViewableItemsChanged = useCallback(({ viewableItems }: any) => {
+    if (viewableItems.length > 0) {
+      setCurrentImageIndex(viewableItems[0].index);
+    }
+  }, []);
+
   const renderItem = useCallback(({ item }: { item: string }) => (
     <GalleryPage uri={item} width={width} height={height} />
   ), [width, height]);
@@ -40,13 +90,22 @@ export default function ImageGallery() {
     <View style={{ flex: 1, backgroundColor: 'black' }}>
       <StatusBar barStyle="light-content" hidden />
       <TouchableOpacity
-        onPress={() => {/* TODO: implement download */}}
-        style={{ position: 'absolute', top: 16, right: 16, zIndex: 10, backgroundColor: 'rgba(0,0,0,0.5)', padding: 10, borderRadius: 20 }}
+        onPress={downloadImage}
+        disabled={isDownloading}
+        style={{ 
+          position: 'absolute', 
+          top: 16, 
+          right: 16, 
+          zIndex: 10, 
+          backgroundColor: isDownloading ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.5)', 
+          padding: 10, 
+          borderRadius: 20 
+        }}
         hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
         accessibilityRole="button"
-        accessibilityLabel="Download image"
+        accessibilityLabel={isDownloading ? "Sharing..." : "Share/Save image"}
       >
-        <Icon name="download" size={22} color="#fff" />
+        <Icon name="download" size={22} color={isDownloading ? "#ccc" : "#fff"} />
       </TouchableOpacity>
       <FlatList
         ref={listRef}
@@ -60,6 +119,8 @@ export default function ImageGallery() {
         windowSize={5}
         maxToRenderPerBatch={3}
         getItemLayout={(_, index) => ({ length: width, offset: width * index, index })}
+        onViewableItemsChanged={onViewableItemsChanged}
+        viewabilityConfig={{ itemVisiblePercentThreshold: 50 }}
       />
     </View>
   );

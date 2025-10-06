@@ -122,7 +122,9 @@ export default function Profile() {
       <TouchableOpacity style={styles.card} onPress={() => nav.navigate('MyCards')}>
         <Text style={styles.row}>{t('profile.myCards')}</Text>
       </TouchableOpacity>
-      <View style={styles.card}><Text style={styles.row}>{t('profile.subscriptionUnlimited')}</Text></View>
+      <TouchableOpacity style={styles.card} onPress={() => nav.navigate('MyStreams')}>
+        <Text style={styles.row}>My Streams</Text>
+      </TouchableOpacity>
       
       <View style={styles.actionsContainer}>
         <PrimaryButton 

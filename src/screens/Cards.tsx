@@ -57,7 +57,6 @@ export default function Cards() {
             onPress={() => nav.navigate('CardDetail', { card: card })}
           />
         ))}
-
       </View>
     </ScrollView>
   );

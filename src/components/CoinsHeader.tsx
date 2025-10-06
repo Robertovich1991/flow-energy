@@ -1,14 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 import { theme } from '../theme';
+import { coinsBalanceSelector } from '../store/selectors/authSelector';
 
-interface CoinsHeaderProps {
-  coinCount: number;
-}
-
-export default function CoinsHeader({ coinCount }: CoinsHeaderProps) {
+export default function CoinsHeader() {
   const nav = useNavigation<any>();
+  const coinsBalance = useSelector(coinsBalanceSelector);
 
   const handlePress = () => {
     nav.navigate('CoinsPurchaseModal');
@@ -18,7 +17,7 @@ export default function CoinsHeader({ coinCount }: CoinsHeaderProps) {
     <TouchableOpacity onPress={handlePress} style={styles.container}>
       <View style={styles.coinContainer}>
         <Image source={require('../assets/images/flowcoin.png')} style={{ width: 16, height: 16 }} />
-        <Text style={styles.coinText}>{coinCount.toLocaleString()}</Text>
+        <Text style={styles.coinText}>{coinsBalance.toLocaleString()}</Text>
       </View>
     </TouchableOpacity>
   );

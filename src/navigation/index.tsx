@@ -7,11 +7,15 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { theme } from '..//theme';
 import { View, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from 'react-redux';
+import { getCoinsBalance } from '../store/slices/authSlice';
+import { setScanMeApiAuthorization } from '../services/instance/MainInstance';
 import Home from '../screens/Home';
 import Cards from '../screens/Cards';
 import CardDetail from '../screens/CardDetail';
 import NameChargeModal from '../screens/NameChargeModal';
 import Streams from '../screens/Streams';
+import StreamDetail from '../screens/StreamDetail';
 import StreamSession from '../screens/StreamSession';
 import StreamAccessModal from '../screens/StreamAccessModal';
 import Profile from '../screens/Profile';
@@ -19,6 +23,7 @@ import Login from '../screens/Login';
 import SignUp from '../screens/SignUp';
 import CoinsPurchaseModal from '../screens/CoinsPurchaseModal';
 import MyCards from '../screens/MyCards';
+import MyStreams from '../screens/MyStreams';
 import ImageGallery from '../screens/ImageGallery';
 import { HomeIcon, CardsIcon, StreamsIcon, ProfileIcon } from '../components/TabBarIcons';
 import CoinsHeader from '../components/CoinsHeader';
@@ -27,8 +32,6 @@ const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
 
 function TabsRoot() {
-  const mockCoinCount = 0; // Mock coin count
-
   return (
     <Tabs.Navigator 
       screenOptions={{ 
@@ -36,7 +39,7 @@ function TabsRoot() {
         headerStyle: { backgroundColor: theme.colors.bg },
         headerTintColor: theme.colors.text,
         headerTitle: '',
-        headerRight: () => <CoinsHeader coinCount={mockCoinCount} />,
+        headerRight: () => <CoinsHeader />,
         tabBarStyle: { backgroundColor: theme.colors.card, borderTopColor: theme.colors.border }
       }}
     >
@@ -78,14 +81,24 @@ function TabsRoot() {
 
 export default function RootNavigator() {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const [bootstrapping, setBootstrapping] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const token = await AsyncStorage.getItem('accessToken');
-        setIsLoggedIn(!!token);
+        const tokenString = await AsyncStorage.getItem('accessToken');
+        const token = tokenString ? JSON.parse(tokenString) : null;
+        const isLoggedIn = !!token;
+        setIsLoggedIn(isLoggedIn);
+        
+        // Set the token in API headers if user is logged in
+        if (isLoggedIn && token) {
+          setScanMeApiAuthorization(token);
+          // Fetch coins balance after setting the token
+          dispatch(getCoinsBalance() as any);
+        }
       } catch (e) {
         setIsLoggedIn(false);
       } finally {
@@ -93,7 +106,7 @@ export default function RootNavigator() {
       }
     };
     checkAuth();
-  }, []);
+  }, [dispatch]);
 
   if (bootstrapping) {
     return (
@@ -110,7 +123,9 @@ export default function RootNavigator() {
         <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown:false }} />
         <Stack.Screen name="Tabs" component={TabsRoot} options={{ headerShown:false }} />
         <Stack.Screen name="CardDetail" component={CardDetail} options={{ title: 'Card' }} />
+        <Stack.Screen name="StreamDetail" component={StreamDetail} options={{ title: 'Stream' }} />
         <Stack.Screen name="MyCards" component={MyCards} options={{ title: t('profile.myCards') }} />
+        <Stack.Screen name="MyStreams" component={MyStreams} options={{ title: 'My Streams' }} />
         <Stack.Screen 
           name="ImageGallery" 
           component={ImageGallery} 

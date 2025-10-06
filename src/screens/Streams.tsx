@@ -23,7 +23,7 @@ console.log(streams,'............jjjjj.................');
             title={stream.title}
             price={stream.price}
             intensity={stream.intensity}
-            onPress={() => nav.navigate('StreamSession', { card: stream })}
+            onPress={() => nav.navigate('StreamDetail', { stream: stream })}
           />
         ))}
      

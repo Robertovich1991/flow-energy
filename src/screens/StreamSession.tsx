@@ -3,11 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { theme } from '../theme';
 import { PrimaryButton, GhostButton } from '../components/Buttons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 export default function StreamSession() {
   const [sec, setSec] = useState(10*60); // demo 10 minutes
   const nav = useNavigation<any>();
+  const route = useRoute<any>();
+  const stream = route.params?.stream;
 
   useEffect(() => {
     const t = setInterval(()=> setSec(s => s>0? s-1 : 0), 1000);
@@ -21,7 +23,7 @@ export default function StreamSession() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Финансовая ясность</Text>
+      <Text style={styles.title}>{stream?.title || 'Stream Session'}</Text>
       <View style={styles.card}>
         <Text style={styles.timer}>{mm}:{ss}</Text>
       </View>

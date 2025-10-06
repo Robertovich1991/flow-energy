@@ -2,6 +2,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import cardreducer from "../slices/cardSlice"
 import streamreducer from "../slices/streamSlice"
 import categoriesReducer from "../slices/categoriesSlice"
+import ownedCardsReducer from "../slices/ownedCardsSlice"
+import ownedStreamsReducer from "../slices/ownedStreamsSlice"
 import authSlice from "../slices/authSlice"
 import administrativSlice from "../slices/administrativSlice"
 
@@ -10,6 +12,8 @@ export const store = configureStore({
         cardreducer,
         streamreducer,
         categoriesReducer,
+        ownedCardsReducer,
+        ownedStreamsReducer,
         authInfo: authSlice,
         administrativ: administrativSlice
     },
