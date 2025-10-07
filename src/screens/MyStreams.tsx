@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 import { ownedStreamsListSelector, ownedStreamsLoadingSelector } from '../store/selectors/ownedStreamsSelector';
 import { getOwnedStreamsList } from '../store/slices/ownedStreamsSlice';
 import StreamCard from './StreamCard';
@@ -13,20 +14,12 @@ dayjs.extend(utc);
 
 export default function MyStreams() {
   const dispatch = useDispatch();
+  const navigation = useNavigation<any>();
   const ownedStreams = useSelector(ownedStreamsListSelector);
   const loadingOwnedStreams = useSelector(ownedStreamsLoadingSelector);
   const transactions = useSelector(transactionsListSelector)
+  console.log(transactions, '..........................transactions..........................');
 
-  const dateNow = dayjs.utc().subtract(2, 'hour');
-  const created = dayjs.utc(transactions.data.created_at)
-  const difference = dateNow.diff(created, 'minute');
-  const getTotalDurationForStream = (streamId: number) => {
-    const tx = transactions.data.find(t => t.metadata.stream_id === streamId);
-    if (!tx) return 0;
-    const created = dayjs.utc(tx.created_at).subtract(-2, 'hour');
-    const difference = dayjs.utc().diff(created, 'minute');
-    return difference * 60;
-  };
 
 
   useEffect(() => {
@@ -57,8 +50,20 @@ export default function MyStreams() {
       <Text style={styles.title}>My Streams</Text>
       <ScrollView style={styles.scrollView}>
         <View style={styles.gridContainer}>
-          {ownedStreams.map(stream => (
-            <StreamCard key={stream.id} stream={stream} totalDuration={getTotalDurationForStream(stream.id)} />
+          {ownedStreams.map((stream, index) => (
+            <StreamCard 
+              key={stream.id} 
+              stream={stream} 
+              totalDuration={transactions?.data[index]}
+                            onPress={() => {
+                // Navigate to ImageGallery with stream image (convert single image to array)
+                const images = stream.image ? [`http://api.go2winbet.online${stream.image}`] : [];
+                navigation.navigate('ImageGallery', {
+                  images: images,
+                  initialIndex: 0
+                });
+              }}
+            />
           ))}
         </View>
       </ScrollView>

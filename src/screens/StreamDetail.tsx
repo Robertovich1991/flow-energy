@@ -35,11 +35,24 @@ export default function StreamDetail() {
       return;
     }
 
-    // Purchase stream access then proceed
-    dispatch(purchaseStream(stream.id, () => {
-      Alert.alert('Stream Successful');
-      nav.navigate('StreamSession', { stream: stream });
-    }) as any);
+    // Show confirmation alert before purchasing
+    Alert.alert(
+      'Confirm Purchase',
+      `Do you really want to buy this stream for $${stream.price}?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { 
+          text: 'Yes, Buy', 
+          onPress: () => {
+            // Purchase stream access then proceed
+            dispatch(purchaseStream(stream.id, () => {
+              Alert.alert('Stream Successful');
+              nav.navigate('StreamSession', { stream: stream });
+            }) as any);
+          }
+        }
+      ]
+    );
   };
 
   const onGetAccess = () => {

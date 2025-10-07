@@ -2,41 +2,58 @@ import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Animated } from 'react-native';
 import { theme } from '../theme';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 interface StreamCardProps {
   stream: any;
-  totalDuration: number;
+  totalDuration: any; // Transaction object with created_at
   onPress?: () => void;
 }
 
 export default function StreamCard({ stream, totalDuration, onPress }: StreamCardProps) {
-  const [progressTime, setProgressTime] = useState(0);
+  const [durationInMinutes, setDurationInMinutes] = useState(0);
+  const [progress, setProgress] = useState(0);
   const progressAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setProgressTime(prev => prev + 1);
-    }, 1000);
+    if (!totalDuration?.created_at) {
+      console.log('No created_at found in totalDuration');
+      return;
+    }
 
-    return () => clearInterval(timer);
-  }, []);
+    const updateDuration = () => {
+      const duration = dayjs.utc(totalDuration.created_at)
+        .add(1, 'hour') // add 1 hour
+        .diff(dayjs.utc(), 'seconds'); // difference from now in seconds
+      console.log(duration, '..........................duration..........................');
+      
+      const minutes = Math.round(duration / 60); // Convert to minutes and round
+      
+      // Calculate progress (assuming 60 minutes total)
+      const progressValue = Math.max(0, Math.min(1, 1 - (duration / 3600)));
+      
+      setDurationInMinutes(minutes);
+      setProgress(progressValue);
+      
+      // Animate progress bar
+      Animated.timing(progressAnim, {
+        toValue: progressValue,
+        duration: 1000,
+        useNativeDriver: false,
+      }).start();
+      
+    };
 
-  useEffect(() => {
-    const progress = Math.min(1, progressTime / totalDuration);
-    Animated.timing(progressAnim, {
-      toValue: progress,
-      duration: 100,
-      useNativeDriver: false,
-    }).start();
-  }, [progressTime, totalDuration]);
+    // Update immediately
+    updateDuration();
 
-  const remainingTime = totalDuration - progressTime;
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
+    // Update every minute (60000 ms)
+    const interval = setInterval(updateDuration, 60000);
+    
+    return () => clearInterval(interval);
+  }, [totalDuration, progressAnim]);
+  console.log(durationInMinutes, '..........................duration in minutes..........................');
 
   return (
     <TouchableOpacity style={styles.container} activeOpacity={0.8} onPress={onPress}>
@@ -48,9 +65,9 @@ export default function StreamCard({ stream, totalDuration, onPress }: StreamCar
 
       <View style={styles.progressContainer}>
         <View style={styles.progressInfo}>
-          <Text style={styles.progressLabel}>Progress</Text>
+          <Text style={styles.progressLabel}>Time Remaining</Text>
           <Text style={styles.progressTime}>
-            {remainingTime > 0 ? formatTime(remainingTime) : 'time lost'}
+            {durationInMinutes > 0 ? `${durationInMinutes} min` : 'Time Lost'}
           </Text>
         </View>
         <View style={styles.progressBar}>

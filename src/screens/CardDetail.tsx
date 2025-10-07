@@ -48,10 +48,25 @@ export default function CardDetail() {
       return;
     }
 
-    await buyCard(card.id);
-
+    // Show confirmation alert before purchasing
     if (isFocused && isMounted.current) {
-      nav.navigate('NameChargeModal', { id: card.id });
+      Alert.alert(
+        'Confirm Purchase',
+        `Do you really want to buy this card for $${card.price}?`,
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { 
+            text: 'Yes, Buy', 
+            onPress: async () => {
+              await buyCard(card.id);
+
+              if (isFocused && isMounted.current) {
+                nav.navigate('NameChargeModal', { id: card.id });
+              }
+            }
+          }
+        ]
+      );
     }
   };
 
