@@ -48,7 +48,7 @@ const dispatch = useDispatch<AppDispatch>()
   return (
     <ScrollView style={styles.container} contentInsetAdjustmentBehavior="automatic">
       <View style={styles.header}>
-        <Text style={styles.brand}>The Flow</Text>
+        <Text style={styles.brand}>Flow up</Text>
         <Text style={styles.welcome}>{t('auth.createAccount')}</Text>
         <Text style={styles.subtitle}>{t('auth.signUpSubtitle')}</Text>
       </View>

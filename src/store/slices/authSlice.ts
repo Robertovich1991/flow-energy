@@ -37,11 +37,13 @@ export interface ICoinsResponse {
 export interface IAuthState {
   isLogined: boolean;
   coinsBalance: number;
+  userId: number | null;
 }
 
 const initialState: IAuthState = {
   isLogined: false,
-  coinsBalance: 0
+  coinsBalance: 0,
+  userId: null
 }
 export const authSlice = createSlice({
   name: 'authInfo',
@@ -52,6 +54,9 @@ export const authSlice = createSlice({
     },
     setCoinsBalance: (state, action: PayloadAction<number>) => {
       state.coinsBalance = action.payload
+    },
+    setUserId: (state, action: PayloadAction<number>) => {
+      state.userId = action.payload
     },
   },
 })
@@ -177,15 +182,18 @@ export const resendConfirmationCode = (data: IResendCodeConfirm, cb?: () => void
 export const getCoinsBalance = () => async (dispatch: Dispatch) => {
   try {
     const response = await mainApi.get('coins/balance');
-    
+
     if (response.data && response.data.success === true) {
       dispatch(setCoinsBalance(response.data.data.balance));
+      dispatch(setUserId(response.data.data.user_id));
     } else {
       dispatch(setCoinsBalance(0));
+      dispatch(setUserId(null));
     }
   } catch (err: any) {
     console.error('Failed to fetch coins balance:', err);
     dispatch(setCoinsBalance(0));
+    dispatch(setUserId(null));
   }
 };
 
@@ -195,12 +203,13 @@ export const signOut = () => async (dispatch: Dispatch) => {
     await AsyncStorage.removeItem('userEmail');
     dispatch(setIsLogined(false));
     dispatch(setCoinsBalance(0)); // Reset coins balance on logout
+    dispatch(setUserId(null)); // Reset user ID on logout
     //   dispatch(clearUserInfo());
   } catch (err) {
     console.error('Failed to clear AsyncStorage during sign-out', err);
   }
 };
 
-export const { setIsLogined, setCoinsBalance } = authSlice.actions
+export const { setIsLogined, setCoinsBalance, setUserId } = authSlice.actions
 
 export default authSlice.reducer

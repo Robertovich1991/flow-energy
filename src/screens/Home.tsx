@@ -52,7 +52,7 @@ const productIds=['coin10','coin50','coin100','coin500','coin1000']
 
   return (
     <ScrollView style={styles.container} contentInsetAdjustmentBehavior="automatic">
-      <Text style={styles.brand}>The Flow</Text>
+      <Text style={styles.brand}>Flow Up</Text>
       <Text style={styles.tagline}>{t('appTagline')}</Text>
 
       <View style={styles.hero}>

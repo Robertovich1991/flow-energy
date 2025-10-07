@@ -4,6 +4,7 @@ import streamreducer from "../slices/streamSlice"
 import categoriesReducer from "../slices/categoriesSlice"
 import ownedCardsReducer from "../slices/ownedCardsSlice"
 import ownedStreamsReducer from "../slices/ownedStreamsSlice"
+import coinsPurchaseReducer from "../slices/coinsPurchaseSlice"
 import authSlice from "../slices/authSlice"
 import administrativSlice from "../slices/administrativSlice"
 
@@ -14,6 +15,7 @@ export const store = configureStore({
         categoriesReducer,
         ownedCardsReducer,
         ownedStreamsReducer,
+        coinsPurchaseReducer,
         authInfo: authSlice,
         administrativ: administrativSlice
     },

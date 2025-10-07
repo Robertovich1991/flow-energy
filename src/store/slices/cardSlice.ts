@@ -1,9 +1,9 @@
 import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit'
 import mainApi from '../../services/instance/MainInstance';
-
+import { Card } from '../types';
 
 export interface ICard {
-  cardsList: ICardItem[] | undefined,
+  cardsList: Card[] | undefined,
  
 }
 
@@ -16,7 +16,7 @@ export const cardSlice = createSlice({
   name: 'card',
   initialState,
   reducers: {
-    setCardsList: (state, action: PayloadAction<ICardItem[] | undefined>) => {
+    setCardsList: (state, action: PayloadAction<Card[] | undefined>) => {
       state.cardsList = action.payload
     },
   }

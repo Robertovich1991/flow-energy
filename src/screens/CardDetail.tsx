@@ -6,6 +6,8 @@ import { theme } from '../theme';
 import { PrimaryButton, GhostButton } from '../components/Buttons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useApp } from '../store/app';
+import { useSelector } from 'react-redux';
+import { coinsBalanceSelector } from '../store/selectors/authSelector';
 import Icon from '../components/Icon';
 
 export default function CardDetail() {
@@ -13,10 +15,28 @@ export default function CardDetail() {
   const nav = useNavigation<any>();
   const route = useRoute<any>();
   const card = route.params?.card
+  const coinsBalance = useSelector(coinsBalanceSelector);
+  console.log(card.image,'card.image');
   
   const buyCard = useApp(s => s.buyCard);
 
   const onBuy = async () => {
+    // Check if user has sufficient coins balance
+    if (coinsBalance === 0) {
+      Alert.alert(
+        'Insufficient Coins',
+        'You need coins to purchase this card. Would you like to buy coins?',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { 
+            text: 'Buy Coins', 
+            onPress: () => nav.navigate('CoinsPurchaseModal')
+          }
+        ]
+      );
+      return;
+    }
+
     await buyCard(card.id);
     Alert.alert('OK', t('messages.cardWillBeReady'));
     nav.navigate('NameChargeModal', { id: card.id });

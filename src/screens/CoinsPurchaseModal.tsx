@@ -4,20 +4,75 @@ import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { PrimaryButton } from '../components/Buttons';
 import { useNavigation } from '@react-navigation/native';
+import { PurchaseError, requestSubscription } from 'react-native-iap';
+import { useSelector, useDispatch } from 'react-redux';
+import { userIdSelector, coinsBalanceSelector } from '../store/selectors/authSelector';
+import { purchaseCoins } from '../store/slices/coinsPurchaseSlice';
+import { getCoinsBalance } from '../store/slices/authSlice';
+
 // replaced vector coin icon with raster image asset
 
 const COIN_PACKAGES = [
-  { coins: 10, price: '$10' },
-  { coins: 50, price: '$50' },
-  { coins: 100, price: '$100' },
-  { coins: 500, price: '$500' },
-  { coins: 1000, price: '$1000' },
+  { coins: 10, price: '$10' ,productId: 'coin10'},
+  { coins: 50, price: '$50' ,productId: 'coin50'},
+  { coins: 100, price: '$100' ,productId: 'coin100'},
+  { coins: 500, price: '$500' ,productId: 'coin500'},
+  { coins: 1000, price: '$1000' ,productId: 'coin1000'},
 ];
 
 export default function CoinsPurchaseModal() {
   const { t } = useTranslation();
   const nav = useNavigation<any>();
-  const [userCoins] = useState(0); // Mock user balance
+  const dispatch = useDispatch();
+  const userId = useSelector(userIdSelector);
+  const coinsBalance = useSelector(coinsBalanceSelector);
+console.log(coinsBalance,'coinsBalance');
+
+  const handleBuyProducts = async (productId: string) => {
+    if (!userId) {
+      Alert.alert('Error', 'User not authenticated');
+      return;
+    }
+
+    console.log(productId, '>>>>>><<<<<<<<<<<<<<<<<99999999999999999');
+  
+    try {
+      const skus = await requestSubscription({
+        sku: productId,
+      });
+  
+      console.log(skus, '------000000000099999iiiiiiii----');
+      
+      // Send purchase data to backend
+      const purchaseData = {
+        app_store_product_id: skus.productId,
+        app_store_transaction_id: skus.transactionReceipt,
+        user_id: userId
+      };
+
+      // Dispatch the purchase action
+      await dispatch(purchaseCoins(purchaseData) as any);
+      
+      // Refresh coins balance after successful purchase
+      dispatch(getCoinsBalance() as any);
+      
+      Alert.alert('Success', 'Coins purchased successfully!');
+      nav.goBack();
+  
+    } catch (error) {
+      if (error instanceof PurchaseError) {
+       // console.log({ message: `[${error.code}]: ${error.message}`, error });
+      } else {
+        Alert.alert(
+          'Purchase error',
+          'Try again later',
+          [{ text: 'OK' }],
+        );
+        console.log(error,'//////////.......................................');
+        
+      }
+    }
+  }
 
   const handlePurchase = (coins: number, price: string) => {
     Alert.alert(
@@ -42,7 +97,7 @@ export default function CoinsPurchaseModal() {
       <View style={styles.header}>
         <View style={styles.balanceContainer}>
           <Image source={require('../assets/images/flowcoin.png')} style={{ width: 20, height: 20 }} />
-          <Text style={styles.balanceText}>{userCoins.toLocaleString()}</Text>
+          <Text style={styles.balanceText}>{coinsBalance}</Text>
         </View>
         <Text style={styles.title}>{t('coins.title')}</Text>
         <Text style={styles.subtitle}>{t('coins.subtitle')}</Text>
@@ -60,7 +115,7 @@ export default function CoinsPurchaseModal() {
             </View>
             <PrimaryButton 
               label={t('coins.buy')} 
-              onPress={() => handlePurchase(package_.coins, package_.price)}
+              onPress={() => handleBuyProducts(package_.productId)}
               style={styles.buyButton}
             />
           </View>

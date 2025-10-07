@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { PrimaryButton, GhostButton } from '../components/Buttons';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { coinsBalanceSelector } from '../store/selectors/authSelector';
 import Icon from '../components/Icon';
 
 export default function StreamDetail() {
@@ -11,8 +13,25 @@ export default function StreamDetail() {
   const nav = useNavigation<any>();
   const route = useRoute<any>();
   const stream = route.params?.stream;
+  const coinsBalance = useSelector(coinsBalanceSelector);
   
   const onStartStream = () => {
+    // Check if user has sufficient coins balance
+    if (coinsBalance === 0) {
+      Alert.alert(
+        'Insufficient Coins',
+        'You need coins to start this stream. Would you like to buy coins?',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { 
+            text: 'Buy Coins', 
+            onPress: () => nav.navigate('CoinsPurchaseModal')
+          }
+        ]
+      );
+      return;
+    }
+
     nav.navigate('StreamSession', { stream: stream });
   };
 
