@@ -24,9 +24,9 @@ export default function StreamSession() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{stream?.title || 'Stream Session'}</Text>
-      <View style={styles.card}>
+      {/* <View style={styles.card}>
         <Text style={styles.timer}>{mm}:{ss}</Text>
-      </View>
+      </View> */}
       <PrimaryButton label="Продлить" onPress={()=>{}} style={{marginVertical:8}} />
       <GhostButton label="Завершить" onPress={()=>nav.goBack()} />
     </View>

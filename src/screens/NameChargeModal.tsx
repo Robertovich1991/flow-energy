@@ -1,11 +1,13 @@
 
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { PrimaryButton } from '../components/Buttons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useApp } from '../store/app';
+import { useDispatch } from 'react-redux';
+import { purchaseCard } from '../store/slices/cardPurchaseSlice';
 
 export default function NameChargeModal() {
   const { t } = useTranslation();
@@ -14,10 +16,15 @@ export default function NameChargeModal() {
   const id = route.params?.id;
   const [name, setName] = useState('');
   const charge = useApp(s => s.chargeCardName);
+  const dispatch = useDispatch();
 
   const onConfirm = () => {
     charge(id, name || '—');
-    nav.goBack();
+    // Call purchase endpoint, then navigate back
+    dispatch(purchaseCard(id, () => {
+      Alert.alert('Successfully');
+      nav.goBack();
+    }) as any);
   };
 
   return (
@@ -27,7 +34,6 @@ export default function NameChargeModal() {
       <TextInput placeholder={t('fields.name') as string} placeholderTextColor="#AAA" value={name}
         onChangeText={setName} style={styles.input} />
       <PrimaryButton label={t('cta.confirm')} onPress={onConfirm} style={styles.confirmButton} />
-      <Text style={styles.note}>{t('messages.cardWillBeReady')}</Text>
     </View>
   );
 }

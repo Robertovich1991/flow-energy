@@ -58,7 +58,7 @@ export const ownedCardsSlice = createSlice({
 export const getOwnedCardsList = () => async (dispatch: Dispatch) => {
   try {
     dispatch(setLoading(true));
-    const response = await mainApi.get('cards/owned');
+    const response = await mainApi.get('cards/user/owned');
     
     if (response.data.success) {
       dispatch(setOwnedCardsList(response.data.data));

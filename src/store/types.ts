@@ -30,3 +30,12 @@ export interface ISignUpData {
   password: string;
   password_confirmation: string;
 }
+
+export interface ITransaction {
+  id: number;
+  type: 'purchase' | 'refund' | 'reward';
+  amount: number;
+  description: string;
+  created_at: string;
+  status: 'completed' | 'pending' | 'failed';
+}

@@ -7,6 +7,8 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { coinsBalanceSelector } from '../store/selectors/authSelector';
 import Icon from '../components/Icon';
+import { useDispatch } from 'react-redux';
+import { purchaseStream } from '../store/slices/streamPurchaseSlice';
 
 export default function StreamDetail() {
   const { t } = useTranslation();
@@ -14,6 +16,7 @@ export default function StreamDetail() {
   const route = useRoute<any>();
   const stream = route.params?.stream;
   const coinsBalance = useSelector(coinsBalanceSelector);
+  const dispatch = useDispatch();
   
   const onStartStream = () => {
     // Check if user has sufficient coins balance
@@ -32,7 +35,11 @@ export default function StreamDetail() {
       return;
     }
 
-    nav.navigate('StreamSession', { stream: stream });
+    // Purchase stream access then proceed
+    dispatch(purchaseStream(stream.id, () => {
+      Alert.alert('Stream Successful');
+      nav.navigate('StreamSession', { stream: stream });
+    }) as any);
   };
 
   const onGetAccess = () => {
@@ -54,7 +61,7 @@ export default function StreamDetail() {
       <Text style={styles.desc}>{stream.description || 'Experience this powerful stream session designed to enhance your energy and focus.'}</Text>
       <View style={styles.actionsRow}>
         <PrimaryButton leftIcon="play" rightIcon="arrow-right" label={t('cta.startStream') + ' · $' + stream.price} onPress={onStartStream} />
-        <GhostButton leftIcon="lock" label={t('cta.getAccess')} onPress={onGetAccess} />
+        {/** <GhostButton leftIcon="lock" label={t('cta.getAccess')} onPress={onGetAccess} /> **/}
       </View>
       <View style={styles.infoRow}>
         <View style={styles.infoItem}>

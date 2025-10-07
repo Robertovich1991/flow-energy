@@ -1,10 +1,10 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert, ImageBackground } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { PrimaryButton, GhostButton } from '../components/Buttons';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { useApp } from '../store/app';
 import { useSelector } from 'react-redux';
 import { coinsBalanceSelector } from '../store/selectors/authSelector';
@@ -20,26 +20,39 @@ export default function CardDetail() {
   
   const buyCard = useApp(s => s.buyCard);
 
-  const onBuy = async () => {
-    // Check if user has sufficient coins balance
+   const isFocused = useIsFocused();
+  const isMounted = useRef(true);
+  const [showDescription, setShowDescription] = useState(false);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+ const onBuy = async () => {
+    console.log('[[[[[[[[[[[[[[[[[[[[[[[[');
+
+    // Check coins balance
     if (coinsBalance === 0) {
-      Alert.alert(
-        'Insufficient Coins',
-        'You need coins to purchase this card. Would you like to buy coins?',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { 
-            text: 'Buy Coins', 
-            onPress: () => nav.navigate('CoinsPurchaseModal')
-          }
-        ]
-      );
+      if (isFocused && isMounted.current) {
+        Alert.alert(
+          'Insufficient Coins',
+          'You need coins to purchase this card. Would you like to buy coins?',
+          [
+            { text: 'Cancel', style: 'cancel' },
+            { text: 'Buy Coins', onPress: () => nav.navigate('CoinsPurchaseModal') },
+          ]
+        );
+      }
       return;
     }
 
     await buyCard(card.id);
-    Alert.alert('OK', t('messages.cardWillBeReady'));
-    nav.navigate('NameChargeModal', { id: card.id });
+
+    if (isFocused && isMounted.current) {
+      nav.navigate('NameChargeModal', { id: card.id });
+    }
   };
 
   return (
@@ -54,10 +67,12 @@ export default function CardDetail() {
           <Text style={styles.coverTitle}>{card.title}</Text>
         </View>
       </ImageBackground>
-      <Text style={styles.desc}>{card.description}</Text>
+      {showDescription && (
+        <Text style={styles.desc}>{card.description}</Text>
+      )}
       <View style={styles.actionsRow}>
         <PrimaryButton leftIcon="shopping-bag" rightIcon="arrow-right" label={t('cta.buy') + ' · $' + card.price} onPress={onBuy} />
-        <GhostButton leftIcon="play" label={t('cta.preview')} onPress={()=>{}} />
+        <GhostButton leftIcon="play" label={t('cta.preview')} onPress={()=> setShowDescription(true)} />
       </View>
       <View style={styles.infoRow}>
         <View style={styles.infoItem}>

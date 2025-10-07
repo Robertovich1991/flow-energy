@@ -27,9 +27,11 @@ console.log(streams,'............jjjjj.................');
           />
         ))}
      
+      {/**
       <TouchableOpacity style={styles.cta} onPress={() => nav.navigate('StreamAccessModal', { id:301 })}>
         <Text style={styles.ctaText}>{t('cta.getAccess')}</Text>
       </TouchableOpacity>
+      **/}
     </ScrollView>
   );
 }

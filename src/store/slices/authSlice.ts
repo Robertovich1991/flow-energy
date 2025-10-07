@@ -55,7 +55,7 @@ export const authSlice = createSlice({
     setCoinsBalance: (state, action: PayloadAction<number>) => {
       state.coinsBalance = action.payload
     },
-    setUserId: (state, action: PayloadAction<number>) => {
+    setUserId: (state, action: PayloadAction<number | null>) => {
       state.userId = action.payload
     },
   },
@@ -75,7 +75,7 @@ console.log(response.data,'response.data',response.data.data.token,'pppppppppppp
       dispatch(setIsLogined(true));
       
       // Fetch coins balance after successful login
-      dispatch(getCoinsBalance());
+      dispatch(getCoinsBalance() as any);
       
       cb && cb(response?.data?.user)
     }
@@ -191,7 +191,7 @@ export const getCoinsBalance = () => async (dispatch: Dispatch) => {
       dispatch(setUserId(null));
     }
   } catch (err: any) {
-    console.error('Failed to fetch coins balance:', err);
+    console.error('Failed to fetch coins balance:', err?.response?.data || err?.message || err);
     dispatch(setCoinsBalance(0));
     dispatch(setUserId(null));
   }

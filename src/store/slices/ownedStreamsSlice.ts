@@ -7,6 +7,9 @@ export interface IOwnedStream {
   price: number;
   description: string;
   image: string;
+  created_at?: string; // ISO timestamp when access was granted
+  duration?: number;   // duration in seconds
+  ends_at?: string;    // ISO timestamp when access ends
   category: {
     id: number;
     name: string;

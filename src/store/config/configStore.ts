@@ -5,6 +5,9 @@ import categoriesReducer from "../slices/categoriesSlice"
 import ownedCardsReducer from "../slices/ownedCardsSlice"
 import ownedStreamsReducer from "../slices/ownedStreamsSlice"
 import coinsPurchaseReducer from "../slices/coinsPurchaseSlice"
+import cardPurchaseReducer from "../slices/cardPurchaseSlice"
+import streamPurchaseReducer from "../slices/streamPurchaseSlice"
+import transactionReducer from "../slices/transactionSlice"
 import authSlice from "../slices/authSlice"
 import administrativSlice from "../slices/administrativSlice"
 
@@ -16,6 +19,9 @@ export const store = configureStore({
         ownedCardsReducer,
         ownedStreamsReducer,
         coinsPurchaseReducer,
+        cardPurchaseReducer,
+        streamPurchaseReducer,
+        transactionsReducer: transactionReducer,
         authInfo: authSlice,
         administrativ: administrativSlice
     },
