@@ -1,6 +1,7 @@
 
 import { create } from 'zustand'
 import { Card, Category, Stream, PurchaseCard, AccessGrant, PassPlanKey } from './types'
+import { logCardPurchase } from '../services/appsFlyer'
 
 type State = {
   lang: 'ru'|'en'|'es'|'de';
@@ -45,6 +46,17 @@ export const useApp = create<State>((set, get) => ({
 
   buyCard: async (cardId: number) => {
     await new Promise(r => setTimeout(r, 600));
+    logCardPurchase(cardId);
+
+    // Find the card to get its details for AppsFlyer logging
+    const state = get();
+    const card = state.cards.find(c => c.id === cardId);
+    console.log(card,'ca111111111111111111111111rd');
+    
+    if (card) {
+      // Log AppsFlyer card purchase event
+    }
+    
     set((s) => ({purchases: [...s.purchases, {cardId, purchasedAt: now(), readyAt: now()+60*60*1000}]}))
   },
   chargeCardName: (cardId: number, name: string) => {

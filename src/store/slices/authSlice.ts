@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createSlice, Dispatch, PayloadAction, } from '@reduxjs/toolkit'
 import mainApi, { setScanMeApiAuthorization } from '../../services/instance/MainInstance';
 import { IError, setError } from './administrativSlice';
+import { logUserRegistration } from '../../services/appsFlyer';
 
 export interface ILogin {
   email: string,
@@ -134,6 +135,8 @@ export const register = (data: IRegister, cb?: () => void) => async () => {
     
     const response = await mainApi.post(`auth/register`, data);
     if (response.status === 201) {
+      // Log AppsFlyer registration event
+      logUserRegistration(data.email);
       cb && cb()
     }
    // if (response.status === 200) {

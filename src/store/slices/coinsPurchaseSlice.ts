@@ -1,5 +1,6 @@
 import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit';
 import mainApi from '../../services/instance/MainInstance';
+import { logCoinsPurchase } from '../../services/appsFlyer';
 
 export interface ICoinsPurchaseRequest {
   app_store_product_id: string;
@@ -53,7 +54,7 @@ export const coinsPurchaseSlice = createSlice({
   },
 });
 
-export const purchaseCoins = (data: ICoinsPurchaseRequest) => async (dispatch: Dispatch) => {
+export const purchaseCoins = (data: ICoinsPurchaseRequest, coinsAmount?: number, price?: number) => async (dispatch: Dispatch) => {
   dispatch(setCoinsPurchaseLoading(true));
   dispatch(setCoinsPurchaseError(null));
 
@@ -61,6 +62,10 @@ export const purchaseCoins = (data: ICoinsPurchaseRequest) => async (dispatch: D
     const response = await mainApi.post('coins/purchase', data);
 
     if (response.data && response.data.success === true) {
+      // Log AppsFlyer coins purchase event if amount and price are provided
+      if (coinsAmount && price) {
+        logCoinsPurchase(coinsAmount, price);
+      }
       dispatch(setCoinsPurchaseSuccess(response.data.data));
     } else {
       dispatch(setCoinsPurchaseError(response.data?.message || 'Purchase failed'));

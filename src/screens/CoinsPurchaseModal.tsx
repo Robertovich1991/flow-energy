@@ -43,15 +43,25 @@ console.log(coinsBalance,'coinsBalance');
   
       console.log(skus, '------000000000099999iiiiiiii----');
       
+      // Find the coin package details for AppsFlyer logging
+      const coinPackage = COIN_PACKAGES.find(pkg => pkg.productId === productId);
+      
+      // Handle the skus response (it can be an array or single object)
+      const skuData = Array.isArray(skus) ? skus[0] : skus;
+      
+      if (!skuData) {
+        throw new Error('Purchase data not received');
+      }
+      
       // Send purchase data to backend
       const purchaseData = {
-        app_store_product_id: skus.productId,
-        app_store_transaction_id: skus.transactionReceipt,
+        app_store_product_id: skuData.productId,
+        app_store_transaction_id: skuData.transactionReceipt,
         user_id: userId
       };
 
-      // Dispatch the purchase action
-      await dispatch(purchaseCoins(purchaseData) as any);
+      // Dispatch the purchase action with coin details for AppsFlyer logging
+      await dispatch(purchaseCoins(purchaseData, coinPackage?.coins, coinPackage ? parseInt(coinPackage.price.replace('$', '')) : undefined) as any);
       
       // Refresh coins balance after successful purchase
       dispatch(getCoinsBalance() as any);

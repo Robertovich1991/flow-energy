@@ -45,7 +45,7 @@ export default function StreamDetail() {
           text: 'Yes, Buy', 
           onPress: () => {
             // Purchase stream access then proceed
-            dispatch(purchaseStream(stream.id, () => {
+            dispatch(purchaseStream(stream.id, stream.title, stream.price, () => {
               Alert.alert('Stream Successful');
               nav.navigate('StreamSession', { stream: stream });
             }) as any);

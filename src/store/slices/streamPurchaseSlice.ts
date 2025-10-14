@@ -1,5 +1,6 @@
 import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit';
 import mainApi from '../../services/instance/MainInstance';
+import { logStreamPurchase } from '../../services/appsFlyer';
 
 export interface IStreamPurchaseState {
   loading: boolean;
@@ -35,12 +36,14 @@ export const streamPurchaseSlice = createSlice({
   }
 });
 
-export const purchaseStream = (streamId: number, cb?: () => void) => async (dispatch: Dispatch) => {
+export const purchaseStream = (streamId: number, streamTitle: string, streamPrice: number, cb?: () => void) => async (dispatch: Dispatch) => {
   dispatch(setStreamPurchaseLoading(true));
   dispatch(setStreamPurchaseError(null));
   try {
     const response = await mainApi.post(`coins/streams/${streamId}/purchase`, { confirm: true });
     if (response?.data?.success === true) {
+      // Log AppsFlyer stream purchase event
+      logStreamPurchase(streamId, streamTitle, streamPrice);
       dispatch(setStreamPurchased(streamId));
       cb && cb();
     } else {
