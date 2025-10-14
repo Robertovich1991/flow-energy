@@ -70,10 +70,15 @@ export default function CardDetail() {
     }
   };
 
+  // Determine which image to use
+  const imageSource = card.image === '/images/default.jpg' 
+    ? require('../assets/images/flowImage.jpg')
+    : { uri: 'http://api.go2winbet.online' + card.image };
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>{card.title}</Text>
-      <ImageBackground source={{uri: 'http://api.go2winbet.online'+ card.image}} style={styles.cover} imageStyle={styles.coverImage}>
+      <ImageBackground source={imageSource} style={styles.cover} imageStyle={styles.coverImage}>
         <View style={{padding: 16, flex: 1, justifyContent: 'space-between'}}>
           <View style={{flexDirection:'row', alignItems:'center', gap:6}}>
             <Icon name="sparkle" color="#fff" />

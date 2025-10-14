@@ -53,12 +53,16 @@ export default function StreamCard({ stream, totalDuration, onPress }: StreamCar
     
     return () => clearInterval(interval);
   }, [totalDuration, progressAnim]);
-  console.log(durationInMinutes, '..........................duration in minutes..........................');
+  console.log(stream.image, '..........................duration in minutes..........................');
 
   return (
     <TouchableOpacity style={styles.container} activeOpacity={0.8} onPress={onPress}>
       <Image
-        source={{ uri: 'http://api.go2winbet.online' + stream.image }}
+        source={
+          stream.image === '/images/default.jpg'
+            ? require('../assets/images/flowImage.jpg')
+            : { uri: 'http://api.go2winbet.online' + stream.image }
+        }
         resizeMode="cover"
         style={styles.image}
       />

@@ -10,7 +10,7 @@ import { getCardList } from '../store/slices/cardSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { cardListSelector } from '../store/selectors/cardSelector';
 import { getStreamList } from '../store/slices/streamSlice';
-// import * as RNIap from 'react-native-iap';
+import * as RNIap from 'react-native-iap';
 import { getCategoriesList } from '../store/slices/categoriesSlice';
 
 
@@ -20,21 +20,21 @@ export default function Home() {
   const dispatch = useDispatch();
   const cards = useSelector(cardListSelector);
   
-const productIds=['coin10','coin50','coin100','coin500','coin1000']
+ const productIds=['coin10','coin50','coin100','coin500','coin1000']
   
   useEffect(() => {
-    dispatch(getCardList());
-    dispatch(getStreamList());
-    dispatch(getCategoriesList());
-  }, [])
+    dispatch(getCardList() as any);
+    dispatch(getStreamList() as any);
+    dispatch(getCategoriesList() as any);
+  }, [dispatch])
 
- useEffect(() => {
+  useEffect(() => {
     async function init() {
       try {
-       const suc= await RNIap.initConnection();
+        const suc= await RNIap.initConnection();
         setTimeout(async () => {
-          await RNIap.getSubscriptions({skus:productIds});
-         const x= await RNIap.getProducts({skus:productIds});
+           await RNIap.getSubscriptions({skus:productIds});
+          const x= await RNIap.getProducts({skus:productIds});
          console.log(x,suc,'[[[[[[[[[[[[[[[[[[[[[[');
          
         }, 1000); // Wait 1 second        console.log(products,'[[[[[[[[gggggggggggggggggg[[[[[[[[[[[[[[')
@@ -48,7 +48,7 @@ const productIds=['coin10','coin50','coin100','coin500','coin1000']
     return () => {
     //  RNIap.endConnection();
     };
-  }, []);
+   }, []);
 
   return (
     <ScrollView style={styles.container} contentInsetAdjustmentBehavior="automatic">
@@ -65,7 +65,7 @@ const productIds=['coin10','coin50','coin100','coin500','coin1000']
       </View>
 
       <Text style={styles.section}>{t('sections.popular')}</Text>
-      {cards && cards.slice(0, 2).map((card: any) => (
+      {cards && cards.length > 0 && cards?.slice(0, 2).map((card: any) => (
         <CardTile
           key={card.id}
           title={card.title}

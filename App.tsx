@@ -9,8 +9,27 @@ import i18n from './src/i18n/index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setScanMeApiAuthorization } from './src/services/instance/MainInstance';
 import { getCoinsBalance } from './src/store/slices/authSlice';
+import appsFlyer from 'react-native-appsflyer';
+
 
 const Bootstrap = () => {
+
+  const options = {
+    devKey: '2Tbaxm8HrTqQvvYi3k2SjZ',
+    isDebug: true, // optional for development
+    appId: '6753660624',
+  };
+  
+  appsFlyer.initSdk(
+    options,
+    (result) => {
+      console.log('AppsFlyer initialized:', result);
+    },
+    (error) => {
+      console.error('AppsFlyer init error:', error);
+    }
+  );
+
   const dispatch = useDispatch();
   useEffect(() => {
     const init = async () => {

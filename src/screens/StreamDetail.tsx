@@ -59,10 +59,15 @@ export default function StreamDetail() {
     nav.navigate('StreamAccessModal', { streamId: stream.id });
   };
 
+  // Determine which image to use
+  const imageSource = stream.image === '/images/default.jpg' 
+    ? require('../assets/images/flowImage.jpg')
+    : { uri: 'http://api.go2winbet.online' + stream.image };
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>{stream.title}</Text>
-      <ImageBackground source={{uri: 'http://api.go2winbet.online' + stream.image}} style={styles.cover} imageStyle={styles.coverImage}>
+      <ImageBackground source={imageSource} style={styles.cover} imageStyle={styles.coverImage}>
         <View style={{padding: 16, flex: 1, justifyContent: 'space-between'}}>
           <View style={{flexDirection:'row', alignItems:'center', gap:6}}>
             <Icon name="play" color="#fff" />
@@ -76,7 +81,7 @@ export default function StreamDetail() {
         <PrimaryButton leftIcon="play" rightIcon="arrow-right" label={t('cta.startStream') + ' · $' + stream.price} onPress={onStartStream} />
         {/** <GhostButton leftIcon="lock" label={t('cta.getAccess')} onPress={onGetAccess} /> **/}
       </View>
-      <View style={styles.infoRow}>
+      {/* <View style={styles.infoRow}>
         <View style={styles.infoItem}>
           <Icon name="clock" size={16} color="#E0E0E6" />
           <Text style={styles.info}>10–15 мин</Text>
@@ -88,8 +93,8 @@ export default function StreamDetail() {
         <View style={styles.infoItem}>
           <Icon name="play" size={16} color="#E0E0E6" />
           <Text style={styles.info}>Онлайн</Text>
-        </View>
-      </View>
+        </View> */}
+      {/* </View> */}
     </ScrollView>
   );
 }

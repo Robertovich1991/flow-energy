@@ -54,10 +54,14 @@ export default function MyStreams() {
             <StreamCard 
               key={stream.id} 
               stream={stream} 
-              totalDuration={transactions?.data[index]}
+              totalDuration={(transactions as any)?.data?.[index]}
                             onPress={() => {
                 // Navigate to ImageGallery with stream image (convert single image to array)
-                const images = stream.image ? [`http://api.go2winbet.online${stream.image}`] : [];
+                const images = stream.image 
+                  ? (stream.image === '/images/default.jpg' 
+                      ? [require('../assets/images/flowImage.jpg')]
+                      : [`http://api.go2winbet.online${stream.image}`])
+                  : [];
                 navigation.navigate('ImageGallery', {
                   images: images,
                   initialIndex: 0

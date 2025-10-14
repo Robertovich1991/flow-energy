@@ -6,7 +6,7 @@ import { theme } from '../theme';
 
 type GalleryRouteParams = {
   ImageGallery: {
-    images: string[];
+    images: (string | number)[]; // Support both URI strings and local image numbers
     initialIndex?: number;
   };
 };
@@ -14,7 +14,7 @@ type GalleryRouteParams = {
 export default function ImageGallery() {
   const route = useRoute<any>();
   const navigation = useNavigation();
-  const listRef = useRef<FlatList<string>>(null);
+  const listRef = useRef<FlatList<string | number>>(null);
   const { width, height } = Dimensions.get('window');
   const images = useMemo(() => route.params?.images ?? [], [route.params]);
   const initialIndex = route.params?.initialIndex ?? 0;
@@ -37,15 +37,25 @@ export default function ImageGallery() {
   const downloadImage = async () => {
     if (isDownloading) return;
     
-    const currentImageUrl = images[currentImageIndex];
-    if (!currentImageUrl) return;
+    const currentImage = images[currentImageIndex];
+    if (!currentImage) return;
+
+    // Check if it's a local image (number) - can't share local images
+    if (typeof currentImage === 'number') {
+      Alert.alert(
+        'Local Image',
+        'This is a local image and cannot be shared directly.',
+        [{ text: 'OK' }]
+      );
+      return;
+    }
 
     setIsDownloading(true);
     
     try {
       // Use React Native's Share API to save the image
       const result = await Share.share({
-        url: currentImageUrl,
+        url: currentImage,
         message: Platform.OS === 'ios' 
           ? 'Save this image to your Photos app' 
           : 'Save this image to your device'
@@ -82,8 +92,8 @@ export default function ImageGallery() {
     }
   }, []);
 
-  const renderItem = useCallback(({ item }: { item: string }) => (
-    <GalleryPage uri={item} width={width} height={height} />
+  const renderItem = useCallback(({ item }: { item: string | number }) => (
+    <GalleryPage source={item} width={width} height={height} />
   ), [width, height]);
 
   return (
@@ -126,7 +136,7 @@ export default function ImageGallery() {
   );
 }
 
-function GalleryPage({ uri, width, height }: { uri: string; width: number; height: number }) {
+function GalleryPage({ source, width, height }: { source: string | number; width: number; height: number }) {
   const scale = React.useRef(new Animated.Value(1)).current;
   const lastTap = React.useRef<number>(0);
 
@@ -150,12 +160,15 @@ function GalleryPage({ uri, width, height }: { uri: string; width: number; heigh
     lastTap.current = now;
   };
 
+  // Determine image source type
+  const imageSource = typeof source === 'number' ? source : { uri: source };
+
   return (
     <View style={{ width, height, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center' }}>
       <TouchableWithoutFeedback onPress={handleTap}>
         <Animated.View style={{ width, height, transform: [{ scale }] }}>
           <Image
-            source={{ uri }}
+            source={imageSource}
             resizeMode="contain"
             style={{ width, height }}
           />

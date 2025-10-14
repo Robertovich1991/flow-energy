@@ -81,3 +81,8 @@ export const {
 } = coinsPurchaseSlice.actions;
 
 export default coinsPurchaseSlice.reducer;
+
+
+
+
+

@@ -55,13 +55,19 @@ export default function MyCards() {
               key={card.id}
               style={styles.cardContainer}
               onPress={() => nav.navigate('ImageGallery', { 
-                images: ['http://api.go2winbet.online' + card.image], 
+                images: card.image === '/images/default.jpg' 
+                  ? [require('../assets/images/flowImage.jpg')]
+                  : ['http://api.go2winbet.online' + card.image], 
                 initialIndex: 0 
               })}
               activeOpacity={0.8}
             >
               <Image
-                source={{ uri: 'http://api.go2winbet.online'+ card.image }}
+                source={
+                  card.image === '/images/default.jpg'
+                    ? require('../assets/images/flowImage.jpg')
+                    : { uri: 'http://api.go2winbet.online' + card.image }
+                }
                 resizeMode="cover"
                 style={styles.cardImage}
               />
