@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
-import { PrimaryButton } from '../components/Buttons';
+import { PrimaryButton, AppleButton } from '../components/Buttons';
 import { useNavigation } from '@react-navigation/native';
 import Icon from '../components/Icon';
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -192,8 +192,8 @@ const dispatch = useDispatch<AppDispatch>()
               )}
             />
           </View>
-          {errors.confirmPassword && (
-            <Text style={styles.fieldErrorText}>{errors.confirmPassword.message}</Text>
+          {errors.password_confirmation && (
+            <Text style={styles.fieldErrorText}>{errors.password_confirmation.message}</Text>
           )}
         </View>
 
@@ -201,6 +201,16 @@ const dispatch = useDispatch<AppDispatch>()
           label={t('cta.signUp')} 
           onPress={handleSubmit(onSubmit)}
           style={styles.signUpButton}
+        />
+
+        <AppleButton
+          label="Continue with Apple"
+          leftIcon="apple"
+          onPress={() => {
+            // TODO: Implement Apple login functionality
+            console.log('Apple login pressed');
+          }}
+          style={styles.appleButton}
         />
 
         <View style={styles.loginContainer}>
@@ -275,6 +285,9 @@ const styles = StyleSheet.create({
   },
   signUpButton: {
     marginTop: 8,
+    marginBottom: 16,
+  },
+  appleButton: {
     marginBottom: 24,
   },
   loginContainer: {

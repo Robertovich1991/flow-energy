@@ -23,6 +23,7 @@
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = avrora/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		25CCA73C2E9323AB00092173 /* flowcoins.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = flowcoins.storekit; sourceTree = "<group>"; };
 		25CCA73E2E93269D00092173 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		25CFE9722E9EF42100F19233 /* avrora.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = avrora.entitlements; path = avrora/avrora.entitlements; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-avrora.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-avrora.debug.xcconfig"; path = "Target Support Files/Pods-avrora/Pods-avrora.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-avrora.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-avrora.release.xcconfig"; path = "Target Support Files/Pods-avrora/Pods-avrora.release.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-avrora.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-avrora.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -47,6 +48,7 @@
 		13B07FAE1A68108700A75B9A /* avrora */ = {
 			isa = PBXGroup;
 			children = (
+				25CFE9722E9EF42100F19233 /* avrora.entitlements */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				761780EC2CA45674006654EE /* AppDelegate.swift */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -267,6 +269,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = avrora/avrora.entitlements;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 9RBQZ3ZN9L;
 				ENABLE_BITCODE = NO;
@@ -297,6 +300,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = avrora/avrora.entitlements;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 9RBQZ3ZN9L;
 				INFOPLIST_FILE = avrora/Info.plist;

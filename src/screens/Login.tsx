@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity,  } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert,  } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
-import { PrimaryButton } from '../components/Buttons';
+import { PrimaryButton, AppleButton } from '../components/Buttons';
 import { useNavigation } from '@react-navigation/native';
 import Icon from '../components/Icon';
 import { login } from '../store/slices/authSlice';
@@ -10,6 +10,8 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../store/config/configStore';
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { ILoginData } from '../store/types';
+import appleAuth from '@invertase/react-native-apple-authentication';
+
 
 
 export default function Login() {
@@ -83,6 +85,45 @@ export default function Login() {
       );
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const onAppleButtonPress = async () => {
+    console.log('oooo');
+    try {console.log('ooojjjjjjjjjjjjjo');
+    
+      const appleAuthRequestResponse = await appleAuth.performRequest({
+        requestedOperation: appleAuth.Operation.LOGIN,
+        // Note: it appears putting FULL_NAME first is important, see issue #293
+        requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
+      });
+    
+console.log(appleAuthRequestResponse,'appleAuthRequestResponse');
+
+      // get current authentication state for user
+      // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+      const credentialState = await appleAuth.getCredentialStateForUser(
+        appleAuthRequestResponse.user,
+      );
+      if (!appleAuthRequestResponse.identityToken) {
+        Alert.alert(
+          'Authorization Error',
+          'Error while processing idToken in Google',
+        );
+        // store.modalsStore.hideSpinner();
+      } else {
+       // const firstName=name?name:"User"
+        // store.userStore.signInWithApple(
+        //   firstName,
+        //   appleAuthRequestResponse.identityToken,
+        // );
+      }
+      // use credentialState response to ensure the user is authenticated
+      if (credentialState === appleAuth.State.AUTHORIZED) {
+        // user is authenticated
+      }
+    } catch (error) {
+      console.log(error, 'ppppppp9999999');
     }
   };
 
@@ -187,6 +228,13 @@ export default function Login() {
           style={styles.loginButton}
         />
 
+        <AppleButton
+          label="Continue with Apple"
+          leftIcon="apple"
+          onPress={onAppleButtonPress}
+          style={styles.appleButton}
+        />
+
         {loginError ? (
           <Text style={styles.errorText}>{loginError}</Text>
         ) : null}
@@ -271,6 +319,9 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   loginButton: {
+    marginBottom: 16,
+  },
+  appleButton: {
     marginBottom: 24,
   },
   errorText: {
