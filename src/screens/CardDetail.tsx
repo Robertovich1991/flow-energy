@@ -37,11 +37,11 @@ export default function CardDetail() {
     if (coinsBalance === 0) {
       if (isFocused && isMounted.current) {
         Alert.alert(
-          'Insufficient Coins',
+          t('common.insufficientCoins'),
           'You need coins to purchase this card. Would you like to buy coins?',
           [
             { text: 'Cancel', style: 'cancel' },
-            { text: 'Buy Coins', onPress: () => nav.navigate('CoinsPurchaseModal') },
+            { text: t('common.buyCoins'), onPress: () => nav.navigate('CoinsPurchaseModal') },
           ]
         );
       }
@@ -51,12 +51,12 @@ export default function CardDetail() {
     // Show confirmation alert before purchasing
     if (isFocused && isMounted.current) {
       Alert.alert(
-        'Confirm Purchase',
+        t('common.confirmPurchase'),
         `Do you really want to buy this card for $${card.price}?`,
         [
           { text: 'Cancel', style: 'cancel' },
           { 
-            text: 'Yes, Buy', 
+            text: t('common.yesBuy'), 
             onPress: async () => {
               await buyCard(card.id);
 
@@ -94,16 +94,7 @@ export default function CardDetail() {
         <PrimaryButton leftIcon="shopping-bag" rightIcon="arrow-right" label={t('cta.buy') + ' · $' + card.price} onPress={onBuy} />
         <GhostButton leftIcon="play" label={t('cta.preview')} onPress={()=> setShowDescription(true)} />
       </View>
-      <View style={styles.infoRow}>
-        <View style={styles.infoItem}>
-          <Icon name="clock" size={16} color="#E0E0E6" />
-          <Text style={styles.info}>5–10 мин</Text>
-        </View>
-        <View style={styles.infoItem}>
-          <Icon name="headphones" size={16} color="#E0E0E6" />
-          <Text style={styles.info}>Наушники</Text>
-        </View>
-      </View>
+     
     </ScrollView>
   );
 }

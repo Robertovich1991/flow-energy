@@ -64,6 +64,35 @@
     "hasAccount": "¿Ya tienes cuenta?",
     "loginLink": "Iniciar sesión"
   },
+  "coins": {
+    "title": "Comprar monedas",
+    "subtitle": "Elige tu paquete de monedas",
+    "buy": "Comprar",
+    "balance": "Saldo"
+  },
+  "common": {
+    "all": "Todos",
+    "loading": "Cargando...",
+    "processing": "Procesando...",
+    "timeRemaining": "Tiempo restante",
+    "timeLost": "Tiempo perdido",
+    "min": "min",
+    "coins": "monedas",
+    "stream": "Flujo",
+    "insufficientCoins": "Monedas insuficientes",
+    "buyCoins": "Comprar monedas",
+    "confirmPurchase": "Confirmar compra",
+    "yesBuy": "Sí, comprar",
+    "streamSuccessful": "Flujo exitoso",
+    "purchaseFailed": "Compra fallida",
+    "extend": "Extender",
+    "complete": "Completar",
+    "myStreams": "Mis flujos",
+    "loadingStreams": "Cargando flujos...",
+    "loadingCards": "Cargando cartas...",
+    "noStreamsFound": "No se encontraron flujos para esta categoría",
+    "noCardsFound": "No se encontraron cartas para esta categoría"
+  },
   "Errors": {
     "Required": "Este campo es obligatorio",
     "Invalid_Email": "Por favor, ingresa un email válido",

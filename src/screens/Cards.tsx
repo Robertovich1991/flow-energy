@@ -43,7 +43,7 @@ export default function Cards() {
       <Text style={styles.sub}>{t('sections.categories')}</Text>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 8 }}>
         <Chip 
-          label="Все"
+          label={t('common.all')}
           active={selectedCategoryId === null} 
           onPress={() => setSelectedCategoryId(null)}
         />
@@ -62,9 +62,9 @@ export default function Cards() {
           <Chip key={i} label={c} active={i === 4} />
         ))}
       </View> */}
-      <View style={{ marginTop: 16 }}>
+      <View style={styles.cardsContainer}>
         {!cards || cards.length === 0 ? (
-          <Text style={styles.emptyText}>Loading cards...</Text>
+          <Text style={styles.emptyText}>{t('common.loadingCards')}</Text>
         ) : filteredCards && filteredCards.length > 0 ? (
           filteredCards.map((card: any) => (
             <CardTile
@@ -76,7 +76,7 @@ export default function Cards() {
             />
           ))
         ) : (
-          <Text style={styles.emptyText}>No cards found for this category</Text>
+          <Text style={styles.emptyText}>{t('common.noCardsFound')}</Text>
         )}
       </View>
     </ScrollView>
@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: theme.colors.bg, padding: 16 },
   title: { color: '#fff', fontSize: 32, fontWeight: '900' },
   sub: { color: theme.colors.subtext, marginTop: 12 },
+  cardsContainer: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginTop: 16 },
   emptyText: { 
     color: theme.colors.subtext, 
     textAlign: 'center', 

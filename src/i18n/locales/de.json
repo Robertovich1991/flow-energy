@@ -64,6 +64,35 @@
     "hasAccount": "Bereits ein Konto?",
     "loginLink": "Anmelden"
   },
+  "coins": {
+    "title": "Münzen kaufen",
+    "subtitle": "Wähle dein Münzenpaket",
+    "buy": "Kaufen",
+    "balance": "Guthaben"
+  },
+  "common": {
+    "all": "Alle",
+    "loading": "Laden...",
+    "processing": "Verarbeitung...",
+    "timeRemaining": "Verbleibende Zeit",
+    "timeLost": "Zeit abgelaufen",
+    "min": "Min",
+    "coins": "Münzen",
+    "stream": "Stream",
+    "insufficientCoins": "Unzureichende Münzen",
+    "buyCoins": "Münzen kaufen",
+    "confirmPurchase": "Kauf bestätigen",
+    "yesBuy": "Ja, kaufen",
+    "streamSuccessful": "Stream erfolgreich",
+    "purchaseFailed": "Kauf fehlgeschlagen",
+    "extend": "Verlängern",
+    "complete": "Abschließen",
+    "myStreams": "Meine Streams",
+    "loadingStreams": "Streams laden...",
+    "loadingCards": "Karten laden...",
+    "noStreamsFound": "Keine Streams für diese Kategorie gefunden",
+    "noCardsFound": "Keine Karten für diese Kategorie gefunden"
+  },
   "Errors": {
     "Required": "Dieses Feld ist erforderlich",
     "Invalid_Email": "Bitte gib eine gültige E-Mail-Adresse ein",

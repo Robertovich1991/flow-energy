@@ -1,4 +1,3 @@
-
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +9,7 @@ type Props = {
   price?: string;
   intensity?: number;
   colors?: [string,string];
+  useCases?: string[];
   onPress?: () => void;
 };
 
@@ -26,7 +26,7 @@ const colorPalettes = [
   ['#8B5CF6', '#7C2D12'], // Violet
 ];
 
-export const CardTile: React.FC<Props> = ({title, price, intensity, colors, onPress}) => {
+export const StreamTile: React.FC<Props> = ({title, price, intensity, colors, useCases, onPress}) => {
   const { t } = useTranslation();
   const randomColors = useMemo(() => {
     if (colors) return colors;
@@ -41,19 +41,33 @@ export const CardTile: React.FC<Props> = ({title, price, intensity, colors, onPr
       {price && (
         <View style={styles.priceContainer}>
           <Text style={styles.priceText}>{price}</Text>
-          <Icon name="coin" size={14} color={theme.colors.primary} />
+          <Icon name="coin" size={16} color={theme.colors.primary} />
         </View>
       )}
       {typeof intensity === 'number' && <Text style={styles.meta}>{t('fields.intensity')} {intensity}%</Text>}
+    
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  tile: { borderWidth: 2, borderRadius: 16, padding: 16, overflow: 'hidden', marginBottom: 12, width: '48%', height: 160 },
-  gradient: { position:'absolute', top:0, left:0, right:0, height:6, opacity:0.9 },
-  title: { color: '#fff', fontSize: 16, fontWeight: '800', marginTop: 6, marginBottom: 6, textAlign: 'center' },
-  priceContainer: { marginBottom: 6, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' },
-  priceText: { color: theme.colors.primary, fontSize: 14, fontWeight: '700' },
-  meta: { color:'#EAEAF0', marginTop: 6, fontSize: 10, textAlign: 'center' },
+  tile: { borderWidth: 2, borderRadius: 24, padding: 20, overflow: 'hidden', marginBottom: 12, width: '100%', minHeight: 120 },
+  gradient: { position:'absolute', top:0, left:0, right:0, height:8, opacity:0.9 },
+  title: { color: '#fff', fontSize: 20, fontWeight: '800', marginTop: 8, marginBottom: 8 },
+  priceContainer: { marginBottom: 8, flexDirection: 'row', alignItems: 'center' },
+  priceText: { color: theme.colors.primary, fontSize: 16, fontWeight: '700' },
+  meta: { color:'#EAEAF0', marginTop: 8, fontSize: 12 },
+  useCasesContainer: {
+    marginTop: 8,
+  },
+  useCase: {
+    color: theme.colors.subtext,
+    fontSize: 11,
+    marginBottom: 2,
+  },
+  useCaseMore: {
+    color: theme.colors.primary,
+    fontSize: 10,
+    fontStyle: 'italic',
+  },
 });

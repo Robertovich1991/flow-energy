@@ -4,8 +4,10 @@ import { View, Text, StyleSheet } from 'react-native';
 import { theme } from '../theme';
 import { PrimaryButton, GhostButton } from '../components/Buttons';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 export default function StreamSession() {
+  const { t } = useTranslation();
   const [sec, setSec] = useState(10*60); // demo 10 minutes
   const nav = useNavigation<any>();
   const route = useRoute<any>();
@@ -27,8 +29,8 @@ export default function StreamSession() {
       {/* <View style={styles.card}>
         <Text style={styles.timer}>{mm}:{ss}</Text>
       </View> */}
-      <PrimaryButton label="Продлить" onPress={()=>{}} style={{marginVertical:8}} />
-      <GhostButton label="Завершить" onPress={()=>nav.goBack()} />
+      <PrimaryButton label={t('common.extend')} onPress={()=>{}} style={{marginVertical:8}} />
+      <GhostButton label={t('common.complete')} onPress={()=>nav.goBack()} />
     </View>
   );
 }

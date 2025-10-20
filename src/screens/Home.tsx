@@ -65,15 +65,17 @@ export default function Home() {
       </View>
 
       <Text style={styles.section}>{t('sections.popular')}</Text>
-      {cards && cards.length > 0 && cards?.slice(0, 2).map((card: any) => (
-        <CardTile
-          key={card.id}
-          title={card.title}
-          price={`$${card.price}`}
-          intensity={card.intensityPct}
-          onPress={() => nav.navigate('CardDetail', { card: card })}
-        />
-      ))}
+      <View style={styles.cardsGrid}>
+        {cards && cards.length > 0 && cards?.slice(0, 6).map((card: any) => (
+          <CardTile
+            key={card.id}
+            title={card.title}
+            price={`$${card.price}`}
+            intensity={card.intensityPct}
+            onPress={() => nav.navigate('CardDetail', { card: card })}
+          />
+        ))}
+      </View>
     </ScrollView>
   );
 }
@@ -86,5 +88,6 @@ const styles = StyleSheet.create({
   heroSup: { color: theme.colors.subtext, marginBottom: 6 },
   heroTitle: { color: '#fff', fontSize: 20, fontWeight: '900', lineHeight: 26 },
   section: { color: '#fff', fontSize: 20, fontWeight: '900', marginTop: 24, marginBottom: 8 },
-  ctaRow: { flexDirection: 'row', gap: 10, marginTop: 12, flexWrap: 'wrap' }
+  ctaRow: { flexDirection: 'row', gap: 10, marginTop: 12, flexWrap: 'wrap' },
+  cardsGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }
 });

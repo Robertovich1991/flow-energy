@@ -11,7 +11,7 @@ const spacing = 12;
 const { width } = Dimensions.get('window');
 const numColumns = 2;
 const cardWidth = Math.floor((width - spacing * (numColumns + 1)) / numColumns);
-const cardHeight = Math.floor(cardWidth * 1.35);
+const cardHeight = Math.floor(cardWidth * 1.5);
 
 export default function MyCards() {
   const { t } = useTranslation();
@@ -21,6 +21,7 @@ export default function MyCards() {
 
   const ownedCards = useSelector(ownedCardsListSelector);
   const loadingOwnedCards = useSelector(ownedCardsLoadingSelector);
+console.log(ownedCards,'ownedCards');
 
   // Fetch owned cards on component mount
   useEffect(() => {
@@ -50,31 +51,37 @@ export default function MyCards() {
       <Text style={styles.title}>{t('profile.myCards')}</Text>
       <ScrollView style={styles.scrollView}>
         <View style={styles.gridContainer}>
-          {ownedCards.map((card, index) => (
+          {ownedCards.map((ownedCard, index) => (
             <TouchableOpacity
-              key={card.id}
+              key={ownedCard.id}
               style={styles.cardContainer}
               onPress={() => nav.navigate('ImageGallery', { 
-                images: card.image === '/images/default.jpg' 
+                images: ownedCard.card.image === '/images/default.jpg' 
                   ? [require('../assets/images/flowImage.jpg')]
-                  : ['http://api.go2winbet.online' + card.image], 
+                  : ['http://api.go2winbet.online' + ownedCard.card.image], 
                 initialIndex: 0 
               })}
               activeOpacity={0.8}
             >
               <Image
                 source={
-                  card.image === '/images/default.jpg'
+                  ownedCard.card.image === '/images/default.jpg'
                     ? require('../assets/images/flowImage.jpg')
-                    : { uri: 'http://api.go2winbet.online' + card.image }
+                    : { uri: 'http://api.go2winbet.online' + ownedCard.card.image }
                 }
                 resizeMode="cover"
                 style={styles.cardImage}
               />
               <View style={styles.cardInfo}>
-                <Text style={styles.cardTitle}>{card.title}</Text>
-                <Text style={styles.cardCategory}>{card.category.name}</Text>
-                <Text style={styles.cardPrice}>${card.price}</Text>
+                <View style={styles.cardHeader}>
+                  <Text style={styles.cardTitle}>{ownedCard.card.title}</Text>
+                  <Text style={styles.cardCategory}>{ownedCard.card.category.name}</Text>
+                </View>
+                <View style={styles.cardFooter}>
+                  <Text style={styles.cardPrice}>${ownedCard.card.price}</Text>
+                  <Text style={styles.cardName}>👤 {ownedCard.name}</Text>
+                  <Text style={styles.cardBirthday}>🎂 {ownedCard.birthday.split('T')[0]}</Text>
+                </View>
               </View>
             </TouchableOpacity>
           ))}
@@ -116,13 +123,19 @@ const styles = StyleSheet.create({
   },
   cardImage: {
     width: '100%',
-    height: '70%',
+    height: '60%',
     backgroundColor: theme.colors.card,
   },
   cardInfo: {
     flex: 1,
     padding: 8,
     justifyContent: 'space-between',
+  },
+  cardHeader: {
+    flex: 1,
+  },
+  cardFooter: {
+    marginTop: 4,
   },
   cardTitle: {
     color: '#fff',
@@ -139,6 +152,16 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     fontSize: 12,
     fontWeight: '600',
+    marginBottom: 4,
+  },
+  cardName: {
+    color: theme.colors.text,
+    fontSize: 10,
+    marginBottom: 2,
+  },
+  cardBirthday: {
+    color: theme.colors.subtext,
+    fontSize: 10,
   },
   loadingText: {
     color: theme.colors.text,

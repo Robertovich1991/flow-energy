@@ -5,7 +5,7 @@ import { theme } from '../theme';
 import { PrimaryButton, AppleButton } from '../components/Buttons';
 import { useNavigation } from '@react-navigation/native';
 import Icon from '../components/Icon';
-import { login } from '../store/slices/authSlice';
+import { login, appleLogin } from '../store/slices/authSlice';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../store/config/configStore';
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -17,6 +17,7 @@ import appleAuth from '@invertase/react-native-apple-authentication';
 export default function Login() {
   const { t } = useTranslation();
   const nav = useNavigation<any>();
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -89,8 +90,9 @@ export default function Login() {
   };
 
   const onAppleButtonPress = async () => {
-    console.log('oooo');
-    try {console.log('ooojjjjjjjjjjjjjo');
+    console.log('🍎 Apple button pressed - START');
+    try {
+      console.log('🍎 Starting Apple authentication request...');
     
       const appleAuthRequestResponse = await appleAuth.performRequest({
         requestedOperation: appleAuth.Operation.LOGIN,
@@ -98,32 +100,57 @@ export default function Login() {
         requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
       });
     
-console.log(appleAuthRequestResponse,'appleAuthRequestResponse');
+      console.log('🍎 Apple auth response received:', appleAuthRequestResponse);
 
-      // get current authentication state for user
-      // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
-      const credentialState = await appleAuth.getCredentialStateForUser(
-        appleAuthRequestResponse.user,
-      );
-      if (!appleAuthRequestResponse.identityToken) {
+      if (!appleAuthRequestResponse.identityToken || !appleAuthRequestResponse.authorizationCode) {
         Alert.alert(
           'Authorization Error',
-          'Error while processing idToken in Google',
+          'Error while processing Apple authentication tokens',
         );
-        // store.modalsStore.hideSpinner();
+        return;
+      }
+
+      // Check if this is a first-time user (has email and fullName) or returning user
+      const isFirstTime = appleAuthRequestResponse.email && appleAuthRequestResponse.fullName;
+      
+      let loginData;
+      
+      if (isFirstTime) {
+        // First-time user - send full data
+        loginData = {
+          user: appleAuthRequestResponse.user,
+          email: appleAuthRequestResponse.email,
+          fullName: {
+            givenName: appleAuthRequestResponse.fullName?.givenName || '',
+            familyName: appleAuthRequestResponse.fullName?.familyName || '',
+          },
+          identityToken: appleAuthRequestResponse.identityToken,
+          authorizationCode: appleAuthRequestResponse.authorizationCode,
+        };
+        console.log('🍎 First-time user login data:', loginData);
       } else {
-       // const firstName=name?name:"User"
-        // store.userStore.signInWithApple(
-        //   firstName,
-        //   appleAuthRequestResponse.identityToken,
-        // );
+        // Returning user - send minimal data
+        loginData = {
+          user: appleAuthRequestResponse.user,
+          identityToken: appleAuthRequestResponse.identityToken,
+          authorizationCode: appleAuthRequestResponse.authorizationCode,
+        };
+        console.log('🍎 Returning user login data:', loginData);
       }
-      // use credentialState response to ensure the user is authenticated
-      if (credentialState === appleAuth.State.AUTHORIZED) {
-        // user is authenticated
-      }
+
+      // Dispatch the Apple login action
+      dispatch(appleLogin(loginData, (user) => {
+        console.log('🍎 Apple login successful:', user);
+        nav.navigate('Tabs');
+      }, (error) => {
+        console.error('🍎 Apple login failed:', error);
+        Alert.alert('Apple Login Failed', error);
+      }) as any);
+
     } catch (error) {
-      console.log(error, 'ppppppp9999999');
+      console.error('🍎 Apple authentication error:', error);
+      console.log('🍎 Error details:', JSON.stringify(error, null, 2));
+      Alert.alert('Apple Login Error', `Error: ${error.message || 'Unknown error occurred'}`);
     }
   };
 

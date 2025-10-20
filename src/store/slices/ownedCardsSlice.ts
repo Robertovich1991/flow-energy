@@ -3,14 +3,42 @@ import mainApi from '../../services/instance/MainInstance';
 
 export interface IOwnedCard {
   id: number;
-  title: string;
-  price: number;
-  description: string;
-  image: string;
-  category: {
+  user_id: number;
+  card_id: number;
+  name: string;
+  birthday: string; // Format: "2022-10-15T00:00:00.000000Z"
+  coins_spent: number;
+  created_at: string;
+  updated_at: string;
+  card: {
     id: number;
-    name: string;
+    tenant_id: number;
+    categoryId: number;
+    code: string;
+    title: string;
+    image: string;
+    description: string;
+    intensityPct: number;
+    price: number;
+    created_at: string;
+    category: {
+      id: number;
+      name: string;
+    };
   };
+  transaction: {
+    id: number;
+    user_id: number;
+    type: string;
+    amount: number;
+    balance_after: number;
+    reference_type: string;
+    reference_id: number;
+    app_store_transaction_id: string | null;
+    description: string;
+    metadata: any;
+  };
+  transaction_id: number;
 }
 
 export interface IOwnedCardsResponse {

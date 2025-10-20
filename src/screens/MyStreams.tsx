@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { ownedStreamsListSelector, ownedStreamsLoadingSelector } from '../store/selectors/ownedStreamsSelector';
 import { getOwnedStreamsList } from '../store/slices/ownedStreamsSlice';
 import StreamCard from './StreamCard';
@@ -13,12 +14,13 @@ import { getTransactionsList } from '../store/slices/transactionSlice';
 dayjs.extend(utc);
 
 export default function MyStreams() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigation = useNavigation<any>();
   const ownedStreams = useSelector(ownedStreamsListSelector);
   const loadingOwnedStreams = useSelector(ownedStreamsLoadingSelector);
   const transactions = useSelector(transactionsListSelector)
-  console.log(transactions, '..........................transactions..........................');
+  console.log(ownedStreams, '..........................transactions..........................');
 
 
 
@@ -30,8 +32,8 @@ export default function MyStreams() {
   if (loadingOwnedStreams) {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>My Streams</Text>
-        <Text style={styles.loadingText}>Загрузка...</Text>
+        <Text style={styles.title}>{t('common.myStreams')}</Text>
+        <Text style={styles.loadingText}>{t('common.loading')}</Text>
       </View>
     );
   }
@@ -39,7 +41,7 @@ export default function MyStreams() {
   if (!ownedStreams || ownedStreams.length === 0) {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>My Streams</Text>
+        <Text style={styles.title}>{t('common.myStreams')}</Text>
         <Text style={styles.emptyText}>У вас нет потоков</Text>
       </View>
     );
@@ -47,20 +49,21 @@ export default function MyStreams() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>My Streams</Text>
+      <Text style={styles.title}>{t('common.myStreams')}</Text>
       <ScrollView style={styles.scrollView}>
         <View style={styles.gridContainer}>
-          {ownedStreams.map((stream, index) => (
+          {ownedStreams.map((ownedStream, index) => (
             <StreamCard 
-              key={stream.id} 
-              stream={stream} 
+              key={ownedStream.id} 
+              stream={ownedStream.stream} 
+              ownedStream={ownedStream}
               totalDuration={(transactions as any)?.data?.[index]}
-                            onPress={() => {
+              onPress={() => {
                 // Navigate to ImageGallery with stream image (convert single image to array)
-                const images = stream.image 
-                  ? (stream.image === '/images/default.jpg' 
+                const images = ownedStream.stream.image 
+                  ? (ownedStream.stream.image === '/images/default.jpg' 
                       ? [require('../assets/images/flowImage.jpg')]
-                      : [`http://api.go2winbet.online${stream.image}`])
+                      : [`http://api.go2winbet.online${ownedStream.stream.image}`])
                   : [];
                 navigation.navigate('ImageGallery', {
                   images: images,

@@ -3,17 +3,40 @@ import mainApi from '../../services/instance/MainInstance';
 
 export interface IOwnedStream {
   id: number;
-  title: string;
-  price: number;
-  description: string;
-  image: string;
-  created_at?: string; // ISO timestamp when access was granted
-  duration?: number;   // duration in seconds
-  ends_at?: string;    // ISO timestamp when access ends
-  category: {
+  user_id: number;
+  stream_id: number;
+  coins_spent: number;
+  created_at: string;
+  updated_at: string;
+  stream: {
     id: number;
-    name: string;
+    tenant_id: number;
+    categoryId: number;
+    code: string;
+    title: string;
+    image: string;
+    price: number;
+    duration: number;
+    created_at: string;
+    updated_at: string;
+    category: {
+      id: number;
+      name: string;
+    };
   };
+  transaction: {
+    id: number;
+    user_id: number;
+    type: string;
+    amount: number;
+    balance_after: number;
+    reference_type: string;
+    reference_id: number;
+    app_store_transaction_id: string | null;
+    description: string;
+    metadata: any;
+  };
+  transaction_id: number;
 }
 
 export interface IOwnedStreamsResponse {

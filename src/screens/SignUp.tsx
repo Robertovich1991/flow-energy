@@ -203,7 +203,7 @@ const dispatch = useDispatch<AppDispatch>()
           style={styles.signUpButton}
         />
 
-        <AppleButton
+        {/* <AppleButton
           label="Continue with Apple"
           leftIcon="apple"
           onPress={() => {
@@ -211,7 +211,7 @@ const dispatch = useDispatch<AppDispatch>()
             console.log('Apple login pressed');
           }}
           style={styles.appleButton}
-        />
+        /> */}
 
         <View style={styles.loginContainer}>
           <Text style={styles.loginText}>{t('auth.hasAccount')} </Text>

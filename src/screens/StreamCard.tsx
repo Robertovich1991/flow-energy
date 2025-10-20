@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Animated } from 'react-native';
 import { theme } from '../theme';
+import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
@@ -8,10 +9,12 @@ dayjs.extend(utc);
 interface StreamCardProps {
   stream: any;
   totalDuration: any; // Transaction object with created_at
+  ownedStream?: any; // Full owned stream object with coins_spent, created_at, etc.
   onPress?: () => void;
 }
 
-export default function StreamCard({ stream, totalDuration, onPress }: StreamCardProps) {
+export default function StreamCard({ stream, totalDuration, ownedStream, onPress }: StreamCardProps) {
+  const { t } = useTranslation();
   const [durationInMinutes, setDurationInMinutes] = useState(0);
   const [progress, setProgress] = useState(0);
   const progressAnim = useRef(new Animated.Value(0)).current;
@@ -69,9 +72,9 @@ export default function StreamCard({ stream, totalDuration, onPress }: StreamCar
 
       <View style={styles.progressContainer}>
         <View style={styles.progressInfo}>
-          <Text style={styles.progressLabel}>Time Remaining</Text>
+          <Text style={styles.progressLabel}>{t('common.timeRemaining')}</Text>
           <Text style={styles.progressTime}>
-            {durationInMinutes > 0 ? `${durationInMinutes} min` : 'Time Lost'}
+            {durationInMinutes > 0 ? `${durationInMinutes} ${t('common.min')}` : t('common.timeLost')}
           </Text>
         </View>
         <View style={styles.progressBar}>
@@ -91,7 +94,15 @@ export default function StreamCard({ stream, totalDuration, onPress }: StreamCar
 
       <View style={styles.info}>
         <Text style={styles.title}>{stream.title}</Text>
+        {ownedStream && (
+          <Text style={styles.coinsSpent}>💰 {ownedStream.coins_spent} {t('common.coins')}</Text>
+        )}
         <Text style={styles.category}>{stream.category.name}</Text>
+        {ownedStream && (
+          <View style={styles.purchaseInfo}>
+            <Text style={styles.purchaseDate}>📅 {ownedStream.created_at.split('T')[0]}</Text>
+          </View>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -106,24 +117,58 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.card,
     borderWidth: 2,
     borderColor: theme.colors.border,
+    minHeight: 280,
   },
   image: {
     width: '100%',
-    height: 160,
+    height: 180,
     backgroundColor: theme.colors.card,
   },
   info: {
-    padding: 8,
+    padding: 12,
+    flex: 1,
+    justifyContent: 'space-between',
   },
   title: {
     color: '#fff',
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '700',
-    marginBottom: 4,
+    marginBottom: 6,
+    lineHeight: 20,
   },
   category: {
     color: theme.colors.subtext,
-    fontSize: 12,
+    fontSize: 13,
+    marginBottom: 6,
+  },
+  purchaseInfo: {
+    marginTop: 8,
+  },
+  coinsSpent: {
+    color: theme.colors.primary,
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 6,
+  },
+  purchaseDate: {
+    color: theme.colors.subtext,
+    fontSize: 11,
+  },
+  useCasesContainer: {
+    marginTop: 8,
+    marginBottom: 6,
+  },
+  useCase: {
+    color: theme.colors.subtext,
+    fontSize: 11,
+    marginBottom: 3,
+    lineHeight: 14,
+  },
+  useCaseMore: {
+    color: theme.colors.primary,
+    fontSize: 10,
+    fontStyle: 'italic',
+    marginTop: 2,
   },
   progressContainer: {
     paddingHorizontal: 8,

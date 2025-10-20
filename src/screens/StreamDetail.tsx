@@ -22,12 +22,12 @@ export default function StreamDetail() {
     // Check if user has sufficient coins balance
     if (coinsBalance === 0) {
       Alert.alert(
-        'Insufficient Coins',
+        t('common.insufficientCoins'),
         'You need coins to start this stream. Would you like to buy coins?',
         [
           { text: 'Cancel', style: 'cancel' },
           { 
-            text: 'Buy Coins', 
+            text: t('common.buyCoins'), 
             onPress: () => nav.navigate('CoinsPurchaseModal')
           }
         ]
@@ -37,16 +37,16 @@ export default function StreamDetail() {
 
     // Show confirmation alert before purchasing
     Alert.alert(
-      'Confirm Purchase',
+      t('common.confirmPurchase'),
       `Do you really want to buy this stream for $${stream.price}?`,
       [
         { text: 'Cancel', style: 'cancel' },
         { 
-          text: 'Yes, Buy', 
+          text: t('common.yesBuy'), 
           onPress: () => {
             // Purchase stream access then proceed
             dispatch(purchaseStream(stream.id, stream.title, stream.price, () => {
-              Alert.alert('Stream Successful');
+              Alert.alert(t('common.streamSuccessful'));
               nav.navigate('StreamSession', { stream: stream });
             }) as any);
           }
@@ -67,16 +67,21 @@ export default function StreamDetail() {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>{stream.title}</Text>
+
       <ImageBackground source={imageSource} style={styles.cover} imageStyle={styles.coverImage}>
         <View style={{padding: 16, flex: 1, justifyContent: 'space-between'}}>
           <View style={{flexDirection:'row', alignItems:'center', gap:6}}>
             <Icon name="play" color="#fff" />
-            <Text style={{color:'#fff'}}>Stream</Text>
+            <Text style={{color:'#fff'}}>{t('common.stream')}</Text>
           </View>
           <Text style={styles.coverTitle}>{stream.title}</Text>
         </View>
       </ImageBackground>
       <Text style={styles.desc}>{stream.description || 'Experience this powerful stream session designed to enhance your energy and focus.'}</Text>
+      <Text style={styles.title}>{stream.use_cases}</Text>
+
+      
+      
       <View style={styles.actionsRow}>
         <PrimaryButton leftIcon="play" rightIcon="arrow-right" label={t('cta.startStream') + ' · $' + stream.price} onPress={onStartStream} />
         {/** <GhostButton leftIcon="lock" label={t('cta.getAccess')} onPress={onGetAccess} /> **/}
@@ -119,6 +124,11 @@ const styles = StyleSheet.create({
   },
   coverTitle: { color:'#fff', fontSize: 28, fontWeight:'900' },
   desc: { color: theme.colors.subtext, marginTop: 16 },
+  useCasesSection: { marginTop: 16 },
+  useCasesTitle: { color: '#fff', fontSize: 18, fontWeight: '700', marginBottom: 8 },
+  useCaseItem: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 6 },
+  useCaseBullet: { color: theme.colors.primary, fontSize: 16, marginRight: 8, marginTop: 2 },
+  useCaseText: { color: theme.colors.subtext, fontSize: 14, flex: 1, lineHeight: 20 },
   actionsRow: { flexDirection:'row', gap:10, marginTop: 12 },
   infoRow: { flexDirection:'row', justifyContent:'space-between', marginTop: 12 },
   infoItem: { flexDirection:'row', alignItems:'center', gap:6 },

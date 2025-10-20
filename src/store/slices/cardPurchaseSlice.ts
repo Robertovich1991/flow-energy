@@ -37,11 +37,14 @@ export const cardPurchaseSlice = createSlice({
   }
 });
 
-export const purchaseCard = (cardId: number, cb?: () => void) => async (dispatch: Dispatch) => {
+export const purchaseCard = (cardId: number, name: string, birthday: string, cb?: () => void) => async (dispatch: Dispatch) => {
   dispatch(setCardPurchaseLoading(true));
   dispatch(setCardPurchaseError(null));
   try {
-    const response = await mainApi.post(`coins/cards/${cardId}/purchase`, { confirm: true });
+    const response = await mainApi.post(`coins/cards/${cardId}/purchase`, { 
+      name: name,
+      birthday: birthday
+    });
     if (response?.data?.success === true) {
       dispatch(setCardPurchased(cardId));
       // Refresh balance and owned cards after successful purchase

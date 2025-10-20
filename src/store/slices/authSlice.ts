@@ -35,6 +35,23 @@ export interface ICoinsResponse {
   data: ICoinsBalance;
 }
 
+export interface IAppleLoginFirstTime {
+  user: string;
+  email: string;
+  fullName: {
+    givenName: string;
+    familyName: string;
+  };
+  identityToken: string;
+  authorizationCode: string;
+}
+
+export interface IAppleLoginReturning {
+  user: string;
+  identityToken: string;
+  authorizationCode: string;
+}
+
 export interface IAuthState {
   isLogined: boolean;
   coinsBalance: number;
@@ -210,6 +227,43 @@ export const signOut = () => async (dispatch: Dispatch) => {
     //   dispatch(clearUserInfo());
   } catch (err) {
     console.error('Failed to clear AsyncStorage during sign-out', err);
+  }
+};
+
+export const appleLogin = (data: IAppleLoginFirstTime | IAppleLoginReturning, cb?: (user: any) => void, errorCb?: (error: string) => void) => async (dispatch: Dispatch) => {
+  try {
+    console.log('🍎 Sending Apple login request:', data);
+    
+    const response = await mainApi.post('auth/login/apple', data);
+    console.log('🍎 Apple login response:', response.data);
+
+    if (response.data && response.data.success === true) {
+      const token = response.data.data.token;
+      setScanMeApiAuthorization(token);
+      AsyncStorage.setItem('accessToken', JSON.stringify(token));
+      AsyncStorage.setItem('userEmail', JSON.stringify(response.data.data.user));
+      dispatch(setIsLogined(true));
+      
+      // Fetch coins balance after successful login
+      dispatch(getCoinsBalance() as any);
+      
+      cb && cb(response?.data?.user);
+    }
+  } catch (err: any) {
+    console.error('🍎 Apple login error:', err?.response?.data || err?.message || err);
+
+    // Handle 401 specifically
+    if (err?.response?.status === 401) {
+      errorCb && errorCb('You are not authorized');
+    } else {
+      // For other errors, use global error handling
+      const errorData: IError = {
+        title: 'Apple Login Error',
+        text: err?.response?.data?.message || 'Apple login failed',
+        buttonTitle: 'OK'
+      }
+      dispatch(setError(errorData));
+    }
   }
 };
 

@@ -86,12 +86,12 @@ console.log(coinsBalance,'coinsBalance');
 
   const handlePurchase = (coins: number, price: string) => {
     Alert.alert(
-      'Purchase Confirmation',
+      t('common.confirmPurchase'),
       `Are you sure you want to buy ${coins} coins for ${price}?`,
       [
         { text: 'Cancel', style: 'cancel' },
         { 
-          text: 'Buy', 
+          text: t('common.buyCoins'), 
           onPress: () => {
             // TODO: Implement actual purchase logic
             Alert.alert('Success', `Successfully purchased ${coins} coins!`);
