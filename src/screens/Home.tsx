@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { PrimaryButton, GhostButton } from '../components/Buttons';
 import { CardTile } from '../components/CardTile';
+import BackgroundWrapper from '../components/BackgroundWrapper';
 import { useNavigation } from '@react-navigation/native';
 import { getCardList } from '../store/slices/cardSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -51,7 +52,8 @@ export default function Home() {
    }, []);
 
   return (
-    <ScrollView style={styles.container} contentInsetAdjustmentBehavior="automatic">
+    <BackgroundWrapper>
+      <ScrollView style={styles.container} contentInsetAdjustmentBehavior="automatic">
       <Text style={styles.brand}>Flow Up</Text>
       <Text style={styles.tagline}>{t('appTagline')}</Text>
 
@@ -76,12 +78,13 @@ export default function Home() {
           />
         ))}
       </View>
-    </ScrollView>
+      </ScrollView>
+    </BackgroundWrapper>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: theme.colors.bg, padding: 16 },
+  container: { flex: 1, backgroundColor: 'transparent', padding: 16 },
   brand: { color: '#fff', fontSize: 40, fontWeight: '900', marginTop: 4 },
   tagline: { color: theme.colors.subtext, fontSize: 15 },
   hero: { borderColor: theme.colors.border, borderWidth: 2, borderRadius: 24, padding: 16, marginTop: 16, backgroundColor: theme.colors.card },

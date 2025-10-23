@@ -2,7 +2,7 @@
 export const theme = {
   dark: true,
   colors: {
-    bg: '#0C0C10',
+    bg: 'transparent',
     card: '#17171C',
     border: '#2A2A33',
     text: '#FFFFFF',

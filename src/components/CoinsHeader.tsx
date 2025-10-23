@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   coinContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.card,
+    backgroundColor: 'rgba(23, 23, 28, 0.8)',
     borderColor: theme.colors.border,
     borderWidth: 1,
     borderRadius: 20,

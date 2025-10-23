@@ -29,22 +29,24 @@ import CategoryCards from '../screens/CategoryCards';
 import CategoryStreams from '../screens/CategoryStreams';
 import { HomeIcon, CardsIcon, StreamsIcon, ProfileIcon } from '../components/TabBarIcons';
 import CoinsHeader from '../components/CoinsHeader';
+import BackgroundWrapper from '../components/BackgroundWrapper';
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
 
 function TabsRoot() {
   return (
-    <Tabs.Navigator 
-      screenOptions={{ 
-        headerShown: true,
-        headerStyle: { backgroundColor: theme.colors.bg },
-        headerTintColor: theme.colors.text,
-        headerTitle: '',
-        headerRight: () => <CoinsHeader />,
-        tabBarStyle: { backgroundColor: theme.colors.card, borderTopColor: theme.colors.border }
-      }}
-    >
+    <BackgroundWrapper>
+      <Tabs.Navigator 
+        screenOptions={{ 
+          headerShown: true,
+          headerStyle: { backgroundColor: 'transparent' },
+          headerTintColor: theme.colors.text,
+          headerTitle: '',
+          headerRight: () => <CoinsHeader />,
+          tabBarStyle: { backgroundColor: 'transparent', borderTopColor: theme.colors.border }
+        }}
+      >
       <Tabs.Screen 
         name="HomeTab" 
         component={Home} 
@@ -77,7 +79,8 @@ function TabsRoot() {
           tabBarIcon: ({ focused }: { focused: boolean }) => <ProfileIcon focused={focused} />
         }} 
       />
-    </Tabs.Navigator>
+      </Tabs.Navigator>
+    </BackgroundWrapper>
   );
 }
 

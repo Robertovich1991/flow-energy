@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert, Image } from 'react-native';
 import Video from 'react-native-video';
+import RNFS from 'react-native-fs';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { PrimaryButton, GhostButton } from '../components/Buttons';
@@ -18,6 +19,10 @@ export default function CardDetail() {
   const card = route.params?.card
   const coinsBalance = useSelector(coinsBalanceSelector);
   const [isVideoPaused, setIsVideoPaused] = useState(false);
+  const [isVideoLoading, setIsVideoLoading] = useState(true);
+  const [videoError, setVideoError] = useState(false);
+  const [cachedVideoUri, setCachedVideoUri] = useState(null);
+  const [cachedImageUri, setCachedImageUri] = useState(null);
   console.log(card.image,'card.image');
   
   const buyCard = useApp(s => s.buyCard);
@@ -46,6 +51,7 @@ export default function CardDetail() {
       )
     });
   }, [nav, t, coinsBalance]);
+
  const onBuy = async () => {
     console.log('[[[[[[[[[[[[[[[[[[[[[[[[');
 
@@ -92,22 +98,135 @@ export default function CardDetail() {
     ? require('../assets/images/flowImage.jpg')
     : { uri: 'http://api.go2winbet.online' + card.image };
 
+  // Video caching logic
+  useEffect(() => {
+    if (isVideo && card.image !== '/images/default.jpg') {
+      const videoUrl = 'http://api.go2winbet.online' + card.image;
+      const fileName = card.image.split('/').pop();
+      const localPath = `${RNFS.CachesDirectoryPath}/${fileName}`;
+      
+      // Check if video is already cached
+      RNFS.exists(localPath).then(exists => {
+        if (exists) {
+          // Cached video - set immediately and skip loading
+          setCachedVideoUri({ uri: `file://${localPath}` });
+          setIsVideoLoading(false);
+          setIsVideoPaused(false); // Start playing immediately
+        } else {
+          // Not cached - start loading and download
+          setIsVideoLoading(true);
+          const downloadOptions = {
+            fromUrl: videoUrl,
+            toFile: localPath,
+            background: true,
+            discretionary: true,
+            progress: (res) => {
+              console.log('Download progress:', res.bytesWritten / res.contentLength);
+            }
+          };
+          
+          RNFS.downloadFile(downloadOptions).promise
+            .then(() => {
+              setCachedVideoUri({ uri: `file://${localPath}` });
+              setIsVideoLoading(false);
+              setIsVideoPaused(false);
+            })
+            .catch(error => {
+              console.log('Download error:', error);
+              setVideoError(true);
+              setIsVideoLoading(false);
+            });
+        }
+      });
+    } else if (!isVideo) {
+      setIsVideoLoading(false);
+    }
+  }, [isVideo, card.image]);
+
+  // Image caching logic
+  useEffect(() => {
+    if (!isVideo && card.image !== '/images/default.jpg') {
+      const imageUrl = 'http://api.go2winbet.online' + card.image;
+      const fileName = card.image.split('/').pop();
+      const localPath = `${RNFS.CachesDirectoryPath}/${fileName}`;
+      
+      // Check if image is already cached
+      RNFS.exists(localPath).then(exists => {
+        if (exists) {
+          // Cached image - set immediately
+          setCachedImageUri({ uri: `file://${localPath}` });
+        } else {
+          // Not cached - download and cache
+          const downloadOptions = {
+            fromUrl: imageUrl,
+            toFile: localPath,
+            background: true,
+            discretionary: true,
+            progress: (res) => {
+              console.log('Image download progress:', res.bytesWritten / res.contentLength);
+            }
+          };
+          
+          RNFS.downloadFile(downloadOptions).promise
+            .then(() => {
+              setCachedImageUri({ uri: `file://${localPath}` });
+            })
+            .catch(error => {
+              console.log('Image download error:', error);
+            });
+        }
+      });
+    }
+  }, [isVideo, card.image]);
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>{card.title}</Text>
       <View style={styles.imageWrapper}>
         {isVideo ? (
-          <Video
-            source={mediaSource}
-            style={styles.cover}
-            resizeMode='contain'
-            paused={isVideoPaused}
-            repeat={true}
-            muted={true}
-            onLoad={() => setIsVideoPaused(false)}
-          />
+          <View style={styles.cover}>
+            <Video
+              source={cachedVideoUri || mediaSource}
+              style={styles.cover}
+              resizeMode='contain'
+              paused={isVideoPaused}
+              repeat={true}
+              muted={true}
+              playInBackground={false}
+              playWhenInactive={false}
+              ignoreSilentSwitch="ignore"
+              onLoad={() => {
+                setIsVideoLoading(false);
+                setVideoError(false);
+              }}
+              onLoadStart={() => {
+                setIsVideoLoading(true);
+                setVideoError(false);
+              }}
+              onError={(error) => {
+                console.log('Video error:', error);
+                setVideoError(true);
+                setIsVideoLoading(false);
+              }}
+              onBuffer={({ isBuffering }) => {
+                // Only show loading for non-cached videos
+                if (!cachedVideoUri) {
+                  setIsVideoLoading(isBuffering);
+                }
+              }}
+            />
+            {isVideoLoading && (
+              <View style={styles.loadingOverlay}>
+              </View>
+            )}
+            {videoError && (
+              <View style={styles.errorOverlay}>
+                <Text style={styles.errorText}>Video unavailable</Text>
+              </View>
+            )}
+          </View>
         ) : (
-          <Image source={mediaSource} style={styles.cover} resizeMode='contain' />
+          <Image source={cachedImageUri || mediaSource} style={styles.cover} resizeMode='contain' />
         )}
         <View style={styles.overlay}>
           <View style={{flexDirection:'row',marginLeft:35, alignItems:'center', gap:6}}>
@@ -133,6 +252,38 @@ const styles = StyleSheet.create({
   imageWrapper: { marginTop: 12, borderRadius: 20, overflow: 'hidden', alignSelf: 'center' },
   cover: { height: 440, width: 400, borderRadius: 20 },
   overlay: { position: 'absolute', top: 16, left: 16, right: 16, flex: 1, justifyContent: 'space-between' },
+  loadingOverlay: { 
+    position: 'absolute', 
+    top: 0, 
+    left: 0, 
+    right: 0, 
+    bottom: 0, 
+    backgroundColor: 'rgba(0,0,0,0.7)', 
+    justifyContent: 'center', 
+    alignItems: 'center',
+    borderRadius: 20
+  },
+  loadingText: { 
+    color: '#fff', 
+    fontSize: 16, 
+    fontWeight: '600' 
+  },
+  errorOverlay: { 
+    position: 'absolute', 
+    top: 0, 
+    left: 0, 
+    right: 0, 
+    bottom: 0, 
+    backgroundColor: 'rgba(0,0,0,0.8)', 
+    justifyContent: 'center', 
+    alignItems: 'center',
+    borderRadius: 20
+  },
+  errorText: { 
+    color: '#ff6b6b', 
+    fontSize: 16, 
+    fontWeight: '600' 
+  },
   // coverTitle: { color:'black', fontSize: 28, fontWeight:'900' },
   desc: { color: theme.colors.subtext, marginTop: 20, fontSize: 16, lineHeight: 24 },
   actionsRow: { flexDirection:'row', gap:10, marginTop: 12 },
