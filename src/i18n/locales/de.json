@@ -93,6 +93,9 @@
     "noStreamsFound": "Keine Streams für diese Kategorie gefunden",
     "noCardsFound": "Keine Karten für diese Kategorie gefunden"
   },
+  "home": {
+    "heroTitle": "«Einkommenssteigerung» + 10 Min «Finanzielle Klarheit»"
+  },
   "Errors": {
     "Required": "Dieses Feld ist erforderlich",
     "Invalid_Email": "Bitte gib eine gültige E-Mail-Adresse ein",

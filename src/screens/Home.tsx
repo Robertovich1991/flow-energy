@@ -57,7 +57,7 @@ export default function Home() {
 
       <View style={styles.hero}>
         <Text style={styles.heroSup}>AI • {t('sections.popular')}</Text>
-        <Text style={styles.heroTitle}>«Повышение дохода» + 10 мин «Финансовая ясность»</Text>
+        <Text style={styles.heroTitle}>{t('home.heroTitle')}</Text>
         <View style={styles.ctaRow}>
           <PrimaryButton leftIcon="sparkle" rightIcon="arrow-right" label={t('cta.viewCard')} onPress={() => nav.navigate('CardsTab')} />
           <GhostButton leftIcon="play" label={t('cta.startStream')} onPress={() => nav.navigate('StreamsTab')} />

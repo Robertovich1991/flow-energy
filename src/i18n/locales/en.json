@@ -93,6 +93,9 @@
     "noStreamsFound": "No streams found for this category",
     "noCardsFound": "No cards found for this category"
   },
+  "home": {
+    "heroTitle": "«Income Boost» + 10 min «Financial Clarity»"
+  },
   "Errors": {
     "Required": "This field is required",
     "Invalid_Email": "Please enter a valid email address",

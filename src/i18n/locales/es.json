@@ -93,6 +93,9 @@
     "noStreamsFound": "No se encontraron flujos para esta categoría",
     "noCardsFound": "No se encontraron cartas para esta categoría"
   },
+  "home": {
+    "heroTitle": "«Aumento de ingresos» + 10 min «Claridad financiera»"
+  },
   "Errors": {
     "Required": "Este campo es obligatorio",
     "Invalid_Email": "Por favor, ingresa un email válido",
