@@ -6,7 +6,10 @@ import { theme } from '../theme';
 import { useApp } from '../store/app';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import { signOut } from '../store/slices/authSlice';
+import { signOut, getCoinsBalance } from '../store/slices/authSlice';
+import { getCardList } from '../store/slices/cardSlice';
+import { getStreamList } from '../store/slices/streamSlice';
+import { getCategoriesList } from '../store/slices/categoriesSlice';
 import { PrimaryButton, GhostButton } from '../components/Buttons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -19,7 +22,15 @@ export default function Profile() {
   const [userEmail, setUserEmail] = useState<string>('');
   const [userName, setUserName] = useState<string>('');
 
-  const set = (l: any) => { setLang(l); i18n.changeLanguage(l); };
+  const set = (l: any) => { 
+    setLang(l); 
+    i18n.changeLanguage(l);
+    // Refresh API data with new tenant slug
+    dispatch(getCardList() as any);
+    dispatch(getStreamList() as any);
+    dispatch(getCategoriesList() as any);
+    dispatch(getCoinsBalance() as any);
+  };
 
   useEffect(() => {
     const logAsyncStorage = async () => {
