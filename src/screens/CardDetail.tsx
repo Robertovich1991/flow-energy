@@ -1,6 +1,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert, Image } from 'react-native';
+import Video from 'react-native-video';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { PrimaryButton, GhostButton } from '../components/Buttons';
@@ -16,6 +17,7 @@ export default function CardDetail() {
   const route = useRoute<any>();
   const card = route.params?.card
   const coinsBalance = useSelector(coinsBalanceSelector);
+  const [isVideoPaused, setIsVideoPaused] = useState(false);
   console.log(card.image,'card.image');
   
   const buyCard = useApp(s => s.buyCard);
@@ -84,8 +86,9 @@ export default function CardDetail() {
     }
   };
 
-  // Determine which image to use
-  const imageSource = card.image === '/images/default.jpg' 
+  // Determine which image/video to use
+  const isVideo = card.image && card.image.toLowerCase().endsWith('.mp4');
+  const mediaSource = card.image === '/images/default.jpg' 
     ? require('../assets/images/flowImage.jpg')
     : { uri: 'http://api.go2winbet.online' + card.image };
 
@@ -93,7 +96,19 @@ export default function CardDetail() {
     <ScrollView style={styles.container}>
       <Text style={styles.title}>{card.title}</Text>
       <View style={styles.imageWrapper}>
-        <Image source={imageSource} style={styles.cover} resizeMode='contain' />
+        {isVideo ? (
+          <Video
+            source={mediaSource}
+            style={styles.cover}
+            resizeMode='contain'
+            paused={isVideoPaused}
+            repeat={true}
+            muted={true}
+            onLoad={() => setIsVideoPaused(false)}
+          />
+        ) : (
+          <Image source={mediaSource} style={styles.cover} resizeMode='contain' />
+        )}
         <View style={styles.overlay}>
           <View style={{flexDirection:'row',marginLeft:35, alignItems:'center', gap:6}}>
             <Icon name="sparkle" color="#fff" />
