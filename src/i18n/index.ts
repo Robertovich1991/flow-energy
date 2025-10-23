@@ -14,7 +14,7 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-  //  lng: Localization.locale.split('-')[0] || 'ru',
+    lng: 'en',
     fallbackLng: 'en',
     interpolation: { escapeValue: false }
   });

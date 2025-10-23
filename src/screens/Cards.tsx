@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { Chip } from '../components/Chip';
@@ -35,25 +35,33 @@ export default function Cards() {
     ? cards?.filter((card: any) => card.categoryId === selectedCategoryId)
     : cards;
     
+  // Filter categories to only show those that have cards
+  const categoriesWithCards = categories?.filter((category: any) => 
+    cards?.some((card: any) => card.categoryId === category.id)
+  );
+    
   console.log('Filtered cards:', filteredCards);
+  console.log('Categories with cards:', categoriesWithCards);
 
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>{t('tabs.cards')}</Text>
-      <Text style={styles.sub}>{t('sections.categories')}</Text>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 8 }}>
-        <Chip 
-          label={t('common.all')}
-          active={selectedCategoryId === null} 
+      <Text style={styles.sub}>{t('sections.chooseCategory')}</Text>
+      <View style={styles.categoriesContainer}>
+        <TouchableOpacity 
+          style={[styles.categoryCard, selectedCategoryId === null && styles.categoryCardActive]}
           onPress={() => setSelectedCategoryId(null)}
-        />
-        {categories?.map((category) => (
-          <Chip 
+        >
+          <Text style={[styles.categoryText, selectedCategoryId === null && styles.categoryTextActive]}>{t('common.all')}</Text>
+        </TouchableOpacity>
+        {categoriesWithCards?.map((category) => (
+          <TouchableOpacity 
             key={category.id} 
-            label={category.name} 
-            active={selectedCategoryId === category.id} 
-            onPress={() => setSelectedCategoryId(category.id)}
-          />
+            style={[styles.categoryCard, selectedCategoryId === category.id && styles.categoryCardActive]}
+            onPress={() => nav.navigate('CategoryCards', { category: category })}
+          >
+            <Text style={[styles.categoryText, selectedCategoryId === category.id && styles.categoryTextActive]}>{category.name}</Text>
+          </TouchableOpacity>
         ))}
       </View>
       {/* <Text style={styles.sub}>{t('sections.subcategories')}</Text>
@@ -62,7 +70,7 @@ export default function Cards() {
           <Chip key={i} label={c} active={i === 4} />
         ))}
       </View> */}
-      <View style={styles.cardsContainer}>
+      {/* <View style={styles.cardsContainer}>
         {!cards || cards.length === 0 ? (
           <Text style={styles.emptyText}>{t('common.loadingCards')}</Text>
         ) : filteredCards && filteredCards.length > 0 ? (
@@ -78,7 +86,7 @@ export default function Cards() {
         ) : (
           <Text style={styles.emptyText}>{t('common.noCardsFound')}</Text>
         )}
-      </View>
+      </View> */}
     </ScrollView>
   );
 }
@@ -87,6 +95,39 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: theme.colors.bg, padding: 16 },
   title: { color: '#fff', fontSize: 32, fontWeight: '900' },
   sub: { color: theme.colors.subtext, marginTop: 12 },
+  categoriesContainer: { 
+    flexDirection: 'row', 
+    flexWrap: 'wrap', 
+    justifyContent: 'space-between', 
+    marginTop: 8,
+    gap: 8
+  },
+  categoryCard: {
+    width: '48%',
+    backgroundColor: theme.colors.card,
+    borderWidth: 2,
+    borderColor: theme.colors.border,
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 80,
+  },
+  categoryCardActive: {
+    borderColor: theme.colors.primary,
+    backgroundColor: theme.colors.primary + '20',
+  },
+  categoryText: {
+    color: theme.colors.subtext,
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  categoryTextActive: {
+    color: theme.colors.primary,
+    fontWeight: '700',
+  },
   cardsContainer: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginTop: 16 },
   emptyText: { 
     color: theme.colors.subtext, 

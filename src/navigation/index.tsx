@@ -25,6 +25,8 @@ import CoinsPurchaseModal from '../screens/CoinsPurchaseModal';
 import MyCards from '../screens/MyCards';
 import MyStreams from '../screens/MyStreams';
 import ImageGallery from '../screens/ImageGallery';
+import CategoryCards from '../screens/CategoryCards';
+import CategoryStreams from '../screens/CategoryStreams';
 import { HomeIcon, CardsIcon, StreamsIcon, ProfileIcon } from '../components/TabBarIcons';
 import CoinsHeader from '../components/CoinsHeader';
 
@@ -125,7 +127,9 @@ export default function RootNavigator() {
         <Stack.Screen name="CardDetail" component={CardDetail} options={{ title: 'Card' }} />
         <Stack.Screen name="StreamDetail" component={StreamDetail} options={{ title: 'Stream' }} />
         <Stack.Screen name="MyCards" component={MyCards} options={{ title: t('profile.myCards') }} />
-        <Stack.Screen name="MyStreams" component={MyStreams} options={{ title: 'My Streams' }} />
+        <Stack.Screen name="MyStreams" component={MyStreams} options={{ title: t('common.myStreams') }} />
+        <Stack.Screen name="CategoryCards" component={CategoryCards} options={{ title: 'Card Categories' }} />
+        <Stack.Screen name="CategoryStreams" component={CategoryStreams} options={{ title: 'Stream Categories' }} />
         <Stack.Screen 
           name="ImageGallery" 
           component={ImageGallery} 

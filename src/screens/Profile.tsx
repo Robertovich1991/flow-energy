@@ -110,7 +110,7 @@ export default function Profile() {
         </View>
       )}
       
-      <View style={styles.card}><Text style={styles.row}>Язык:</Text>
+      <View style={styles.card}><Text style={styles.row}>{t('profile.language')}</Text>
         <View style={{flexDirection:'row', flexWrap:'wrap'}}>
           {(['ru','en','es','de'] as const).map(l => (
             <TouchableOpacity key={l} onPress={()=>set(l)} style={[styles.lang, lang===l && styles.langActive]}>
@@ -123,7 +123,7 @@ export default function Profile() {
         <Text style={styles.row}>{t('profile.myCards')}</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.card} onPress={() => nav.navigate('MyStreams')}>
-        <Text style={styles.row}>My Streams</Text>
+        <Text style={styles.row}>{t('common.myStreams')}</Text>
       </TouchableOpacity>
       
       <View style={styles.actionsContainer}>

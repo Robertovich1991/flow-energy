@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
@@ -27,6 +27,11 @@ export default function CoinsPurchaseModal() {
   const userId = useSelector(userIdSelector);
   const coinsBalance = useSelector(coinsBalanceSelector);
 console.log(coinsBalance,'coinsBalance');
+
+  // Set navigation title
+  useEffect(() => {
+    nav.setOptions({ title: t('headers.buyCoins') });
+  }, [nav, t]);
 
   const handleBuyProducts = async (productId: string) => {
     if (!userId) {

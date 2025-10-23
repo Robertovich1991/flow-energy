@@ -6,6 +6,11 @@
     "streams": "Потоки",
     "profile": "Профиль"
   },
+  "headers": {
+    "card": "Карта",
+    "stream": "Поток",
+    "buyCoins": "Купить монеты"
+  },
   "cta": {
     "viewCard": "Посмотреть карту",
     "startStream": "Запустить поток",
@@ -19,7 +24,10 @@
   "sections": {
     "popular": "Популярные сегодня",
     "categories": "Разделы",
-    "subcategories": "Подразделы"
+    "subcategories": "Подразделы",
+    "chooseCategory": "Выберите категорию",
+    "cardCategories": "Категории карт",
+    "streamCategories": "Категории потоков"
   },
   "fields": {
     "name": "Имя",
@@ -51,7 +59,8 @@
     "emailLabel": "Email:",
     "subscriptionUnlimited": "Подписка — безлимитные потоки",
     "logout": "Выйти",
-    "deleteAccount": "Удалить аккаунт"
+    "deleteAccount": "Удалить аккаунт",
+    "language": "Язык:"
   },
   "coins": {
     "title": "Купить монеты",
@@ -80,7 +89,8 @@
     "loadingStreams": "Загрузка потоков...",
     "loadingCards": "Загрузка карт...",
     "noStreamsFound": "Потоки для этой категории не найдены",
-    "noCardsFound": "Карты для этой категории не найдены"
+    "noCardsFound": "Карты для этой категории не найдены",
+    "noStreams": "У вас нет потоков"
   },
   "home": {
     "heroTitle": "«Повышение дохода» + 10 мин «Финансовая ясность»"

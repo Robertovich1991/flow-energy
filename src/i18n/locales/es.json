@@ -6,6 +6,11 @@
     "streams": "Flujos",
     "profile": "Perfil"
   },
+  "headers": {
+    "card": "Carta",
+    "stream": "Flujo",
+    "buyCoins": "Comprar Monedas"
+  },
   "cta": {
     "viewCard": "Ver carta",
     "startStream": "Iniciar flujo",
@@ -19,7 +24,10 @@
   "sections": {
     "popular": "Tendencias de hoy",
     "categories": "Categorías",
-    "subcategories": "Subcategorías"
+    "subcategories": "Subcategorías",
+    "chooseCategory": "Elige categoría",
+    "cardCategories": "Categorías de Cartas",
+    "streamCategories": "Categorías de Flujos"
   },
   "fields": {
     "name": "Nombre",
@@ -51,7 +59,8 @@
     "emailLabel": "Email:",
     "subscriptionUnlimited": "Suscripción — flujos ilimitados",
     "logout": "Cerrar sesión",
-    "deleteAccount": "Eliminar cuenta"
+    "deleteAccount": "Eliminar cuenta",
+    "language": "Idioma:"
   },
   "auth": {
     "welcome": "Bienvenido de vuelta",
@@ -91,7 +100,8 @@
     "loadingStreams": "Cargando flujos...",
     "loadingCards": "Cargando cartas...",
     "noStreamsFound": "No se encontraron flujos para esta categoría",
-    "noCardsFound": "No se encontraron cartas para esta categoría"
+    "noCardsFound": "No se encontraron cartas para esta categoría",
+    "noStreams": "No tienes flujos"
   },
   "home": {
     "heroTitle": "«Aumento de ingresos» + 10 min «Claridad financiera»"

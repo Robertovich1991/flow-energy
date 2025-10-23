@@ -22,7 +22,6 @@ export default function CardDetail() {
 
    const isFocused = useIsFocused();
   const isMounted = useRef(true);
-  const [showDescription, setShowDescription] = useState(false);
 
   useEffect(() => {
     isMounted.current = true;
@@ -30,6 +29,11 @@ export default function CardDetail() {
       isMounted.current = false;
     };
   }, []);
+  
+  // Set navigation title
+  useEffect(() => {
+    nav.setOptions({ title: t('headers.card') });
+  }, [nav, t]);
  const onBuy = async () => {
     console.log('[[[[[[[[[[[[[[[[[[[[[[[[');
 
@@ -87,13 +91,12 @@ export default function CardDetail() {
           {/* <Text style={styles.coverTitle}>{card.title}</Text> */}
         </View>
       </ImageBackground>
-      {showDescription && (
-        <Text style={styles.desc}>{card.description}</Text>
-      )}
       <View style={styles.actionsRow}>
         <PrimaryButton leftIcon="shopping-bag" rightIcon="arrow-right" label={t('cta.buy') + ' · $' + card.price} onPress={onBuy} />
-        <GhostButton leftIcon="play" label={t('cta.preview')} onPress={()=> setShowDescription(true)} />
       </View>
+      {card.description && (
+        <Text style={styles.desc}>{card.description}</Text>
+      )}
      
     </ScrollView>
   );
@@ -105,7 +108,7 @@ const styles = StyleSheet.create({
   cover: { borderColor: theme.colors.border, borderWidth:2, borderRadius: 24, marginTop: 12, height: 420, justifyContent: 'space-between', overflow: 'hidden' },
   coverImage: { borderRadius: 24, width: '100%', height: '100%', resizeMode: 'cover' },
   // coverTitle: { color:'black', fontSize: 28, fontWeight:'900' },
-  desc: { color: theme.colors.subtext, marginTop: 16 },
+  desc: { color: theme.colors.subtext, marginTop: 20, fontSize: 16, lineHeight: 24 },
   actionsRow: { flexDirection:'row', gap:10, marginTop: 12 },
   infoRow: { flexDirection:'row', justifyContent:'space-between', marginTop: 12 },
   infoItem: { flexDirection:'row', alignItems:'center', gap:6 },

@@ -42,7 +42,7 @@ export default function MyStreams() {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>{t('common.myStreams')}</Text>
-        <Text style={styles.emptyText}>У вас нет потоков</Text>
+        <Text style={styles.emptyText}>{t('common.noStreams')}</Text>
       </View>
     );
   }

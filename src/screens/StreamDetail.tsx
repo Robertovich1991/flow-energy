@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert, ImageBackground } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
@@ -58,6 +58,11 @@ export default function StreamDetail() {
   const onGetAccess = () => {
     nav.navigate('StreamAccessModal', { streamId: stream.id });
   };
+  
+  // Set navigation title
+  useEffect(() => {
+    nav.setOptions({ title: t('headers.stream') });
+  }, [nav, t]);
 
   // Determine which image to use
   const imageSource = stream.image === '/images/default.jpg' 

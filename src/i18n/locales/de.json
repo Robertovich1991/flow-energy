@@ -6,6 +6,11 @@
     "streams": "Ströme",
     "profile": "Profil"
   },
+  "headers": {
+    "card": "Karte",
+    "stream": "Stream",
+    "buyCoins": "Münzen kaufen"
+  },
   "cta": {
     "viewCard": "Karte ansehen",
     "startStream": "Stream starten",
@@ -19,7 +24,10 @@
   "sections": {
     "popular": "Heute im Trend",
     "categories": "Kategorien",
-    "subcategories": "Unterkategorien"
+    "subcategories": "Unterkategorien",
+    "chooseCategory": "Kategorie wählen",
+    "cardCategories": "Karten-Kategorien",
+    "streamCategories": "Stream-Kategorien"
   },
   "fields": {
     "name": "Name",
@@ -51,7 +59,8 @@
     "emailLabel": "Email:",
     "subscriptionUnlimited": "Abonnement — unbegrenzte Streams",
     "logout": "Abmelden",
-    "deleteAccount": "Konto löschen"
+    "deleteAccount": "Konto löschen",
+    "language": "Sprache:"
   },
   "auth": {
     "welcome": "Willkommen zurück",
@@ -91,7 +100,8 @@
     "loadingStreams": "Streams laden...",
     "loadingCards": "Karten laden...",
     "noStreamsFound": "Keine Streams für diese Kategorie gefunden",
-    "noCardsFound": "Keine Karten für diese Kategorie gefunden"
+    "noCardsFound": "Keine Karten für diese Kategorie gefunden",
+    "noStreams": "Du hast keine Streams"
   },
   "home": {
     "heroTitle": "«Einkommenssteigerung» + 10 Min «Finanzielle Klarheit»"
