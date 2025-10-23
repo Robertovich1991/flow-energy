@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Alert, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Alert, Image, ImageBackground } from 'react-native';
 import Video from 'react-native-video';
 import RNFS from 'react-native-fs';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +11,7 @@ import { useApp } from '../store/app';
 import { useSelector } from 'react-redux';
 import { coinsBalanceSelector } from '../store/selectors/authSelector';
 import Icon from '../components/Icon';
+import BackgroundWrapper from '../components/BackgroundWrapper';
 
 export default function CardDetail() {
   const { t } = useTranslation();
@@ -37,10 +38,18 @@ export default function CardDetail() {
     };
   }, []);
   
-  // Set navigation title with coins balance
+  // Set navigation title with coins balance and background
   useEffect(() => {
     nav.setOptions({ 
       title: t('headers.card'),
+      headerBackground: () => (
+        <ImageBackground 
+          source={require('../assets/images/flowground.png')} 
+          style={{ flex: 1 }}
+          resizeMode="cover"
+          imageStyle={{ opacity: 0.8 }}
+        />
+      ),
       headerRight: () => (
         <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 16 }}>
           <Icon name="coin" color="#fff" size={16} />
@@ -180,7 +189,8 @@ export default function CardDetail() {
   }, [isVideo, card.image]);
 
   return (
-    <ScrollView style={styles.container}>
+    <BackgroundWrapper>
+      <ScrollView style={styles.container}>
       <Text style={styles.title}>{card.title}</Text>
       <View style={styles.imageWrapper}>
         {isVideo ? (
@@ -242,12 +252,13 @@ export default function CardDetail() {
         <Text style={styles.desc}>{card.description}</Text>
       )}
      
-    </ScrollView>
+      </ScrollView>
+    </BackgroundWrapper>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: theme.colors.bg, padding: 16 },
+  container: { flex: 1, backgroundColor: 'transparent', padding: 16 },
   title: { color:'#fff', fontSize: 32, fontWeight: '900' },
   imageWrapper: { marginTop: 12, borderRadius: 20, overflow: 'hidden', alignSelf: 'center' },
   cover: { height: 440, width: 400, borderRadius: 20 },

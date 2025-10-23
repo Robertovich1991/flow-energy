@@ -7,6 +7,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { coinsBalanceSelector } from '../store/selectors/authSelector';
 import Icon from '../components/Icon';
+import BackgroundWrapper from '../components/BackgroundWrapper';
 import { useDispatch } from 'react-redux';
 import { purchaseStream } from '../store/slices/streamPurchaseSlice';
 
@@ -70,7 +71,8 @@ export default function StreamDetail() {
     : { uri: 'http://api.go2winbet.online' + stream.image };
 
   return (
-    <ScrollView style={styles.container}>
+    <BackgroundWrapper>
+      <ScrollView style={styles.container}>
       <Text style={styles.title}>{stream.title}</Text>
 
       <ImageBackground source={imageSource} style={styles.cover} imageStyle={styles.coverImage}>
@@ -105,12 +107,13 @@ export default function StreamDetail() {
           <Text style={styles.info}>Онлайн</Text>
         </View> */}
       {/* </View> */}
-    </ScrollView>
+      </ScrollView>
+    </BackgroundWrapper>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: theme.colors.bg, padding: 16 },
+  container: { flex: 1, backgroundColor: 'transparent', padding: 16 },
   title: { color:'#fff', fontSize: 32, fontWeight: '900' },
   cover: { 
     borderColor: theme.colors.border, 

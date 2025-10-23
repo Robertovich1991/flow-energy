@@ -7,6 +7,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { streamListSelector } from '../store/selectors/streamSelector';
 import { getStreamList } from '../store/slices/streamSlice';
+import BackgroundWrapper from '../components/BackgroundWrapper';
 
 export default function CategoryStreams() {
   const { t } = useTranslation();
@@ -35,7 +36,8 @@ export default function CategoryStreams() {
   console.log('Filtered streams for category:', filteredStreams);
 
   return (
-    <ScrollView style={styles.container}>
+    <BackgroundWrapper>
+      <ScrollView style={styles.container}>
       <Text style={styles.title}>{category?.name || t('tabs.streams')}</Text>
       <Text style={styles.subtitle}>
         {filteredStreams?.length || 0} {filteredStreams?.length === 1 ? t('common.streamInCategory') : t('common.streamsInCategory')}
@@ -57,12 +59,13 @@ export default function CategoryStreams() {
       ) : (
         <Text style={styles.emptyText}>No streams found in this category</Text>
       )}
-    </ScrollView>
+      </ScrollView>
+    </BackgroundWrapper>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: theme.colors.bg, padding: 16 },
+  container: { flex: 1, backgroundColor: 'transparent', padding: 16 },
   title: { color: '#fff', fontSize: 32, fontWeight: '900', marginBottom: 8 },
   subtitle: { color: theme.colors.subtext, fontSize: 16, marginBottom: 20 },
   emptyText: { 

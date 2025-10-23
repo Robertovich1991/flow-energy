@@ -11,6 +11,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { transactionsListSelector } from '../store/selectors/transactionSelector';
 import { getTransactionsList } from '../store/slices/transactionSlice';
+import BackgroundWrapper from '../components/BackgroundWrapper';
 dayjs.extend(utc);
 
 export default function MyStreams() {
@@ -48,7 +49,8 @@ export default function MyStreams() {
   }
 
   return (
-    <View style={styles.container}>
+    <BackgroundWrapper>
+      <View style={styles.container}>
       <Text style={styles.title}>{t('common.myStreams')}</Text>
       <ScrollView style={styles.scrollView}>
         <View style={styles.gridContainer}>
@@ -74,12 +76,13 @@ export default function MyStreams() {
           ))}
         </View>
       </ScrollView>
-    </View>
+      </View>
+    </BackgroundWrapper>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: theme.colors.bg, padding: 16 },
+  container: { flex: 1, backgroundColor: 'transparent', padding: 16 },
   title: { color: '#fff', fontSize: 32, fontWeight: '900', marginBottom: 20 },
   scrollView: { flex: 1 },
   gridContainer: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' },

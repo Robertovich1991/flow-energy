@@ -40,11 +40,17 @@ function TabsRoot() {
       <Tabs.Navigator 
         screenOptions={{ 
           headerShown: true,
-          headerStyle: { backgroundColor: 'transparent' },
+          headerStyle: { 
+            backgroundColor: 'transparent',
+            elevation: 0,
+            shadowOpacity: 0,
+            borderBottomWidth: 0,
+          },
+          headerTransparent: true,
           headerTintColor: theme.colors.text,
           headerTitle: '',
           headerRight: () => <CoinsHeader />,
-          tabBarStyle: { backgroundColor: 'transparent', borderTopColor: theme.colors.border }
+          tabBarStyle: { backgroundColor: theme.colors.card, borderTopColor: theme.colors.border }
         }}
       >
       <Tabs.Screen 

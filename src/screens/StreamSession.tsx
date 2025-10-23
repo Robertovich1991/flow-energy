@@ -5,6 +5,7 @@ import { theme } from '../theme';
 import { PrimaryButton, GhostButton } from '../components/Buttons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import BackgroundWrapper from '../components/BackgroundWrapper';
 
 export default function StreamSession() {
   const { t } = useTranslation();
@@ -24,19 +25,21 @@ export default function StreamSession() {
   const ss = String(sec%60).padStart(2,'0');
 
   return (
-    <View style={styles.container}>
+    <BackgroundWrapper>
+      <View style={styles.container}>
       <Text style={styles.title}>{stream?.title || 'Stream Session'}</Text>
       {/* <View style={styles.card}>
         <Text style={styles.timer}>{mm}:{ss}</Text>
       </View> */}
       <PrimaryButton label={t('common.extend')} onPress={()=>{}} style={{marginVertical:8}} />
       <GhostButton label={t('common.complete')} onPress={()=>nav.goBack()} />
-    </View>
+      </View>
+    </BackgroundWrapper>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex:1, backgroundColor: theme.colors.bg, padding:16 },
+  container: { flex:1, backgroundColor: 'transparent', padding:16 },
   title: { color:'#fff', fontSize: 28, fontWeight:'900' },
   card: { borderColor: theme.colors.border, borderWidth:2, borderRadius:24, padding: 20, marginTop: 12, alignItems:'center', justifyContent:'center', height: 320 },
   timer: { color:'#fff', fontSize: 64, fontWeight:'900' },

@@ -11,6 +11,7 @@ import { getCardList } from '../store/slices/cardSlice';
 import { getStreamList } from '../store/slices/streamSlice';
 import { getCategoriesList } from '../store/slices/categoriesSlice';
 import { PrimaryButton, GhostButton } from '../components/Buttons';
+import BackgroundWrapper from '../components/BackgroundWrapper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Profile() {
@@ -110,7 +111,8 @@ export default function Profile() {
   };
 
   return (
-    <View style={styles.container}>
+    <BackgroundWrapper>
+      <View style={styles.container}>
       <Text style={styles.title}>{t('tabs.profile')}</Text>
       
       {userEmail && (
@@ -149,12 +151,13 @@ export default function Profile() {
           style={styles.deleteButton}
         />
       </View>
-    </View>
+      </View>
+    </BackgroundWrapper>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex:1, backgroundColor: theme.colors.bg, padding:16 },
+  container: { flex:1, backgroundColor: 'transparent', padding:16 },
   title: { color:'#fff', fontSize: 32, fontWeight:'900' },
   userInfoCard: { 
     borderColor: theme.colors.border, 

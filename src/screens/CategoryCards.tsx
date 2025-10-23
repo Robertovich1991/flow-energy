@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ImageBackground } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { CardTile } from '../components/CardTile';
@@ -7,6 +7,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { cardListSelector } from '../store/selectors/cardSelector';
 import { getCardList } from '../store/slices/cardSlice';
+import BackgroundWrapper from '../components/BackgroundWrapper';
 
 export default function CategoryCards() {
   const { t } = useTranslation();
@@ -21,9 +22,19 @@ export default function CategoryCards() {
     dispatch(getCardList() as any);
   }, [dispatch]);
   
-  // Set navigation title
+  // Set navigation title with background
   useEffect(() => {
-    nav.setOptions({ title: t('sections.cardCategories') });
+    nav.setOptions({ 
+      title: t('sections.cardCategories'),
+      headerBackground: () => (
+        <ImageBackground 
+          source={require('../assets/images/flowground.png')} 
+          style={{ flex: 1 }}
+          resizeMode="cover"
+          imageStyle={{ opacity: 0.8 }}
+        />
+      )
+    });
   }, [nav, t]);
   
   console.log('Category:', category);
@@ -35,7 +46,8 @@ export default function CategoryCards() {
   console.log('Filtered cards for category:', filteredCards);
 
   return (
-    <ScrollView style={styles.container}>
+    <BackgroundWrapper>
+      <ScrollView style={styles.container}>
       <Text style={styles.title}>{category?.name || t('tabs.cards')}</Text>
       <Text style={styles.subtitle}>
         {filteredCards?.length || 0} {filteredCards?.length === 1 ? t('common.cardInCategory') : t('common.cardsInCategory')}
@@ -58,12 +70,13 @@ export default function CategoryCards() {
           <Text style={styles.emptyText}>No cards found in this category</Text>
         )}
       </View>
-    </ScrollView>
+      </ScrollView>
+    </BackgroundWrapper>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: theme.colors.bg, padding: 16 },
+  container: { flex: 1, backgroundColor: 'transparent', padding: 16 },
   title: { color: '#fff', fontSize: 32, fontWeight: '900', marginBottom: 8 },
   subtitle: { color: theme.colors.subtext, fontSize: 16, marginBottom: 20 },
   cardsContainer: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' },

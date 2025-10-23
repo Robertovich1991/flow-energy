@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-nati
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { StreamTile } from '../components/StreamTile';
+import BackgroundWrapper from '../components/BackgroundWrapper';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { streamListSelector } from '../store/selectors/streamSelector';
@@ -41,7 +42,8 @@ export default function Streams() {
   console.log('Categories with streams:', categoriesWithStreams);
 
   return (
-    <ScrollView style={styles.container}>
+    <BackgroundWrapper>
+      <ScrollView style={styles.container}>
       <Text style={styles.title}>{t('tabs.streams')}</Text>
       <Text style={styles.sub}>{t('sections.chooseCategory')}</Text>
       <View style={styles.categoriesContainer}>
@@ -83,12 +85,13 @@ export default function Streams() {
         <Text style={styles.ctaText}>{t('cta.getAccess')}</Text>
       </TouchableOpacity>
       **/}
-    </ScrollView>
+      </ScrollView>
+    </BackgroundWrapper>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: theme.colors.bg, padding: 16 },
+  container: { flex: 1, backgroundColor: 'transparent', padding: 16 },
   title: { color:'#fff', fontSize: 32, fontWeight: '900' },
   sub: { color: theme.colors.subtext, marginTop: 12 },
   categoriesContainer: { 

@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { theme } from '../theme';
 import { ownedCardsListSelector, ownedCardsLoadingSelector } from '../store/selectors/ownedCardsSelector';
 import { getOwnedCardsList } from '../store/slices/ownedCardsSlice';
+import BackgroundWrapper from '../components/BackgroundWrapper';
 
 const spacing = 12;
 const { width } = Dimensions.get('window');
@@ -47,7 +48,8 @@ console.log(ownedCards,'ownedCards');
   }
 
   return (
-    <View style={styles.container}>
+    <BackgroundWrapper>
+      <View style={styles.container}>
       <Text style={styles.title}>{t('profile.myCards')}</Text>
       <ScrollView style={styles.scrollView}>
         <View style={styles.gridContainer}>
@@ -87,14 +89,15 @@ console.log(ownedCards,'ownedCards');
           ))}
         </View>
       </ScrollView>
-    </View>
+      </View>
+    </BackgroundWrapper>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.bg,
+    backgroundColor: 'transparent',
     padding: 16,
   },
   title: {

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { Chip } from '../components/Chip';
 import { CardTile } from '../components/CardTile';
+import BackgroundWrapper from '../components/BackgroundWrapper';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { cardListSelector } from '../store/selectors/cardSelector';
@@ -44,7 +45,8 @@ export default function Cards() {
   console.log('Categories with cards:', categoriesWithCards);
 
   return (
-    <ScrollView style={styles.container}>
+    <BackgroundWrapper>
+      <ScrollView style={styles.container}>
       <Text style={styles.title}>{t('tabs.cards')}</Text>
       <Text style={styles.sub}>{t('sections.chooseCategory')}</Text>
       <View style={styles.categoriesContainer}>
@@ -87,12 +89,13 @@ export default function Cards() {
           <Text style={styles.emptyText}>{t('common.noCardsFound')}</Text>
         )}
       </View> */}
-    </ScrollView>
+      </ScrollView>
+    </BackgroundWrapper>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: theme.colors.bg, padding: 16 },
+  container: { flex: 1, backgroundColor: 'transparent', padding: 16 },
   title: { color: '#fff', fontSize: 32, fontWeight: '900' },
   sub: { color: theme.colors.subtext, marginTop: 12 },
   categoriesContainer: { 
