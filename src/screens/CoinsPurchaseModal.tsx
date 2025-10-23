@@ -94,7 +94,7 @@ console.log(coinsBalance,'coinsBalance');
       t('common.confirmPurchase'),
       `Are you sure you want to buy ${coins} coins for ${price}?`,
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         { 
           text: t('common.buyCoins'), 
           onPress: () => {

@@ -25,7 +25,7 @@ export default function StreamDetail() {
         t('common.insufficientCoins'),
         'You need coins to start this stream. Would you like to buy coins?',
         [
-          { text: 'Cancel', style: 'cancel' },
+          { text: t('common.cancel'), style: 'cancel' },
           { 
             text: t('common.buyCoins'), 
             onPress: () => nav.navigate('CoinsPurchaseModal')
@@ -38,7 +38,7 @@ export default function StreamDetail() {
     // Show confirmation alert before purchasing
     Alert.alert(
       t('common.confirmPurchase'),
-      `Do you really want to buy this stream for $${stream.price}?`,
+      t('common.confirmStreamPurchase', { price: stream.price }),
       [
         { text: 'Cancel', style: 'cancel' },
         { 

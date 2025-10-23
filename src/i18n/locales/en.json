@@ -101,7 +101,21 @@
     "loadingCards": "Loading cards...",
     "noStreamsFound": "No streams found for this category",
     "noCardsFound": "No cards found for this category",
-    "noStreams": "You have no streams"
+    "noStreams": "You have no streams",
+    "confirmCardPurchase": "Do you really want to buy this card for ${{price}}?",
+    "confirmStreamPurchase": "Do you really want to buy this stream for ${{price}}?",
+    "cancel": "Cancel",
+    "logout": "Logout",
+    "confirmLogout": "Are you sure you want to logout?",
+    "deleteAccount": "Delete Account",
+    "confirmDeleteAccount": "Are you sure you want to delete your account? This action cannot be undone.",
+    "delete": "Delete",
+    "accountDeleted": "Account Deleted",
+    "accountDeletedSuccess": "Your account has been deleted successfully.",
+    "cardsInCategory": "cards in this category",
+    "cardInCategory": "card in this category",
+    "streamsInCategory": "streams in this category",
+    "streamInCategory": "stream in this category"
   },
   "home": {
     "heroTitle": "«Income Boost» + 10 min «Financial Clarity»"

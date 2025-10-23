@@ -68,12 +68,12 @@ export default function Profile() {
     console.log('Logout button pressed'); // Debug log
     try {
       Alert.alert(
-        'Logout',
-        'Are you sure you want to logout?',
+        t('common.logout'),
+        t('common.confirmLogout'),
         [
-          { text: 'Cancel', style: 'cancel' },
+          { text: t('common.cancel'), style: 'cancel' },
           { 
-            text: 'Logout', 
+            text: t('common.logout'), 
             onPress: () => {
               console.log('Logout confirmed, navigating to Login'); // Debug log
               dispatch(signOut() as any);
@@ -92,16 +92,16 @@ export default function Profile() {
 
   const handleDeleteAccount = () => {
     Alert.alert(
-      'Delete Account',
-      'Are you sure you want to delete your account? This action cannot be undone.',
+      t('common.deleteAccount'),
+      t('common.confirmDeleteAccount'),
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         { 
-          text: 'Delete', 
+          text: t('common.delete'), 
           style: 'destructive',
           onPress: () => {
             // TODO: Implement actual account deletion logic
-            Alert.alert('Account Deleted', 'Your account has been deleted successfully.');
+            Alert.alert(t('common.accountDeleted'), t('common.accountDeletedSuccess'));
             nav.navigate('Login');
           }
         }

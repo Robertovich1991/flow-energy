@@ -101,7 +101,21 @@
     "loadingCards": "Cargando cartas...",
     "noStreamsFound": "No se encontraron flujos para esta categoría",
     "noCardsFound": "No se encontraron cartas para esta categoría",
-    "noStreams": "No tienes flujos"
+    "noStreams": "No tienes flujos",
+    "confirmCardPurchase": "¿Realmente quieres comprar esta carta por ${{price}}?",
+    "confirmStreamPurchase": "¿Realmente quieres comprar este flujo por ${{price}}?",
+    "cancel": "Cancelar",
+    "logout": "Cerrar sesión",
+    "confirmLogout": "¿Estás seguro de que quieres cerrar sesión?",
+    "deleteAccount": "Eliminar cuenta",
+    "confirmDeleteAccount": "¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.",
+    "delete": "Eliminar",
+    "accountDeleted": "Cuenta eliminada",
+    "accountDeletedSuccess": "Tu cuenta ha sido eliminada exitosamente.",
+    "cardsInCategory": "cartas en esta categoría",
+    "cardInCategory": "carta en esta categoría",
+    "streamsInCategory": "flujos en esta categoría",
+    "streamInCategory": "flujo en esta categoría"
   },
   "home": {
     "heroTitle": "«Aumento de ingresos» + 10 min «Claridad financiera»"

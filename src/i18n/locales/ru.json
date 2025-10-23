@@ -90,7 +90,21 @@
     "loadingCards": "Загрузка карт...",
     "noStreamsFound": "Потоки для этой категории не найдены",
     "noCardsFound": "Карты для этой категории не найдены",
-    "noStreams": "У вас нет потоков"
+    "noStreams": "У вас нет потоков",
+    "confirmCardPurchase": "Вы действительно хотите купить эту карту за ${{price}}?",
+    "confirmStreamPurchase": "Вы действительно хотите купить этот поток за ${{price}}?",
+    "cancel": "Отмена",
+    "logout": "Выйти",
+    "confirmLogout": "Вы уверены, что хотите выйти?",
+    "deleteAccount": "Удалить аккаунт",
+    "confirmDeleteAccount": "Вы уверены, что хотите удалить свой аккаунт? Это действие нельзя отменить.",
+    "delete": "Удалить",
+    "accountDeleted": "Аккаунт удален",
+    "accountDeletedSuccess": "Ваш аккаунт был успешно удален.",
+    "cardsInCategory": "карт в этой категории",
+    "cardInCategory": "карта в этой категории",
+    "streamsInCategory": "потоков в этой категории",
+    "streamInCategory": "поток в этой категории"
   },
   "home": {
     "heroTitle": "«Повышение дохода» + 10 мин «Финансовая ясность»"

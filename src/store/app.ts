@@ -22,7 +22,7 @@ type State = {
 const now = () => Date.now();
 
 export const useApp = create<State>((set, get) => ({
-  lang: 'ru',
+  lang: 'en',
   setLang: (l) => set({lang: l}),
 
   categories: [

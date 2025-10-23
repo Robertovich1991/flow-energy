@@ -38,7 +38,7 @@ export default function CategoryStreams() {
     <ScrollView style={styles.container}>
       <Text style={styles.title}>{category?.name || t('tabs.streams')}</Text>
       <Text style={styles.subtitle}>
-        {filteredStreams?.length || 0} {filteredStreams?.length === 1 ? 'stream' : 'streams'} in this category
+        {filteredStreams?.length || 0} {filteredStreams?.length === 1 ? t('common.streamInCategory') : t('common.streamsInCategory')}
       </Text>
       
       {!streams || streams.length === 0 ? (

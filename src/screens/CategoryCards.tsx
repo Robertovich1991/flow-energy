@@ -38,7 +38,7 @@ export default function CategoryCards() {
     <ScrollView style={styles.container}>
       <Text style={styles.title}>{category?.name || t('tabs.cards')}</Text>
       <Text style={styles.subtitle}>
-        {filteredCards?.length || 0} {filteredCards?.length === 1 ? 'card' : 'cards'} in this category
+        {filteredCards?.length || 0} {filteredCards?.length === 1 ? t('common.cardInCategory') : t('common.cardsInCategory')}
       </Text>
       
       <View style={styles.cardsContainer}>

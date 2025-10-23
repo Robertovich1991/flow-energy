@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Alert, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Alert, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { PrimaryButton, GhostButton } from '../components/Buttons';
@@ -30,10 +30,20 @@ export default function CardDetail() {
     };
   }, []);
   
-  // Set navigation title
+  // Set navigation title with coins balance
   useEffect(() => {
-    nav.setOptions({ title: t('headers.card') });
-  }, [nav, t]);
+    nav.setOptions({ 
+      title: t('headers.card'),
+      headerRight: () => (
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 16 }}>
+          <Icon name="coin" color="#fff" size={16} />
+          <Text style={{ color: '#fff', marginLeft: 4, fontSize: 16, fontWeight: '600' }}>
+            {coinsBalance}
+          </Text>
+        </View>
+      )
+    });
+  }, [nav, t, coinsBalance]);
  const onBuy = async () => {
     console.log('[[[[[[[[[[[[[[[[[[[[[[[[');
 
@@ -44,7 +54,7 @@ export default function CardDetail() {
           t('common.insufficientCoins'),
           'You need coins to purchase this card. Would you like to buy coins?',
           [
-            { text: 'Cancel', style: 'cancel' },
+            { text: t('common.cancel'), style: 'cancel' },
             { text: t('common.buyCoins'), onPress: () => nav.navigate('CoinsPurchaseModal') },
           ]
         );
@@ -56,9 +66,9 @@ export default function CardDetail() {
     if (isFocused && isMounted.current) {
       Alert.alert(
         t('common.confirmPurchase'),
-        `Do you really want to buy this card for $${card.price}?`,
+        t('common.confirmCardPurchase', { price: card.price }),
         [
-          { text: 'Cancel', style: 'cancel' },
+          { text: t('common.cancel'), style: 'cancel' },
           { 
             text: t('common.yesBuy'), 
             onPress: async () => {
@@ -82,15 +92,15 @@ export default function CardDetail() {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>{card.title}</Text>
-      <ImageBackground source={imageSource} style={styles.cover} imageStyle={styles.coverImage}>
-        <View style={{padding: 16, flex: 1, justifyContent: 'space-between'}}>
-          <View style={{flexDirection:'row', alignItems:'center', gap:6}}>
+      <View style={styles.imageWrapper}>
+        <Image source={imageSource} style={styles.cover} resizeMode='contain' />
+        <View style={styles.overlay}>
+          <View style={{flexDirection:'row',marginLeft:35, alignItems:'center', gap:6}}>
             <Icon name="sparkle" color="#fff" />
             <Text style={{color:'#fff'}}>{card.intensityPct}%</Text>
           </View>
-          {/* <Text style={styles.coverTitle}>{card.title}</Text> */}
         </View>
-      </ImageBackground>
+      </View>
       <View style={styles.actionsRow}>
         <PrimaryButton leftIcon="shopping-bag" rightIcon="arrow-right" label={t('cta.buy') + ' · $' + card.price} onPress={onBuy} />
       </View>
@@ -105,8 +115,9 @@ export default function CardDetail() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: theme.colors.bg, padding: 16 },
   title: { color:'#fff', fontSize: 32, fontWeight: '900' },
-  cover: { borderColor: theme.colors.border, borderWidth:2, borderRadius: 24, marginTop: 12, height: 420, justifyContent: 'space-between', overflow: 'hidden' },
-  coverImage: { borderRadius: 24, width: '100%', height: '100%', resizeMode: 'cover' },
+  imageWrapper: { marginTop: 12, borderRadius: 20, overflow: 'hidden', alignSelf: 'center' },
+  cover: { height: 440, width: 400, borderRadius: 20 },
+  overlay: { position: 'absolute', top: 16, left: 16, right: 16, flex: 1, justifyContent: 'space-between' },
   // coverTitle: { color:'black', fontSize: 28, fontWeight:'900' },
   desc: { color: theme.colors.subtext, marginTop: 20, fontSize: 16, lineHeight: 24 },
   actionsRow: { flexDirection:'row', gap:10, marginTop: 12 },

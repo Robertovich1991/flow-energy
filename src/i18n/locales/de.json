@@ -101,7 +101,21 @@
     "loadingCards": "Karten laden...",
     "noStreamsFound": "Keine Streams für diese Kategorie gefunden",
     "noCardsFound": "Keine Karten für diese Kategorie gefunden",
-    "noStreams": "Du hast keine Streams"
+    "noStreams": "Du hast keine Streams",
+    "confirmCardPurchase": "Möchtest du diese Karte wirklich für ${{price}} kaufen?",
+    "confirmStreamPurchase": "Möchtest du diesen Stream wirklich für ${{price}} kaufen?",
+    "cancel": "Abbrechen",
+    "logout": "Abmelden",
+    "confirmLogout": "Bist du sicher, dass du dich abmelden möchtest?",
+    "deleteAccount": "Konto löschen",
+    "confirmDeleteAccount": "Bist du sicher, dass du dein Konto löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "delete": "Löschen",
+    "accountDeleted": "Konto gelöscht",
+    "accountDeletedSuccess": "Dein Konto wurde erfolgreich gelöscht.",
+    "cardsInCategory": "Karten in dieser Kategorie",
+    "cardInCategory": "Karte in dieser Kategorie",
+    "streamsInCategory": "Streams in dieser Kategorie",
+    "streamInCategory": "Stream in dieser Kategorie"
   },
   "home": {
     "heroTitle": "«Einkommenssteigerung» + 10 Min «Finanzielle Klarheit»"
