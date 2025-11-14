@@ -44,16 +44,16 @@ export default function Streams() {
   return (
     <BackgroundWrapper>
       <ScrollView style={styles.container}>
-      <Text style={styles.title}>{t('tabs.streams')}</Text>
-      <Text style={styles.sub}>{t('sections.chooseCategory')}</Text>
+      <Text style={styles.title}>{"Connect to Flows"}</Text>
+      {/* <Text style={styles.sub}>{t('sections.chooseCategory')}</Text> */}
       <View style={styles.categoriesContainer}>
-        <TouchableOpacity 
+        {/* <TouchableOpacity 
           style={[styles.categoryCard, selectedCategoryId === null && styles.categoryCardActive]}
           onPress={() => setSelectedCategoryId(null)}
         >
           <Text style={[styles.categoryText, selectedCategoryId === null && styles.categoryTextActive]}>{t('common.all')}</Text>
-        </TouchableOpacity>
-        {categoriesWithStreams?.map((category) => (
+        </TouchableOpacity> */}
+        {/* {categoriesWithStreams?.map((category) => (
           <TouchableOpacity 
             key={category.id} 
             style={[styles.categoryCard, selectedCategoryId === category.id && styles.categoryCardActive]}
@@ -70,9 +70,9 @@ export default function Streams() {
               </View>
             </ImageBackground>
           </TouchableOpacity>
-        ))}
+        ))} */}
       </View>
-      {/* {!streams || streams.length === 0 ? (
+      {!streams || streams.length === 0 ? (
         <Text style={styles.emptyText}>{t('common.loadingStreams')}</Text>
       ) : filteredStreams && filteredStreams.length > 0 ? (
         filteredStreams.map((stream: any) => (
@@ -87,13 +87,13 @@ export default function Streams() {
         ))
       ) : (
         <Text style={styles.emptyText}>{t('common.noStreamsFound')}</Text>
-      )} */}
+      )}
      
-      {/**
+      
       <TouchableOpacity style={styles.cta} onPress={() => nav.navigate('StreamAccessModal', { id:301 })}>
         <Text style={styles.ctaText}>{t('cta.getAccess')}</Text>
       </TouchableOpacity>
-      **/}
+      
       </ScrollView>
     </BackgroundWrapper>
   );
@@ -101,7 +101,7 @@ export default function Streams() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: 'transparent', padding: 16 },
-  title: { color:'#fff', fontSize: 32, fontWeight: '900' },
+  title: { color:'#fff', fontSize: 32, fontWeight: '900',paddingTop:70 },
   sub: { color: theme.colors.subtext, marginTop: 12 },
   categoriesContainer: { 
     flexDirection: 'row', 
