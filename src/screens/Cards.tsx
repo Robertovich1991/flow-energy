@@ -1,9 +1,8 @@
 
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
-import { Chip } from '../components/Chip';
 import { CardTile } from '../components/CardTile';
 import BackgroundWrapper from '../components/BackgroundWrapper';
 import { useNavigation } from '@react-navigation/native';
@@ -27,9 +26,6 @@ export default function Cards() {
     dispatch(getCategoriesList() as any);
   }, [dispatch]);
   
-  console.log('Cards data:', cards);
-  console.log('Categories data:', categories);
-  console.log('Selected category ID:', selectedCategoryId);
   
   // Filter cards based on selected category
   const filteredCards = selectedCategoryId 
@@ -41,15 +37,13 @@ export default function Cards() {
     cards?.some((card: any) => card.categoryId === category.id)
   );
     
-  console.log('Filtered cards:', filteredCards);
-  console.log('Categories with cards:', categoriesWithCards);
 
   return (
     <BackgroundWrapper>
       <ScrollView style={styles.container}>
       <Text style={styles.title}>{t('tabs.cards')}</Text>
-      <Text style={styles.sub}>{t('sections.chooseCategory')}</Text>
-      <View style={styles.categoriesContainer}>
+      {/* <Text style={styles.sub}>{t('sections.chooseCategory')}</Text> */}
+      {/* <View style={styles.categoriesContainer}>
         <TouchableOpacity 
           style={[styles.categoryCard, selectedCategoryId === null && styles.categoryCardActive]}
           onPress={() => setSelectedCategoryId(null)}
@@ -65,14 +59,14 @@ export default function Cards() {
             <Text style={[styles.categoryText, selectedCategoryId === category.id && styles.categoryTextActive]}>{category.name}</Text>
           </TouchableOpacity>
         ))}
-      </View>
+      </View> */}
       {/* <Text style={styles.sub}>{t('sections.subcategories')}</Text>
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 8 }}>
         {['Найти любовь', 'Укрепить связь', 'Возврат страсти', 'Исцеление сердца', '— все —'].map((c, i) => (
           <Chip key={i} label={c} active={i === 4} />
         ))}
       </View> */}
-      {/* <View style={styles.cardsContainer}>
+      <View style={styles.cardsContainer}>
         {!cards || cards.length === 0 ? (
           <Text style={styles.emptyText}>{t('common.loadingCards')}</Text>
         ) : filteredCards && filteredCards.length > 0 ? (
@@ -88,7 +82,7 @@ export default function Cards() {
         ) : (
           <Text style={styles.emptyText}>{t('common.noCardsFound')}</Text>
         )}
-      </View> */}
+      </View>
       </ScrollView>
     </BackgroundWrapper>
   );
@@ -96,7 +90,7 @@ export default function Cards() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: 'transparent', padding: 16 },
-  title: { color: '#fff', fontSize: 32, fontWeight: '900' },
+  title: { color: '#fff', fontSize: 40,paddingTop:71, fontWeight: '700' },
   sub: { color: theme.colors.subtext, marginTop: 12 },
   categoriesContainer: { 
     flexDirection: 'row', 

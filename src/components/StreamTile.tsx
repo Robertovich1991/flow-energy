@@ -8,55 +8,42 @@ type Props = {
   title: string;
   price?: string;
   intensity?: number;
-  colors?: [string,string];
+  colors?: [string, string];
   useCases?: string[];
   onPress?: () => void;
 };
 
-const colorPalettes = [
-  ['#F472B6', '#DB2777'], // Pink
-  ['#34D399', '#16A34A'], // Green
-  ['#FCD34D', '#CA8A04'], // Yellow
-  ['#38BDF8', '#2563EB'], // Blue
-  ['#A78BFA', '#7C3AED'], // Purple
-  ['#FB7185', '#E11D48'], // Rose
-  ['#10B981', '#059669'], // Emerald
-  ['#F59E0B', '#D97706'], // Amber
-  ['#06B6D4', '#0891B2'], // Cyan
-  ['#8B5CF6', '#7C2D12'], // Violet
-];
 
-export const StreamTile: React.FC<Props> = ({title, price, intensity, colors, useCases, onPress}) => {
+export const StreamTile: React.FC<Props> = ({ title, price, intensity, colors, useCases, onPress }) => {
   const { t } = useTranslation();
-  const randomColors = useMemo(() => {
-    if (colors) return colors;
-    const randomIndex = Math.floor(Math.random() * colorPalettes.length);
-    return colorPalettes[randomIndex];
-  }, [colors]);
 
   return (
-    <TouchableOpacity onPress={onPress} style={[styles.tile, {backgroundColor: theme.colors.card, borderColor: theme.colors.border}]}>
-      <View style={[styles.gradient,{backgroundColor: randomColors[0]}]} />
-      <Text style={styles.title}>{title}</Text>
-      {price && (
-        <View style={styles.priceContainer}>
-          <Text style={styles.priceText}>{price}</Text>
-          <Icon name="coin" size={16} color={theme.colors.primary} />
-        </View>
-      )}
-      {typeof intensity === 'number' && <Text style={styles.meta}>{t('fields.intensity')} {intensity}%</Text>}
-    
-    </TouchableOpacity>
+    <View style={[styles.tile, { backgroundColor: '#ffff' }]}>
+      {/* <View style={[styles.gradient,{backgroundColor: randomColors[0]}]} /> */}
+      <View style={{backgroundColor:'#5ac0d7ff',width:50,height:50,borderRadius:100}}></View>
+      <View style={{ flex: 1, marginLeft: 22 }}>
+        <Text style={styles.title}>{title}</Text>
+        {price && (
+          <View style={styles.priceContainer}>
+            <Text style={styles.priceText}>{price}</Text>
+            <Icon name="coin" size={16} color={'black'} />
+          </View>
+        )}
+        {typeof intensity === 'number' && <Text style={styles.meta}>{t('fields.intensity')} {intensity}%</Text>}
+      </View>
+      <TouchableOpacity style={{ backgroundColor: '#007AFF', paddingVertical: 6, paddingHorizontal: 20, borderRadius: 99 }} onPress={onPress}>
+        <Text style={{ color: 'white', fontSize: 14, fontWeight: '600' }}>Join</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  tile: { borderWidth: 2, borderRadius: 24, padding: 20, overflow: 'hidden', marginBottom: 12, width: '100%', minHeight: 120 },
-  gradient: { position:'absolute', top:0, left:0, right:0, height:8, opacity:0.9 },
-  title: { color: '#fff', fontSize: 20, fontWeight: '800', marginTop: 8, marginBottom: 8 },
-  priceContainer: { marginBottom: 8, flexDirection: 'row', alignItems: 'center' },
-  priceText: { color: theme.colors.primary, fontSize: 16, fontWeight: '700' },
-  meta: { color:'#EAEAF0', marginTop: 8, fontSize: 12 },
+  tile: { borderWidth: 2, borderRadius: 12, padding: 13, overflow: 'hidden', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12, width: '100%', alignItems: 'center' },
+  title: { color: 'black', fontSize: 20, fontWeight: '800' },
+  priceContainer: { flexDirection: 'row', alignItems: 'center' },
+  priceText: { color: 'black', fontSize: 16, fontWeight: '700' },
+  meta: { color: '#090101ff', marginTop: 8, fontSize: 12 },
   useCasesContainer: {
     marginTop: 8,
   },

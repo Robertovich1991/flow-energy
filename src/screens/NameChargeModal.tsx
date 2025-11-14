@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Alert, TouchableOpacity, Platform } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
-import { PrimaryButton } from '../components/Buttons';
+import { PrimaryButton, SubmitButton } from '../components/Buttons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useApp } from '../store/app';
 import { useDispatch, useSelector } from 'react-redux';
@@ -95,13 +95,13 @@ export default function NameChargeModal() {
         />
       )}
       
-      <PrimaryButton 
-        label={isLoading ? t('common.processing') : t('cta.confirm')} 
+      {/* <SubmitButton 
+      //  label={isLoading ? t('common.processing') : t('cta.confirm')} 
         onPress={onConfirm} 
         style={styles.confirmButton}
         disabled={!!isLoading}
         loading={!!isLoading}
-      />
+      /> */}
     </View>
   );
 }
@@ -134,7 +134,6 @@ const styles = StyleSheet.create({
     flex: 0, 
     alignSelf: 'center',
     minWidth: 200,
-    marginTop: 20
   },
   note: { color: theme.colors.subtext, marginTop:12 }
 });
