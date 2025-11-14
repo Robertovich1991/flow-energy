@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, Dimensions, TouchableOpacity } from 'react-native';
+import Video from 'react-native-video';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
@@ -22,7 +23,7 @@ export default function MyCards() {
 
   const ownedCards = useSelector(ownedCardsListSelector);
   const loadingOwnedCards = useSelector(ownedCardsLoadingSelector);
-console.log(ownedCards,'ownedCards');
+console.log(ownedCards,'owned111111111Cards');
 
   // Fetch owned cards on component mount
   useEffect(() => {
@@ -53,40 +54,58 @@ console.log(ownedCards,'ownedCards');
       <Text style={styles.title}>{t('profile.myCards')}</Text>
       <ScrollView style={styles.scrollView}>
         <View style={styles.gridContainer}>
-          {ownedCards.map((ownedCard, index) => (
-            <TouchableOpacity
-              key={ownedCard.id}
-              style={styles.cardContainer}
-              onPress={() => nav.navigate('ImageGallery', { 
-                images: ownedCard.card.image === '/images/default.jpg' 
-                  ? [require('../assets/images/flowImage.jpg')]
-                  : ['http://api.go2winbet.online' + ownedCard.card.image], 
-                initialIndex: 0 
-              })}
-              activeOpacity={0.8}
-            >
-              <Image
-                source={
-                  ownedCard.card.image === '/images/default.jpg'
-                    ? require('../assets/images/flowImage.jpg')
-                    : { uri: 'http://api.go2winbet.online' + ownedCard.card.image }
-                }
-                resizeMode="cover"
-                style={styles.cardImage}
-              />
-              <View style={styles.cardInfo}>
-                <View style={styles.cardHeader}>
-                  <Text style={styles.cardTitle}>{ownedCard.card.title}</Text>
-                  <Text style={styles.cardCategory}>{ownedCard.card.category.name}</Text>
+          {ownedCards.map((ownedCard, index) => {
+            const isVideo = ownedCard.card.video && ownedCard.card.video.toLowerCase().endsWith('.mp4');
+            const videoSource = ownedCard.card.video === '/images/default.jpg'
+              ? require('../assets/images/flowImage.jpg')
+              : { uri: 'http://api.go2winbet.online' + ownedCard.card.video };
+            const imageSource = ownedCard.card.video === '/images/default.jpg'
+              ? require('../assets/images/flowImage.jpg')
+              : { uri: 'http://api.go2winbet.online' + ownedCard.card.video };
+
+            return (
+              <TouchableOpacity
+                key={ownedCard.id}
+                style={styles.cardContainer}
+                onPress={() => nav.navigate('ImageGallery', { 
+                  images: ownedCard.card.video === '/images/default.jpg' 
+                    ? [require('../assets/images/flowImage.jpg')]
+                    : ['http://api.go2winbet.online' + ownedCard.card.video], 
+                  initialIndex: 0 
+                })}
+                activeOpacity={0.8}
+              >
+                {isVideo ? (
+                  <Video
+                    source={videoSource}
+                    style={styles.cardImage}
+                    resizeMode="cover"
+                    repeat={true}
+                    muted={true}
+                    playInBackground={false}
+                    playWhenInactive={false}
+                  />
+                ) : (
+                  <Image
+                    source={imageSource}
+                    resizeMode="cover"
+                    style={styles.cardImage}
+                  />
+                )}
+                <View style={styles.cardInfo}>
+                  <View style={styles.cardHeader}>
+                    <Text style={styles.cardTitle}>{ownedCard.card.title}</Text>
+                    <Text style={styles.cardCategory}>{ownedCard.card.category.name}</Text>
+                  </View>
+                  <View style={styles.cardFooter}>
+                    <Text style={styles.cardPrice}>${ownedCard.card.price}</Text>
+                    <Text style={styles.cardName}>👤 {ownedCard.name}</Text>
+                    <Text style={styles.cardBirthday}>🎂 {ownedCard.birthday.split('T')[0]}</Text>
+                  </View>
                 </View>
-                <View style={styles.cardFooter}>
-                  <Text style={styles.cardPrice}>${ownedCard.card.price}</Text>
-                  <Text style={styles.cardName}>👤 {ownedCard.name}</Text>
-                  <Text style={styles.cardBirthday}>🎂 {ownedCard.birthday.split('T')[0]}</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-          ))}
+              </TouchableOpacity>
+            );
+          })}
         </View>
       </ScrollView>
       </View>

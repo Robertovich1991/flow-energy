@@ -17,6 +17,7 @@ export interface IOwnedCard {
     code: string;
     title: string;
     image: string;
+    video?: string;
     description: string;
     intensityPct: number;
     price: number;

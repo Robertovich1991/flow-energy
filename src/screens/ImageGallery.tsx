@@ -1,5 +1,6 @@
 import React, { useMemo, useRef, useCallback, useState } from 'react';
 import { View, FlatList, Image, Dimensions, StatusBar, TouchableWithoutFeedback, Animated, TouchableOpacity, Alert, Platform, Share } from 'react-native';
+import Video from 'react-native-video';
 import Icon from '../components/Icon';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { theme } from '../theme';
@@ -160,20 +161,37 @@ function GalleryPage({ source, width, height }: { source: string | number; width
     lastTap.current = now;
   };
 
+  // Check if source is a video
+  const isVideo = typeof source === 'string' && source.toLowerCase().endsWith('.mp4');
+  
   // Determine image source type
   const imageSource = typeof source === 'number' ? source : { uri: source };
+  const videoSource = typeof source === 'string' ? { uri: source } : require('../assets/images/flowImage.jpg');
 
   return (
     <View style={{ width, height, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center' }}>
-      <TouchableWithoutFeedback onPress={handleTap}>
-        <Animated.View style={{ width, height, transform: [{ scale }] }}>
-          <Image
-            source={imageSource}
-            resizeMode="contain"
-            style={{ width, height }}
-          />
-        </Animated.View>
-      </TouchableWithoutFeedback>
+      {isVideo ? (
+        <Video
+          source={videoSource}
+          style={{ width, height }}
+          resizeMode="contain"
+          repeat={true}
+          muted={false}
+          playInBackground={false}
+          playWhenInactive={false}
+          controls={true}
+        />
+      ) : (
+        <TouchableWithoutFeedback onPress={handleTap}>
+          <Animated.View style={{ width, height, transform: [{ scale }] }}>
+            <Image
+              source={imageSource}
+              resizeMode="contain"
+              style={{ width, height }}
+            />
+          </Animated.View>
+        </TouchableWithoutFeedback>
+      )}
     </View>
   );
 }

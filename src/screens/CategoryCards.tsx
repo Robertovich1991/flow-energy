@@ -16,6 +16,7 @@ export default function CategoryCards() {
   const dispatch = useDispatch();
   const cards = useSelector(cardListSelector);
   const category = route.params?.category;
+  console.log(cards,'carjjjjjjjjjjjjjjjjjjjjjds');
   
   // Fetch cards on component mount
   useEffect(() => {
@@ -59,6 +60,7 @@ export default function CategoryCards() {
         ) : filteredCards && filteredCards.length > 0 ? (
           filteredCards.map((card: any) => (
             <CardTile
+            image={card.image}
               key={card.id}
               title={card.title}
               price={card.priceUSD || card.price}

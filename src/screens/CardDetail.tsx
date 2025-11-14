@@ -24,7 +24,7 @@ export default function CardDetail() {
   const [videoError, setVideoError] = useState(false);
   const [cachedVideoUri, setCachedVideoUri] = useState(null);
   const [cachedImageUri, setCachedImageUri] = useState(null);
-  console.log(card.image,'card.image');
+  console.log(card.video,'card.imhhjkghjkhgjkhgjkhgjgage');
   
   const buyCard = useApp(s => s.buyCard);
 
@@ -102,16 +102,16 @@ export default function CardDetail() {
   };
 
   // Determine which image/video to use
-  const isVideo = card.image && card.image.toLowerCase().endsWith('.mp4');
-  const mediaSource = card.image === '/images/default.jpg' 
+  const isVideo = card.video && card.video.toLowerCase().endsWith('.mp4');
+  const mediaSource = (!card.video || card.video === '/images/default.jpg')
     ? require('../assets/images/flowImage.jpg')
-    : { uri: 'http://api.go2winbet.online' + card.image };
+    : { uri: 'http://api.go2winbet.online' + card.video };
 
   // Video caching logic
   useEffect(() => {
-    if (isVideo && card.image !== '/images/default.jpg') {
-      const videoUrl = 'http://api.go2winbet.online' + card.image;
-      const fileName = card.image.split('/').pop();
+    if (isVideo && card.video && card.video !== '/images/default.jpg') {
+      const videoUrl = 'http://api.go2winbet.online' + card.video;
+      const fileName = card.video.split('/').pop();
       const localPath = `${RNFS.CachesDirectoryPath}/${fileName}`;
       
       // Check if video is already cached
@@ -150,13 +150,13 @@ export default function CardDetail() {
     } else if (!isVideo) {
       setIsVideoLoading(false);
     }
-  }, [isVideo, card.image]);
+  }, [isVideo, card.video]);
 
   // Image caching logic
   useEffect(() => {
-    if (!isVideo && card.image !== '/images/default.jpg') {
-      const imageUrl = 'http://api.go2winbet.online' + card.image;
-      const fileName = card.image.split('/').pop();
+    if (!isVideo && card.video && card.video !== '/images/default.jpg') {
+      const imageUrl = 'http://api.go2winbet.online' + card.video;
+      const fileName = card.video.split('/').pop();
       const localPath = `${RNFS.CachesDirectoryPath}/${fileName}`;
       
       // Check if image is already cached
@@ -186,58 +186,61 @@ export default function CardDetail() {
         }
       });
     }
-  }, [isVideo, card.image]);
+  }, [isVideo, card.video]);
+console.log(cachedVideoUri,mediaSource,'med77777777777777777777iaSource');
 
   return (
     <BackgroundWrapper>
       <ScrollView style={styles.container}>
       <Text style={styles.title}>{card.title}</Text>
       <View style={styles.imageWrapper}>
-        {isVideo ? (
-          <View style={styles.cover}>
-            <Video
-              source={cachedVideoUri || mediaSource}
-              style={styles.cover}
-              resizeMode='contain'
-              paused={isVideoPaused}
-              repeat={true}
-              muted={true}
-              playInBackground={false}
-              playWhenInactive={false}
-              ignoreSilentSwitch="ignore"
-              onLoad={() => {
-                setIsVideoLoading(false);
-                setVideoError(false);
-              }}
-              onLoadStart={() => {
-                setIsVideoLoading(true);
-                setVideoError(false);
-              }}
-              onError={(error) => {
-                console.log('Video error:', error);
-                setVideoError(true);
-                setIsVideoLoading(false);
-              }}
-              onBuffer={({ isBuffering }) => {
-                // Only show loading for non-cached videos
-                if (!cachedVideoUri) {
-                  setIsVideoLoading(isBuffering);
-                }
-              }}
-            />
-            {isVideoLoading && (
-              <View style={styles.loadingOverlay}>
-              </View>
-            )}
-            {videoError && (
-              <View style={styles.errorOverlay}>
-                <Text style={styles.errorText}>Video unavailable</Text>
-              </View>
-            )}
-          </View>
-        ) : (
-          <Image source={cachedImageUri || mediaSource} style={styles.cover} resizeMode='contain' />
-        )}
+        <View style={styles.shadowContainer}>
+          {isVideo ? (
+            <View style={styles.cover}>
+              <Video
+                source={cachedVideoUri || mediaSource}
+                style={styles.cover}
+                resizeMode='contain'
+                paused={isVideoPaused}
+                repeat={true}
+                muted={true}
+                playInBackground={false}
+                playWhenInactive={false}
+                ignoreSilentSwitch="ignore"
+                onLoad={() => {
+                  setIsVideoLoading(false);
+                  setVideoError(false);
+                }}
+                onLoadStart={() => {
+                  setIsVideoLoading(true);
+                  setVideoError(false);
+                }}
+                onError={(error) => {
+                  console.log('Video error:', error);
+                  setVideoError(true);
+                  setIsVideoLoading(false);
+                }}
+                onBuffer={({ isBuffering }) => {
+                  // Only show loading for non-cached videos
+                  if (!cachedVideoUri) {
+                    setIsVideoLoading(isBuffering);
+                  }
+                }}
+              />
+              {isVideoLoading && (
+                <View style={styles.loadingOverlay}>
+                </View>
+              )}
+              {videoError && (
+                <View style={styles.errorOverlay}>
+                  <Text style={styles.errorText}>Video unavailable</Text>
+                </View>
+              )}
+            </View>
+          ) : (
+            <Image source={cachedImageUri || mediaSource} style={styles.cover} resizeMode='contain' />
+          )}
+        </View>
         <View style={styles.overlay}>
           <View style={{flexDirection:'row',marginLeft:35, alignItems:'center', gap:6}}>
             <Icon name="sparkle" color="#fff" />
@@ -260,8 +263,23 @@ export default function CardDetail() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: 'transparent', padding: 16 },
   title: { color:'#fff', fontSize: 32, fontWeight: '900' },
-  imageWrapper: { marginTop: 12, borderRadius: 20, overflow: 'hidden', alignSelf: 'center' },
-  cover: { height: 440, width: 400, borderRadius: 20 },
+  imageWrapper: { marginTop: 12, borderRadius: 20, overflow: 'visible', alignSelf: 'center' },
+  shadowContainer: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 30,
+    elevation: 20,
+  },
+  cover: { 
+    height: 440, 
+    width: 400, 
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
   overlay: { position: 'absolute', top: 16, left: 16, right: 16, flex: 1, justifyContent: 'space-between' },
   loadingOverlay: { 
     position: 'absolute', 
@@ -269,7 +287,7 @@ const styles = StyleSheet.create({
     left: 0, 
     right: 0, 
     bottom: 0, 
-    backgroundColor: 'rgba(0,0,0,0.7)', 
+  //  backgroundColor: 'rgba(0,0,0,0.7)', 
     justifyContent: 'center', 
     alignItems: 'center',
     borderRadius: 20
@@ -285,7 +303,7 @@ const styles = StyleSheet.create({
     left: 0, 
     right: 0, 
     bottom: 0, 
-    backgroundColor: 'rgba(0,0,0,0.8)', 
+   // backgroundColor: 'rgba(0,0,0,0.8)', 
     justifyContent: 'center', 
     alignItems: 'center',
     borderRadius: 20

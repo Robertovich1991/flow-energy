@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { Chip } from '../components/Chip';
@@ -62,7 +62,16 @@ export default function Cards() {
             style={[styles.categoryCard, selectedCategoryId === category.id && styles.categoryCardActive]}
             onPress={() => nav.navigate('CategoryCards', { category: category })}
           >
-            <Text style={[styles.categoryText, selectedCategoryId === category.id && styles.categoryTextActive]}>{category.name}</Text>
+            <ImageBackground 
+              source={require('../assets/images/categoryImage.jpg')} 
+              style={styles.categoryBackground}
+              resizeMode="cover"
+              imageStyle={styles.categoryImageStyle}
+            >
+              <View style={styles.categoryContent}>
+                <Text style={[styles.categoryText, selectedCategoryId === category.id && styles.categoryTextActive]}>{category.name}</Text>
+              </View>
+            </ImageBackground>
           </TouchableOpacity>
         ))}
       </View>
@@ -108,14 +117,29 @@ const styles = StyleSheet.create({
   categoryCard: {
     width: '48%',
     backgroundColor: theme.colors.card,
-    borderWidth: 2,
     borderColor: theme.colors.border,
     borderRadius: 16,
-    padding: 16,
+    padding: 0,
     marginBottom: 8,
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 80,
+    overflow: 'hidden',
+  },
+  categoryBackground: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  categoryImageStyle: {
+    borderRadius: 16,
+    opacity: 0.8,
+  },
+  categoryContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 4,
   },
   categoryCardActive: {
     borderColor: theme.colors.primary,

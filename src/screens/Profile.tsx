@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     borderWidth:2, 
     borderRadius:16, 
     padding:12, 
-    marginTop:12,
+    marginTop:25,
     backgroundColor: theme.colors.card
   },
   userInfoLabel: { 

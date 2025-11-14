@@ -74,6 +74,7 @@ export default function Home() {
             title={card.title}
             price={`$${card.price}`}
             intensity={card.intensityPct}
+            image={card.image}
             onPress={() => nav.navigate('CardDetail', { card: card })}
           />
         ))}
