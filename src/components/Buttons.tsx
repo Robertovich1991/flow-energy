@@ -65,9 +65,9 @@ export const AppleButton: React.FC<BtnProps> = ({label, onPress, style, leftIcon
 
 const styles = StyleSheet.create({
   primary: {
-    backgroundColor: theme.colors.primary, paddingVertical: 14, paddingHorizontal: 18, borderRadius: 26, alignItems: 'center', flex: 1, minWidth: 0
+    backgroundColor: theme.colors.primary,paddingVertical:8, paddingHorizontal: 28, borderRadius: 96, alignItems: 'center',justifyContent:"center" 
   },
-  primaryText: { color: '#000', fontSize: 16, fontWeight: '800', flexShrink: 1 },
+  primaryText: { color:'#fff', fontSize: 16, fontWeight: '800', },
   disabled: {
     backgroundColor: '#666',
     opacity: 0.6,

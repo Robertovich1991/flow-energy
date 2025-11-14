@@ -44,8 +44,7 @@ export default function CardDetail() {
       title: t('headers.card'),
       headerBackground: () => (
         <ImageBackground 
-          source={require('../assets/images/flowground.png')} 
-          style={{ flex: 1 }}
+          style={{ flex: 1,backgroundColor:'#161427' }}
           resizeMode="cover"
           imageStyle={{ opacity: 0.8 }}
         />

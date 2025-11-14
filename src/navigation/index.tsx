@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { theme } from '..//theme';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import { getCoinsBalance } from '../store/slices/authSlice';
@@ -39,49 +39,95 @@ function TabsRoot() {
     <BackgroundWrapper>
       <Tabs.Navigator 
         screenOptions={{ 
+          
           headerShown: true,
-          headerStyle: { 
-            backgroundColor: 'transparent',
-            elevation: 0,
-            shadowOpacity: 0,
-            borderBottomWidth: 0,
-          },
+          // headerStyle: { 
+          //   backgroundColor: 'transparent',
+          //   elevation: 0,
+          //   shadowOpacity: 0,
+          //   borderBottomWidth: 0,
+          // },
           headerTransparent: true,
           headerTintColor: theme.colors.text,
           headerTitle: '',
           headerRight: () => <CoinsHeader />,
-          tabBarStyle: { backgroundColor: theme.colors.card, borderTopColor: theme.colors.border }
+          tabBarStyle: {height:80, backgroundColor: '#161427' ,  borderTopColor: theme.colors.border }
         }}
       >
       <Tabs.Screen 
         name="HomeTab" 
         component={Home} 
         options={{ 
-          title: 'Home',
+           tabBarLabel: ({ focused }) => (
+      <Text
+        style={{
+          fontSize: 12,
+          fontWeight: '400',
+          color: focused ? 'white' : '#9AA0A6',
+        }}
+      >
+        Home
+      </Text>
+    ),
           tabBarIcon: ({ focused }: { focused: boolean }) => <HomeIcon focused={focused} />
         }} 
       />
-      <Tabs.Screen 
+    
+     <Tabs.Screen
+  name="StreamsTab"
+  component={Streams}
+  options={{
+    title: 'Flow',
+    tabBarLabel: ({ focused }) => (
+      <Text
+        style={{
+          fontSize: 12,
+          fontWeight: '400',
+          color: focused ? 'white' : '#9AA0A6',
+        }}
+      >
+        Flow
+      </Text>
+    ),
+    tabBarIcon: ({ focused }: { focused: boolean }) => (
+      <StreamsIcon focused={focused} />
+    ),
+  }}
+/>
+        <Tabs.Screen 
         name="CardsTab" 
         component={Cards} 
         options={{ 
           title: 'Cards',
+           tabBarLabel: ({ focused }) => (
+      <Text
+        style={{
+          fontSize: 12,
+          fontWeight: '400',
+          color: focused ? 'white' : '#9AA0A6',
+        }}
+      >
+        Cards
+      </Text>
+    ),
           tabBarIcon: ({ focused }: { focused: boolean }) => <CardsIcon focused={focused} />
-        }} 
-      />
-      <Tabs.Screen 
-        name="StreamsTab" 
-        component={Streams} 
-        options={{ 
-          title: 'Streams',
-          tabBarIcon: ({ focused }: { focused: boolean }) => <StreamsIcon focused={focused} />
         }} 
       />
       <Tabs.Screen 
         name="ProfileTab" 
         component={Profile} 
         options={{ 
-          title: 'Profile',
+           tabBarLabel: ({ focused }) => (
+      <Text
+        style={{
+          fontSize: 12,
+          fontWeight: '400',
+          color: focused ? 'white' : '#9AA0A6',
+        }}
+      >
+        More
+      </Text>
+    ),
           tabBarIcon: ({ focused }: { focused: boolean }) => <ProfileIcon focused={focused} />
         }} 
       />
