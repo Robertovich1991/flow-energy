@@ -38,6 +38,8 @@ export const cardPurchaseSlice = createSlice({
 });
 
 export const purchaseCard = (cardId: number, name: string, birthday: string, cb?: () => void) => async (dispatch: Dispatch) => {
+  console.log(cardId,name);
+  
   dispatch(setCardPurchaseLoading(true));
   dispatch(setCardPurchaseError(null));
   try {

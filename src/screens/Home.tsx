@@ -11,7 +11,7 @@ import { getCardList } from '../store/slices/cardSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { cardListSelector } from '../store/selectors/cardSelector';
 import { getStreamList } from '../store/slices/streamSlice';
-import * as RNIap from 'react-native-iap';
+// import * as RNIap from 'react-native-iap';
 import { getCategoriesList } from '../store/slices/categoriesSlice';
 
 

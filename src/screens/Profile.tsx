@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { useApp } from '../store/app';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { signOut, getCoinsBalance } from '../store/slices/authSlice';
 import { getCardList } from '../store/slices/cardSlice';
 import { getStreamList } from '../store/slices/streamSlice';
@@ -13,6 +13,8 @@ import { getCategoriesList } from '../store/slices/categoriesSlice';
 import { PrimaryButton, GhostButton } from '../components/Buttons';
 import BackgroundWrapper from '../components/BackgroundWrapper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ownedCardsListSelector, ownedCardsLoadingSelector } from '../store/selectors/ownedCardsSelector';
+import { getOwnedCardsList } from '../store/slices/ownedCardsSlice';
 
 export default function Profile() {
   const { t, i18n } = useTranslation();
@@ -32,6 +34,15 @@ export default function Profile() {
     dispatch(getCategoriesList() as any);
     dispatch(getCoinsBalance() as any);
   };
+
+   const ownedCards = useSelector(ownedCardsListSelector);
+    const loadingOwnedCards = useSelector(ownedCardsLoadingSelector);
+  console.log(ownedCards,'ownedCards');
+  
+    // Fetch owned cards on component mount
+    useEffect(() => {
+      dispatch(getOwnedCardsList() as any);
+    }, [dispatch]);
 
   useEffect(() => {
     const logAsyncStorage = async () => {
@@ -113,17 +124,17 @@ export default function Profile() {
   return (
     <BackgroundWrapper>
       <View style={styles.container}>
-      <Text style={styles.title}>{t('tabs.profile')}</Text>
+      <Text style={styles.title}>{'More'}</Text>
       
-      {userEmail && (
+      {/* {userEmail && (
         <View style={styles.userInfoCard}>
           <Text style={styles.userInfoLabel}>{t('profile.userInfo')}</Text>
           <Text style={styles.userInfoText}>{t('profile.nameLabel')} {userName}</Text>
           <Text style={styles.userInfoText}>{t('profile.emailLabel')} {userEmail}</Text>
         </View>
-      )}
+      )} */}
       
-      <View style={styles.card}><Text style={styles.row}>{t('profile.language')}</Text>
+      {/* <View style={styles.card}><Text style={styles.row}>{t('profile.language')}</Text>
         <View style={{flexDirection:'row', flexWrap:'wrap'}}>
           {(['ru','en','es','de'] as const).map(l => (
             <TouchableOpacity key={l} onPress={()=>set(l)} style={[styles.lang, lang===l && styles.langActive]}>
@@ -131,7 +142,7 @@ export default function Profile() {
             </TouchableOpacity>
           ))}
         </View>
-      </View>
+      </View> */}
       <TouchableOpacity style={styles.card} onPress={() => nav.navigate('MyCards')}>
         <Text style={styles.row}>{t('profile.myCards')}</Text>
       </TouchableOpacity>
@@ -157,7 +168,7 @@ export default function Profile() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex:1, backgroundColor: 'transparent', padding:16 },
+  container: { flex:1, backgroundColor: 'transparent', padding:16,paddingTop:70 },
   title: { color:'#fff', fontSize: 32, fontWeight:'900' },
   userInfoCard: { 
     borderColor: theme.colors.border, 

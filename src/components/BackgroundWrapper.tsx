@@ -8,7 +8,6 @@ interface BackgroundWrapperProps {
 export default function BackgroundWrapper({ children }: BackgroundWrapperProps) {
   return (
     <ImageBackground 
-      source={require('../assets/images/flowground.png')} 
       style={styles.container}
       resizeMode="cover"
       imageStyle={styles.image}
@@ -31,6 +30,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     paddingTop: 0,
+    backgroundColor: '#161427',
   },
   image: {
     opacity: 0.8,

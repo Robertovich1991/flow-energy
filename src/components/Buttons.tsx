@@ -53,6 +53,12 @@ export const GhostButton: React.FC<BtnProps> = ({label, onPress, style, leftIcon
   </TouchableOpacity>
 );
 
+export const SubmitButton: React.FC<BtnProps> = ({label, onPress, style, leftIcon, rightIcon}) => (
+  <TouchableOpacity onPress={onPress} style={[styles.submit, style]}>
+      <Text style={[styles.submitText]}>{label}</Text>
+  </TouchableOpacity>
+);
+
 export const AppleButton: React.FC<BtnProps> = ({label, onPress, style, leftIcon, rightIcon}) => (
   <TouchableOpacity onPress={onPress} style={[styles.apple, style]}>
     <View style={styles.rowCenter}>
@@ -65,9 +71,9 @@ export const AppleButton: React.FC<BtnProps> = ({label, onPress, style, leftIcon
 
 const styles = StyleSheet.create({
   primary: {
-    backgroundColor: theme.colors.primary, paddingVertical: 14, paddingHorizontal: 18, borderRadius: 26, alignItems: 'center', flex: 1, minWidth: 0
+    backgroundColor: theme.colors.primary,paddingVertical:8, paddingHorizontal: 28, borderRadius: 96, alignItems: 'center',justifyContent:"center" 
   },
-  primaryText: { color: '#000', fontSize: 16, fontWeight: '800', flexShrink: 1 },
+  primaryText: { color:'#fff', fontSize: 16, fontWeight: '800', },
   disabled: {
     backgroundColor: '#666',
     opacity: 0.6,
@@ -75,10 +81,19 @@ const styles = StyleSheet.create({
   disabledText: {
     color: '#999',
   },
+   submit: {
+    borderColor: theme.colors.border,  paddingVertical: 16, paddingHorizontal: 18, borderRadius: 16, alignItems: 'center',
+  },
+  submitText:{
+    color: 'white',
+fontSize:18,
+fontWeight:"400",
+letterSpacing:0.9
+  },
   ghost: {
     borderColor: theme.colors.border, borderWidth: 2, paddingVertical: 12, paddingHorizontal: 18, borderRadius: 26, alignItems: 'center', flex: 1, minWidth: 0
   },
-  ghostText: { color: theme.colors.text, fontSize: 16, fontWeight: '700', flexShrink: 1 },
+  ghostText: { color: 'white', fontSize: 16, fontWeight: '700', flexShrink: 1 },
   apple: {
     backgroundColor: '#000', paddingVertical: 14, paddingHorizontal: 18, borderRadius: 26, alignItems: 'center', flex: 1, minWidth: 0
   },
