@@ -3,9 +3,10 @@ import { ImageBackground, View, StyleSheet, StatusBar, Platform } from 'react-na
 
 interface BackgroundWrapperProps {
   children: React.ReactNode;
+  topPadding?: number;
 }
 
-export default function BackgroundWrapper({ children }: BackgroundWrapperProps) {
+export default function BackgroundWrapper({ children, topPadding }: BackgroundWrapperProps) {
   return (
     <ImageBackground 
       style={styles.container}
@@ -17,7 +18,7 @@ export default function BackgroundWrapper({ children }: BackgroundWrapperProps) 
         backgroundColor="transparent" 
         barStyle="light-content"
       />
-      <View style={styles.content}>
+      <View style={[styles.content, topPadding !== undefined && { paddingTop: topPadding }]}>
         {children}
       </View>
     </ImageBackground>

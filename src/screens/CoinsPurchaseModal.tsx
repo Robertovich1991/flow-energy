@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { PrimaryButton } from '../components/Buttons';
 import { useNavigation } from '@react-navigation/native';
-//  import { PurchaseError, requestSubscription } from 'react-native-iap';
+ import { PurchaseError, requestSubscription } from 'react-native-iap';
 import { useSelector, useDispatch } from 'react-redux';
 import { userIdSelector, coinsBalanceSelector } from '../store/selectors/authSelector';
 import { purchaseCoins } from '../store/slices/coinsPurchaseSlice';
@@ -109,7 +109,7 @@ export default function CoinsPurchaseModal() {
 
   return (
     <ScrollView style={styles.container} contentInsetAdjustmentBehavior="automatic">
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Text style={styles.headerTitle}>Flow up</Text>
 
         <View style={styles.balanceContainer}>
@@ -117,7 +117,7 @@ export default function CoinsPurchaseModal() {
           <Image source={require('../assets/images/flowCoins.png')} style={{ width: 20, height: 20 }} />
           <Text style={styles.balanceText}>{coinsBalance}</Text>
         </View>
-      </View>
+      </View> */}
       <Text style={styles.title}>{t('coins.title')}</Text>
 
       <View style={styles.packagesContainer}>
@@ -152,7 +152,7 @@ export default function CoinsPurchaseModal() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.bg,
+    backgroundColor: '#1C1625',
     padding: 16
   },
   header: {
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   headerTitle: {
-    color: '#ffffffff',
+    color: '#ffffff',
     fontSize: 18,
     fontWeight: '600',
 
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   coinAmount: {
-    color: theme.colors.bg,
+    color: 'black',
     fontSize: 20,
     fontWeight: '800',
   },

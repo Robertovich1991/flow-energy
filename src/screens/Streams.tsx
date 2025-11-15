@@ -101,7 +101,7 @@ export default function Streams() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: 'transparent', padding: 16 },
-  title: { color:'#fff', fontSize: 32, fontWeight: '900',paddingTop:70 },
+  title: { color:'#fff', fontSize: 32, fontWeight: '900' },
   sub: { color: theme.colors.subtext, marginTop: 12 },
   categoriesContainer: { 
     flexDirection: 'row', 

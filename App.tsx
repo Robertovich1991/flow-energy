@@ -1,6 +1,7 @@
 
 import React, { useEffect } from 'react';
 import { StatusBar, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import RootNavigator from './src/navigation';
 import { Provider, useDispatch } from "react-redux";
 import { store } from './src/store/config/configStore';
@@ -50,13 +51,15 @@ const Bootstrap = () => {
 
 export default function App() {
   return (
-    <View style={{ flex: 1 }}>
-      <I18nextProvider i18n={i18n}>
-        <Provider store={store}>
-          <Bootstrap />
-          <RootNavigator />
-        </Provider>
-      </I18nextProvider>
-    </View>
+    <SafeAreaProvider>
+      <View style={{ flex: 1 }}>
+        <I18nextProvider i18n={i18n}>
+          <Provider store={store}>
+            <Bootstrap />
+            <RootNavigator />
+          </Provider>
+        </I18nextProvider>
+      </View>
+    </SafeAreaProvider>
   );
 }

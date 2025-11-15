@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert, Image, ImageBackground, Touchable, TouchableOpacity, Modal, Platform, TextInput, TouchableWithoutFeedback, Dimensions } from 'react-native';
 import Video from 'react-native-video';
@@ -29,8 +28,6 @@ export default function CardDetail() {
   const [videoError, setVideoError] = useState(false);
   const [cachedVideoUri, setCachedVideoUri] = useState(null);
   const [cachedImageUri, setCachedImageUri] = useState(null);
-  console.log(card.video,'card.imhhjkghjkhgjkhgjkhgjgage');
-  
   console.log(card.image, 'card.image');
   const dispatch = useDispatch();
   const buyCard = useApp(s => s.buyCard);
@@ -109,18 +106,16 @@ export default function CardDetail() {
   };
 
   // Determine which image/video to use
-  // const isVideo = card.video && card.video.toLowerCase().endsWith('.mp4');
-  // const mediaSource = (!card.video || card.video === '/images/default.jpg')
   const isVideo = card.image && card.image.toLowerCase().endsWith('.mp4');
   const mediaSource = card.image === '/images/default.jpg'
     ? require('../assets/images/flowImage.jpg')
-    : { uri: 'http://api.go2winbet.online' + card.video };
+    : { uri: 'http://api.go2winbet.online' + card.image };
 
   // Video caching logic
   useEffect(() => {
-    if (isVideo && card.video && card.video !== '/images/default.jpg') {
-      const videoUrl = 'http://api.go2winbet.online' + card.video;
-      const fileName = card.video.split('/').pop();
+    if (isVideo && card.image !== '/images/default.jpg') {
+      const videoUrl = 'http://api.go2winbet.online' + card.image;
+      const fileName = card.image.split('/').pop();
       const localPath = `${RNFS.CachesDirectoryPath}/${fileName}`;
 
       // Check if video is already cached
@@ -159,13 +154,13 @@ export default function CardDetail() {
     } else if (!isVideo) {
       setIsVideoLoading(false);
     }
-  }, [isVideo, card.video]);
+  }, [isVideo, card.image]);
 
   // Image caching logic
   useEffect(() => {
-    if (!isVideo && card.video && card.video !== '/images/default.jpg') {
-      const imageUrl = 'http://api.go2winbet.online' + card.video;
-      const fileName = card.video.split('/').pop();
+    if (!isVideo && card.image !== '/images/default.jpg') {
+      const imageUrl = 'http://api.go2winbet.online' + card.image;
+      const fileName = card.image.split('/').pop();
       const localPath = `${RNFS.CachesDirectoryPath}/${fileName}`;
 
       // Check if image is already cached
@@ -195,8 +190,7 @@ export default function CardDetail() {
         }
       });
     }
-  }, [isVideo, card.video]);
-console.log(cachedVideoUri,mediaSource,'med77777777777777777777iaSource');
+  }, [isVideo, card.image]);
 
   // const id = route.params?.id;
   const [name, setName] = useState('');
@@ -243,7 +237,6 @@ console.log(cachedVideoUri,mediaSource,'med77777777777777777777iaSource');
 
 
   return (
-
     <>
       <BackgroundWrapper>
        <ScrollView style={styles.container}>
@@ -406,34 +399,6 @@ console.log(cachedVideoUri,mediaSource,'med77777777777777777777iaSource');
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: 'transparent', padding: 16 },
-  title: { color:'#fff', fontSize: 32, fontWeight: '900' },
-  imageWrapper: { marginTop: 12, borderRadius: 20, overflow: 'visible', alignSelf: 'center' },
-  shadowContainer: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 30,
-    elevation: 20,
-  },
-  cover: { 
-    height: 440, 
-    width: 400, 
-    borderRadius: 10,
-    overflow: 'hidden',
-  },
-  overlay: { position: 'absolute', top: 16, left: 16, right: 16, flex: 1, justifyContent: 'space-between' },
-  loadingOverlay: { 
-    position: 'absolute', 
-    top: 0, 
-    left: 0, 
-    right: 0, 
-    bottom: 0, 
-  //  backgroundColor: 'rgba(0,0,0,0.7)', 
-    justifyContent: 'center', 
   container: { backgroundColor: '#161427' },
   title: { color: '#fff', fontSize: 30, fontWeight: '700', textAlign: 'center',letterSpacing:1.5 },
   imageWrapper: { borderRadius: 20, overflow: 'hidden', alignSelf: 'center',paddingTop:30 },
@@ -455,14 +420,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600'
   },
-  errorOverlay: { 
-    position: 'absolute', 
-    top: 0, 
-    left: 0, 
-    right: 0, 
-    bottom: 0, 
-   // backgroundColor: 'rgba(0,0,0,0.8)', 
-    justifyContent: 'center', 
   modalBackground: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',

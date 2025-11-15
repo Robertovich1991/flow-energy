@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
@@ -13,13 +13,24 @@ type Props = {
   onPress?: () => void;
 };
 
+const generateRandomColor = (): string => {
+  const colors = [
+    '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8',
+    '#F7DC6F', '#BB8FCE', '#85C1E2', '#F8B739', '#EC7063',
+    '#52BE80', '#5DADE2', '#F39C12', '#E74C3C', '#9B59B6',
+    '#1ABC9C', '#3498DB', '#E67E22', '#E91E63', '#00BCD4',
+    '#FF5722', '#009688', '#FFC107', '#9C27B0', '#3F51B5'
+  ];
+  return colors[Math.floor(Math.random() * colors.length)];
+};
 
 export const CardTile: React.FC<Props> = ({title, price, intensity, image, onPress}) => {
   const { t } = useTranslation();
-
+  
+  const randomBorderColor = useMemo(() => generateRandomColor(), []);
 
   return (
-    <TouchableOpacity onPress={onPress} style={[styles.tile, {backgroundColor: theme.colors.card, borderColor: randomColors[1]}]}>
+    <TouchableOpacity onPress={onPress} style={[styles.tile, {backgroundColor: theme.colors.card, borderColor: randomBorderColor}]}>
       {/* <View style={[styles.gradient,{backgroundColor: randomColors[0]}]} /> */}
       <Text style={styles.title}>{title}</Text>
       {price && (

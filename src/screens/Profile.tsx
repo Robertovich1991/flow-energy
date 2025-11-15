@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, ScrollView, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { useApp } from '../store/app';
@@ -15,6 +15,8 @@ import BackgroundWrapper from '../components/BackgroundWrapper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ownedCardsListSelector, ownedCardsLoadingSelector } from '../store/selectors/ownedCardsSelector';
 import { getOwnedCardsList } from '../store/slices/ownedCardsSlice';
+import { ownedStreamsListSelector, ownedStreamsLoadingSelector } from '../store/selectors/ownedStreamsSelector';
+import { getOwnedStreamsList } from '../store/slices/ownedStreamsSlice';
 
 export default function Profile() {
   const { t, i18n } = useTranslation();
@@ -37,11 +39,14 @@ export default function Profile() {
 
    const ownedCards = useSelector(ownedCardsListSelector);
     const loadingOwnedCards = useSelector(ownedCardsLoadingSelector);
+  const ownedStreams = useSelector(ownedStreamsListSelector);
+  const loadingOwnedStreams = useSelector(ownedStreamsLoadingSelector);
   console.log(ownedCards,'ownedCards');
   
-    // Fetch owned cards on component mount
+    // Fetch owned cards and streams on component mount
     useEffect(() => {
       dispatch(getOwnedCardsList() as any);
+      dispatch(getOwnedStreamsList() as any);
     }, [dispatch]);
 
   useEffect(() => {
@@ -123,7 +128,7 @@ export default function Profile() {
 
   return (
     <BackgroundWrapper>
-      <View style={styles.container}>
+      <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
       <Text style={styles.title}>{'More'}</Text>
       
       {/* {userEmail && (
@@ -143,13 +148,115 @@ export default function Profile() {
           ))}
         </View>
       </View> */}
-      <TouchableOpacity style={styles.card} onPress={() => nav.navigate('MyCards')}>
+      {/* <TouchableOpacity style={styles.card} onPress={() => nav.navigate('MyCards')}>
         <Text style={styles.row}>{t('profile.myCards')}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.card} onPress={() => nav.navigate('MyStreams')}>
-        <Text style={styles.row}>{t('common.myStreams')}</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       
+      {/* Horizontal owned cards section */}
+      {ownedCards && ownedCards.length > 0 && (
+        <View style={styles.ownedCardsSection}>
+          <Text style={styles.sectionTitle}>Your Collection</Text>
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.horizontalScrollContent}
+            style={styles.horizontalScroll}
+            nestedScrollEnabled={true}
+          >
+            {ownedCards.map((ownedCard: any) => {
+              const imageSource = ownedCard.card.video === '/images/default.jpg'
+                ? require('../assets/images/flowImage.jpg')
+                : { uri: 'http://api.go2winbet.online' + ownedCard.card.video };
+              
+              return (
+                <TouchableOpacity
+                  key={ownedCard.id}
+                  style={styles.horizontalCard}
+                  onPress={() => nav.navigate('ImageGallery', { 
+                    images: ownedCard.card.video === '/images/default.jpg' 
+                      ? [require('../assets/images/flowImage.jpg')]
+                      : ['http://api.go2winbet.online' + ownedCard.card.video], 
+                    initialIndex: 0 
+                  })}
+                  activeOpacity={0.8}
+                >
+                  <Image
+                    source={imageSource}
+                    resizeMode="cover"
+                    style={styles.horizontalCardImage}
+                  />
+                  <View style={styles.horizontalCardInfo}>
+                    <Text style={styles.horizontalCardTitle} numberOfLines={1}>
+                      {ownedCard.card.title}
+                    </Text>
+                    <Text style={styles.horizontalCardName} numberOfLines={1}>
+                      👤 {ownedCard.name}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
+        </View>
+      )}
+      
+      {/* <TouchableOpacity style={styles.card} onPress={() => nav.navigate('MyStreams')}>
+        <Text style={styles.row}>{t('common.myStreams')}</Text>
+      </TouchableOpacity> */}
+      
+      {/* Horizontal owned streams section */}
+      {ownedStreams && ownedStreams.length > 0 && (
+        <View style={styles.ownedCardsSection}>
+          <Text style={styles.sectionTitle}>Joined Flows</Text>
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.horizontalScrollContent}
+            style={styles.horizontalScroll}
+            nestedScrollEnabled={true}
+          >
+            {ownedStreams.map((ownedStream: any) => {
+              const imageSource = ownedStream.stream.image === '/images/default.jpg'
+                ? require('../assets/images/flowImage.jpg')
+                : { uri: 'http://api.go2winbet.online' + ownedStream.stream.image };
+              
+              return (
+                <TouchableOpacity
+                  key={ownedStream.id}
+                  style={styles.horizontalCard}
+                  onPress={() => nav.navigate('ImageGallery', { 
+                    images: ownedStream.stream.image === '/images/default.jpg' 
+                      ? [require('../assets/images/flowImage.jpg')]
+                      : ['http://api.go2winbet.online' + ownedStream.stream.image], 
+                    initialIndex: 0 
+                  })}
+                  activeOpacity={0.8}
+                >
+                  <Image
+                    source={imageSource}
+                    resizeMode="cover"
+                    style={styles.horizontalCardImage}
+                  />
+                  <View style={styles.horizontalCardInfo}>
+                    <Text style={styles.horizontalCardTitle} numberOfLines={1}>
+                      {ownedStream.stream.title}
+                    </Text>
+                    <Text style={styles.horizontalCardName} numberOfLines={1}>
+                      💰 {ownedStream.coins_spent} coins
+                    </Text>
+                    {ownedStream.stream.category && (
+                      <Text style={styles.horizontalCardCategory} numberOfLines={1}>
+                        {ownedStream.stream.category.name}
+                      </Text>
+                    )}
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
+        </View>
+      )}
+
       <View style={styles.actionsContainer}>
         <PrimaryButton 
           label={t('profile.logout')} 
@@ -162,13 +269,14 @@ export default function Profile() {
           style={styles.deleteButton}
         />
       </View>
-      </View>
+      </ScrollView>
     </BackgroundWrapper>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex:1, backgroundColor: 'transparent', padding:16,paddingTop:70 },
+  container: { flex:1, backgroundColor: 'transparent' },
+  scrollContent: { padding:16, paddingBottom: 32 },
   title: { color:'#fff', fontSize: 32, fontWeight:'900' },
   userInfoCard: { 
     borderColor: theme.colors.border, 
@@ -208,5 +316,57 @@ const styles = StyleSheet.create({
     flex: 0,
     alignSelf: 'center',
     minWidth: 200,
+  },
+  ownedCardsSection: {
+    marginTop: 12,
+    marginBottom: 12,
+  },
+  sectionTitle: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 12,
+    marginLeft: 4,
+  },
+  horizontalScroll: {
+    marginHorizontal: -16,
+  },
+  horizontalScrollContent: {
+    paddingHorizontal: 16,
+  },
+  horizontalCard: {
+    width: 160,
+    height: 200,
+    borderRadius: 16,
+    overflow: 'hidden',
+    backgroundColor: theme.colors.card,
+    borderWidth: 2,
+    borderColor: theme.colors.border,
+    marginRight: 12,
+  },
+  horizontalCardImage: {
+    width: '100%',
+    height: '70%',
+    backgroundColor: theme.colors.card,
+  },
+  horizontalCardInfo: {
+    flex: 1,
+    padding: 10,
+    justifyContent: 'center',
+  },
+  horizontalCardTitle: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '700',
+    marginBottom: 4,
+  },
+  horizontalCardName: {
+    color: theme.colors.subtext,
+    fontSize: 12,
+  },
+  horizontalCardCategory: {
+    color: theme.colors.primary,
+    fontSize: 11,
+    marginTop: 2,
   },
 });

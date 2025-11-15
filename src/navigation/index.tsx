@@ -1,11 +1,12 @@
 
-import React, { useEffect, useState } from 'react';
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import React, { useEffect, useState, useRef, createContext, useContext } from 'react';
+import { NavigationContainer, DefaultTheme, DarkTheme, useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { theme } from '..//theme';
-import { View, ActivityIndicator, Text } from 'react-native';
+import { View, ActivityIndicator, Text, Platform } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import { getCoinsBalance } from '../store/slices/authSlice';
@@ -34,6 +35,17 @@ import BackgroundWrapper from '../components/BackgroundWrapper';
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
 
+// Create a context to share tab navigation
+export const TabNavigationContext = createContext<any>(null);
+
+export const useTabNavigation = () => {
+  const navigation = useContext(TabNavigationContext);
+  if (!navigation) {
+    throw new Error('useTabNavigation must be used within TabNavigationProvider');
+  }
+  return navigation;
+};
+
 const CardsStack = createNativeStackNavigator();
 function CardsStackScreen() {
   return (
@@ -45,39 +57,56 @@ function CardsStackScreen() {
 }
 
 function TabsRoot() {
+  const insets = useSafeAreaInsets();
+  const statusBarHeight = insets.top || (Platform.OS === 'ios' ? 44 : 24);
+  // CoinsHeader content height: ~44px (content) + 12px (paddingBottom) = ~56px
+  const headerHeight = statusBarHeight + 30; // status bar + CoinsHeader content height
+  const [tabNavigation, setTabNavigation] = useState<any>(null);
+  
+  // Helper to capture navigation from any tab screen
+  const createTabScreenWrapper = (Component: React.ComponentType<any>) => {
+    return (props: any) => {
+      const nav = useNavigation();
+      React.useEffect(() => {
+        setTabNavigation(nav);
+      }, [nav]);
+      return <Component {...props} />;
+    };
+  };
+  
   return (
-    <BackgroundWrapper>
-      <Tabs.Navigator
-        screenOptions={{
-          headerShown: true,
-          headerTransparent: true,
-          headerTintColor: theme.colors.text,
-          headerTitle: '',
-          headerRight: () => <CoinsHeader />,
-          tabBarStyle: {
-            height: 90,
-            backgroundColor: '#161427',
-            borderTopColor: theme.colors.border,
-            paddingTop: 10,
-            paddingBottom: 18, // give space so items sit visually centered
-            alignItems: 'center',
-            justifyContent: 'center',
-          },
-          tabBarItemStyle: {
-            alignItems: 'center',
-            justifyContent: 'center',
-          },
-          tabBarIconStyle: {
-            alignItems: 'center',
-            justifyContent: 'center',
-          },
-        }}
-      >
+    <TabNavigationContext.Provider value={tabNavigation}>
+      <BackgroundWrapper topPadding={headerHeight}>
+        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 1000 }}>
+          <CoinsHeader />
+        </View>
+        <Tabs.Navigator
+          screenOptions={{
+            headerShown: false,
+            tabBarStyle: {
+              height: 90,
+              backgroundColor: '#161427',
+              borderTopColor: theme.colors.border,
+              paddingTop: 10,
+              paddingBottom: 18, // give space so items sit visually centered
+              alignItems: 'center',
+              justifyContent: 'center',
+            },
+            tabBarItemStyle: {
+              alignItems: 'center',
+              justifyContent: 'center',
+            },
+            tabBarIconStyle: {
+              alignItems: 'center',
+              justifyContent: 'center',
+            },
+          }}
+        >
         <Tabs.Screen
           name="HomeTab"
-          component={Home}
+          component={createTabScreenWrapper(Home)}
           options={{
-            tabBarLabel: ({ focused }) => (
+            tabBarLabel: ({ focused }: { focused: boolean }) => (
               <Text
                 style={{
                   fontSize: 12,
@@ -95,10 +124,10 @@ function TabsRoot() {
 
         <Tabs.Screen
           name="StreamsTab"
-          component={Streams}
+          component={createTabScreenWrapper(Streams)}
           options={{
             title: 'Flow',
-            tabBarLabel: ({ focused }) => (
+            tabBarLabel: ({ focused }: { focused: boolean }) => (
               <Text
                 style={{
                   fontSize: 12,
@@ -117,10 +146,10 @@ function TabsRoot() {
         />
         <Tabs.Screen
           name="CardsTab"
-          component={CardsStackScreen}
+          component={createTabScreenWrapper(CardsStackScreen)}
           options={{
             title: 'Cards',
-            tabBarLabel: ({ focused }) => (
+            tabBarLabel: ({ focused }: { focused: boolean }) => (
               <Text
                 style={{
                   fontSize: 12,
@@ -137,9 +166,9 @@ function TabsRoot() {
         />
         <Tabs.Screen
           name="ProfileTab"
-          component={Profile}
+          component={createTabScreenWrapper(Profile)}
           options={{
-            tabBarLabel: ({ focused }) => (
+            tabBarLabel: ({ focused }: { focused: boolean }) => (
               <Text
                 style={{
                   fontSize: 12,
@@ -154,8 +183,18 @@ function TabsRoot() {
             tabBarIcon: ({ focused }: { focused: boolean }) => <ProfileIcon focused={focused} />
           }}
         />
+        <Tabs.Screen
+          name="CoinsPurchaseModal"
+          component={CoinsPurchaseModal}
+          options={{
+            headerShown: false,
+            tabBarButton: () => null, // Hide from tab bar
+            tabBarItemStyle: { display: 'none' },
+          }}
+        />
       </Tabs.Navigator>
-    </BackgroundWrapper>
+      </BackgroundWrapper>
+    </TabNavigationContext.Provider>
   );
 }
 
@@ -216,7 +255,6 @@ export default function RootNavigator() {
         <Stack.Screen name="StreamSession" component={StreamSession} options={{ title: 'Session' }} />
         <Stack.Screen name="NameChargeModal" component={NameChargeModal} options={{ presentation: 'modal', title: 'Charge' }} />
         <Stack.Screen name="StreamAccessModal" component={StreamAccessModal} options={{ presentation: 'modal', title: 'Access' }} />
-        <Stack.Screen name="CoinsPurchaseModal" component={CoinsPurchaseModal} options={{ presentation: 'modal', title: 'Buy Coins' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

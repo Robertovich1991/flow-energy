@@ -99,7 +99,7 @@ export default function Cards() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: 'transparent', padding: 16 },
-  title: { color: '#fff', fontSize: 40,paddingTop:71, fontWeight: '700' },
+  title: { color: '#fff', fontSize: 40, fontWeight: '700',paddingBottom:20 },
   sub: { color: theme.colors.subtext, marginTop: 12 },
   categoriesContainer: { 
     flexDirection: 'row', 

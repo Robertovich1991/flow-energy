@@ -39,4 +39,3 @@ export const ProfileIcon: React.FC<TabIconProps> = ({ focused, size = 20 }) => {
   );
 };
 
-
