@@ -49,7 +49,7 @@ export const CardTile: React.FC<Props> = ({title, price,style, intensity, image,
 
 const styles = StyleSheet.create({
 
-  tile: {minWidth:145, borderWidth: 1, borderRadius: 16, padding: 16, overflow: 'hidden', marginBottom: 12, width: '48%', height: 181, backgroundColor: theme.colors.card,justifyContent:'space-between',  },
+  tile: {minWidth:145, borderWidth: 1, borderRadius: 16, padding: 16, overflow: 'hidden', marginBottom: 12, width: '48%', height: 221, backgroundColor: theme.colors.card,justifyContent:'space-between',  },
   title: { color: '#fff', fontSize: 16, fontWeight: '800', fontFamily: getFontFamily('800'), marginTop: 6, marginBottom: 6,  },
   priceContainer: { marginBottom: 6, alignItems: 'center', flexDirection: 'row' },
   priceText: { color: theme.colors.primary, fontSize: 14, fontWeight: '700', fontFamily: getFontFamily('700') },

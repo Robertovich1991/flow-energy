@@ -10,6 +10,8 @@ import Icon from '../components/Icon';
 import BackgroundWrapper from '../components/BackgroundWrapper';
 import { useDispatch } from 'react-redux';
 import { purchaseStream } from '../store/slices/streamPurchaseSlice';
+import CoinsHeader from '../components/CoinsHeader';
+import { Icons } from '../assets/images/svg';
 
 export default function StreamDetail() {
   const { t } = useTranslation();
@@ -78,10 +80,10 @@ export default function StreamDetail() {
     nav.navigate('StreamAccessModal', { streamId: stream.id });
   };
   
-  // Set navigation title
+  // Hide header
   useEffect(() => {
-    nav.setOptions({ title: t('headers.stream') });
-  }, [nav, t]);
+    nav.setOptions({ headerShown: false });
+  }, [nav]);
 
   // Determine which image to use
   const imageSource = stream.image === '/images/default.jpg' 
@@ -90,9 +92,9 @@ export default function StreamDetail() {
 
   return (
     <BackgroundWrapper>
-      <ScrollView style={styles.container}>
-        <Text  style={{color:'white', fontSize: 24, fontWeight: '700'}}>Connect to Flows</Text>
-      <Text style={styles.title}>{stream.title}</Text>
+      <View style={styles.container}>
+        <Text  style={{color:'white', fontSize: 30, fontWeight: '700'}}>Connect to Flows</Text>
+     <View style={{backgroundColor:'#101423',paddingTop:40,paddingBottom:32,borderRadius:32}}><Text style={styles.title}>{stream.title}</Text>
 
       {stream.prices && stream.prices.length > 0 && (
         <>
@@ -122,6 +124,7 @@ export default function StreamDetail() {
           </View>
           {selectedPrice && (
             <View style={styles.coinsDisplay}>
+              <Icons.Gold width={40} height={40} />
               {/* <Icon name="coin" size={20} color={theme.colors.primary} /> */}
               <Text style={styles.coinsText}>{selectedPrice.price_coins}</Text>
             </View>
@@ -155,7 +158,7 @@ export default function StreamDetail() {
           onPress={onStartStream} 
         /> */}
         {/** <GhostButton leftIcon="lock" label={t('cta.getAccess')} onPress={onGetAccess} /> **/}
-      </View>
+      </View></View> 
       {/* <View style={styles.infoRow}>
         <View style={styles.infoItem}>
           <Icon name="clock" size={16} color="#E0E0E6" />
@@ -170,13 +173,14 @@ export default function StreamDetail() {
           <Text style={styles.info}>Онлайн</Text>
         </View> */}
       {/* </View> */}
-      </ScrollView>
+      <View></View>
+      </View>
     </BackgroundWrapper>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: 'transparent', padding: 16 },
+  container: { flex: 1, backgroundColor: '#0D0B16', padding: 16, justifyContent:'space-between' },
   title: { color:'#fff', fontSize: 32, fontWeight: '900' ,textAlign:'center'},
   pricesContainer: { 
     flexDirection: 'row', 

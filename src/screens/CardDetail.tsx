@@ -411,8 +411,8 @@ export default function CardDetail() {
 const styles = StyleSheet.create({
   container: { backgroundColor: '#161427' },
   title: { color: '#fff', fontSize: 30, fontWeight: '700', textAlign: 'center',letterSpacing:1.5 },
-  imageWrapper: { borderRadius: 20, overflow: 'hidden', alignSelf: 'center',paddingTop:30 },
-  cover: { height: 470, width: 420, borderRadius: 20, overflow: 'hidden' },
+  imageWrapper: {backgroundColor:'red', borderRadius: 20, overflow: 'hidden', alignSelf: 'center', },
+  cover: { height: 600, width: 400, borderRadius: 20, overflow: 'hidden' },
   // overlay: { position: 'absolute', top: 16, left: 16, right: 16, flex: 1, justifyContent: 'space-between' },
   loadingOverlay: {
     position: 'absolute',

@@ -276,7 +276,12 @@ export default function Profile() {
                //   price={ownedStream.coins_spent}
                   intensity={ownedStream.stream.intensity}
                   useCases={ownedStream.stream.use_cases}
-                  onPress={() => nav.navigate('StreamDetail', { stream: ownedStream.stream })}
+                  onPress={() => {
+                    nav.navigate('StreamsTab', {
+                      screen: 'RunningFlowScreen',
+                      params: { stream: ownedStream }
+                    });
+                  }}
                 />
                 </>
               );

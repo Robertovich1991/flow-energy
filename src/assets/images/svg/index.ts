@@ -3,11 +3,13 @@ import Home from './Home.svg';
 import Profile from './Profile.svg';
 import Tornado from './Tornado.svg';
 import Coins from './coins.svg';
+import Gold from './gold.svg';
 
 export const Icons = {
     Cards,
     Home,
     Profile,
     Tornado,
+    Gold,
     Coins
 }

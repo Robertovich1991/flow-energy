@@ -19,6 +19,7 @@ import Streams from '../screens/Streams';
 import StreamDetail from '../screens/StreamDetail';
 import StreamSession from '../screens/StreamSession';
 import StreamAccessModal from '../screens/StreamAccessModal';
+import RunningFlowScreen from '../screens/RunningFlowScreen';
 import Profile from '../screens/Profile';
 import Login from '../screens/Login';
 import SignUp from '../screens/SignUp';
@@ -53,6 +54,17 @@ function CardsStackScreen() {
       <CardsStack.Screen name="CardsMain" component={Cards} />
       <CardsStack.Screen name="CardDetail" component={CardDetail} options={{ headerShown: false }} />
     </CardsStack.Navigator>
+  );
+}
+
+const StreamsStack = createNativeStackNavigator();
+function StreamsStackScreen() {
+  return (
+    <StreamsStack.Navigator screenOptions={{ headerShown: false }}>
+      <StreamsStack.Screen name="StreamsMain" component={Streams} />
+      <StreamsStack.Screen name="StreamDetail" component={StreamDetail} options={{ headerShown: false }} />
+      <StreamsStack.Screen name="RunningFlowScreen" component={RunningFlowScreen} options={{ headerShown: false }} />
+    </StreamsStack.Navigator>
   );
 }
 
@@ -124,7 +136,7 @@ function TabsRoot() {
 
         <Tabs.Screen
           name="StreamsTab"
-          component={createTabScreenWrapper(Streams)}
+          component={createTabScreenWrapper(StreamsStackScreen)}
           options={{
             title: 'Flow',
             tabBarLabel: ({ focused }: { focused: boolean }) => (
@@ -242,7 +254,6 @@ export default function RootNavigator() {
         <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
         <Stack.Screen name="Tabs" component={TabsRoot} options={{ headerShown: false }} />
         {/* <Stack.Screen name="CardDetail" component={CardDetail} options={{headerShown:false}} /> */}
-        <Stack.Screen name="StreamDetail" component={StreamDetail} options={{ title: 'Stream' }} />
         <Stack.Screen name="MyCards" component={MyCards} options={{ title: t('profile.myCards') }} />
         <Stack.Screen name="MyStreams" component={MyStreams} options={{ title: t('common.myStreams') }} />
         <Stack.Screen name="CategoryCards" component={CategoryCards} options={{ title: 'Card Categories' }} />
@@ -253,6 +264,7 @@ export default function RootNavigator() {
           options={{ headerShown: false, presentation: 'modal' }}
         />
         <Stack.Screen name="StreamSession" component={StreamSession} options={{ title: 'Session' }} />
+        <Stack.Screen name="RunningFlowScreen" component={RunningFlowScreen} options={{ headerShown: false }} />
         <Stack.Screen name="NameChargeModal" component={NameChargeModal} options={{ presentation: 'modal', title: 'Charge' }} />
         <Stack.Screen name="StreamAccessModal" component={StreamAccessModal} options={{ presentation: 'modal', title: 'Access' }} />
       </Stack.Navigator>
