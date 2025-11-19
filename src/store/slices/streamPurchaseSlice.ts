@@ -36,14 +36,17 @@ export const streamPurchaseSlice = createSlice({
   }
 });
 
-export const purchaseStream = (streamId: number, streamTitle: string, streamPrice: number, cb?: () => void) => async (dispatch: Dispatch) => {
+export const purchaseStream = (streamId: number, streamTitle: string, streamPrice: number, durationTypeId: number, cb?: () => void) => async (dispatch: Dispatch) => {
   dispatch(setStreamPurchaseLoading(true));
   dispatch(setStreamPurchaseError(null));
   try {
-    const response = await mainApi.post(`coins/streams/${streamId}/purchase`, { confirm: true });
+    const response = await mainApi.post(`coins/streams/${streamId}/purchase`, { 
+      confirm: true,
+      duration_type_id: durationTypeId
+    });
     if (response?.data?.success === true) {
       // Log AppsFlyer stream purchase event
-      logStreamPurchase(streamId, streamTitle, streamPrice);
+      logStreamPurchase(streamId, streamTitle, streamPrice,'[[[[[[[[[[[[[[[[[[[[[[[[[[[');
       dispatch(setStreamPurchased(streamId));
       cb && cb();
     } else {

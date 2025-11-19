@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Alert, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Alert, ImageBackground, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { PrimaryButton, GhostButton } from '../components/Buttons';
@@ -18,8 +18,20 @@ export default function StreamDetail() {
   const stream = route.params?.stream;
   const coinsBalance = useSelector(coinsBalanceSelector);
   const dispatch = useDispatch();
+  const [selectedPrice, setSelectedPrice] = useState<any>(stream.prices?.[0] || null);
+  console.log(stream,'jfhfhfhfhfhhfhfhfhfhfhhhffhhfhfhfhfhfhfhfhffhfhhfhf');
   
   const onStartStream = () => {
+    // Check if a price is selected
+    if (!selectedPrice) {
+      Alert.alert(
+        t('common.error'),
+        'Please select a duration option',
+        [{ text: t('common.ok') }]
+      );
+      return;
+    }
+
     // Check if user has sufficient coins balance
     if (coinsBalance === 0) {
       Alert.alert(
@@ -39,17 +51,23 @@ export default function StreamDetail() {
     // Show confirmation alert before purchasing
     Alert.alert(
       t('common.confirmPurchase'),
-      t('common.confirmStreamPurchase', { price: stream.price }),
+      t('common.confirmStreamPurchase', { price: selectedPrice.price_coins }),
       [
         { text: 'Cancel', style: 'cancel' },
         { 
           text: t('common.yesBuy'), 
           onPress: () => {
             // Purchase stream access then proceed
-            dispatch(purchaseStream(stream.id, stream.title, stream.price, () => {
-              Alert.alert(t('common.streamSuccessful'));
-              nav.navigate('StreamSession', { stream: stream });
-            }) as any);
+            dispatch(purchaseStream(
+              stream.id, 
+              stream.title, 
+              selectedPrice.price_coins, 
+              selectedPrice.duration_type_id,
+              () => {
+                Alert.alert(t('common.streamSuccessful'));
+                nav.navigate('StreamSession', { stream: stream });
+              }
+            ) as any);
           }
         }
       ]
@@ -73,9 +91,45 @@ export default function StreamDetail() {
   return (
     <BackgroundWrapper>
       <ScrollView style={styles.container}>
+        <Text  style={{color:'white', fontSize: 24, fontWeight: '700'}}>Connect to Flows</Text>
       <Text style={styles.title}>{stream.title}</Text>
 
-      <ImageBackground source={imageSource} style={styles.cover} imageStyle={styles.coverImage}>
+      {stream.prices && stream.prices.length > 0 && (
+        <>
+          <View style={styles.pricesContainer}>
+            {stream.prices.map((price: any) => {
+              const isSelected = selectedPrice?.id === price.id;
+              return (
+                <TouchableOpacity 
+                  key={price.id} 
+                  style={[
+                    styles.priceButton,
+                    isSelected && styles.priceButtonSelected
+                  ]}
+                  onPress={() => {
+                    setSelectedPrice(price);
+                  }}
+                >
+                  <Text style={[
+                    styles.priceButtonTitle,
+                    isSelected && styles.priceButtonTitleSelected
+                  ]}>
+                    {price.duration_type?.name || ''}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+          {selectedPrice && (
+            <View style={styles.coinsDisplay}>
+              {/* <Icon name="coin" size={20} color={theme.colors.primary} /> */}
+              <Text style={styles.coinsText}>{selectedPrice.price_coins}</Text>
+            </View>
+          )}
+        </>
+      )}
+
+      {/* <ImageBackground source={imageSource} style={styles.cover} imageStyle={styles.coverImage}>
         <View style={{padding: 16, flex: 1, justifyContent: 'space-between'}}>
           <View style={{flexDirection:'row', alignItems:'center', gap:6}}>
             <Icon name="play" color="#fff" />
@@ -83,14 +137,23 @@ export default function StreamDetail() {
           </View>
           <Text style={styles.coverTitle}>{stream.title}</Text>
         </View>
-      </ImageBackground>
-      <Text style={styles.desc}>{stream.description || 'Experience this powerful stream session designed to enhance your energy and focus.'}</Text>
-      <Text style={styles.title}>{stream.use_cases}</Text>
+      </ImageBackground> */}
+      {/* <Text style={styles.desc}>{stream.description || 'Experience this powerful stream session designed to enhance your energy and focus.'}</Text> */}
+      {/* <Text style={styles.title}>{stream.use_cases}</Text> */}
 
       
       
       <View style={styles.actionsRow}>
-        <PrimaryButton leftIcon="play" rightIcon="arrow-right" label={t('cta.startStream') + ' · $' + stream.price} onPress={onStartStream} />
+        <TouchableOpacity style={styles.startButton} onPress={onStartStream}>
+          <Text style={{color:'white', fontSize: 24, fontWeight: '700'}}>Buy</Text>
+        </TouchableOpacity>
+        {/* <PrimaryButton 
+        
+          leftIcon="play" 
+          rightIcon="arrow-right" 
+          label={t('cta.startStream') + (selectedPrice ? ` · ${selectedPrice.price_coins} coins` : '')} 
+          onPress={onStartStream} 
+        /> */}
         {/** <GhostButton leftIcon="lock" label={t('cta.getAccess')} onPress={onGetAccess} /> **/}
       </View>
       {/* <View style={styles.infoRow}>
@@ -114,7 +177,62 @@ export default function StreamDetail() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: 'transparent', padding: 16 },
-  title: { color:'#fff', fontSize: 32, fontWeight: '900' },
+  title: { color:'#fff', fontSize: 32, fontWeight: '900' ,textAlign:'center'},
+  pricesContainer: { 
+    flexDirection: 'row', 
+    flexWrap: 'wrap', 
+    gap: 10, 
+    marginTop: 16,
+    marginBottom: 12,
+    paddingHorizontal: 66
+  },
+  priceButton: {
+    width: '48%',
+    backgroundColor: 'white',
+    borderColor: theme.colors.border,
+  //  borderWidth: 2,
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  priceButtonSelected: {
+    backgroundColor: '#4A90E2',
+   // borderColor: theme.colors.primary,
+  },
+  priceButtonTitle: {
+    color: 'black',
+    fontSize: 18,
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  startButton: {
+    flex:1,
+    backgroundColor: '#1ED760',
+  //  width: '100%',
+    borderRadius: 16,
+    paddingVertical: 16,
+    marginHorizontal: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  priceButtonTitleSelected: {
+    color: 'white',
+  },
+  coinsDisplay: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    marginTop: 12,
+    marginBottom: 8,
+  },
+  coinsText: {
+    color: theme.colors.primary,
+    fontSize: 36,
+    fontWeight: '700',
+  },
   cover: { 
     borderColor: theme.colors.border, 
     borderWidth:2, 

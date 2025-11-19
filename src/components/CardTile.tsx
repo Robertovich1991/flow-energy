@@ -1,6 +1,6 @@
 
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, ViewStyle } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme, getFontFamily } from '../theme';
 import { Icons } from '../assets/images/svg';
@@ -11,6 +11,7 @@ type Props = {
   intensity?: number;
   image?: string;
   onPress?: () => void;
+  style:ViewStyle
 };
 
 const generateRandomColor = (): string => {
@@ -24,13 +25,13 @@ const generateRandomColor = (): string => {
   return colors[Math.floor(Math.random() * colors.length)];
 };
 
-export const CardTile: React.FC<Props> = ({title, price, intensity, image, onPress}) => {
+export const CardTile: React.FC<Props> = ({title, price,style, intensity, image, onPress}) => {
   const { t } = useTranslation();
   
   const randomBorderColor = useMemo(() => generateRandomColor(), []);
 
   return (
-    <TouchableOpacity onPress={onPress} style={[styles.tile, {backgroundColor: theme.colors.card, borderColor: randomBorderColor}]}>
+    <TouchableOpacity onPress={onPress} style={[styles.tile, {backgroundColor: theme.colors.card, borderColor: randomBorderColor, ...style}]}>
       {/* <View style={[styles.gradient,{backgroundColor: randomColors[0]}]} /> */}
       <Text style={styles.title}>{title}</Text>
       {price && (
@@ -48,7 +49,7 @@ export const CardTile: React.FC<Props> = ({title, price, intensity, image, onPre
 
 const styles = StyleSheet.create({
 
-  tile: { borderWidth: 1, borderRadius: 16, padding: 16, overflow: 'hidden', marginBottom: 12, width: '48%', height: 181, backgroundColor: theme.colors.card,justifyContent:'space-between',  },
+  tile: {minWidth:145, borderWidth: 1, borderRadius: 16, padding: 16, overflow: 'hidden', marginBottom: 12, width: '48%', height: 181, backgroundColor: theme.colors.card,justifyContent:'space-between',  },
   title: { color: '#fff', fontSize: 16, fontWeight: '800', fontFamily: getFontFamily('800'), marginTop: 6, marginBottom: 6,  },
   priceContainer: { marginBottom: 6, alignItems: 'center', flexDirection: 'row' },
   priceText: { color: theme.colors.primary, fontSize: 14, fontWeight: '700', fontFamily: getFontFamily('700') },

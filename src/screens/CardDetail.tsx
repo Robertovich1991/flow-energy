@@ -194,6 +194,7 @@ export default function CardDetail() {
 
   // const id = route.params?.id;
   const [name, setName] = useState('');
+  const [surname, setSurname] = useState('');
   const [birthday, setBirthday] = useState(new Date());
   const [successModalVisible, setSuccessModalVisible] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -219,8 +220,8 @@ export default function CardDetail() {
     // Format birthday as YYYY-MM-DD
     const formattedBirthday = birthday.toISOString().split('T')[0];
 
-    // Call purchase endpoint with name and birthday, then navigate back
-    dispatch(purchaseCard(card.id, name, formattedBirthday, () => {
+    // Call purchase endpoint with name, surname and birthday, then navigate back
+    dispatch(purchaseCard(card.id, name, surname, formattedBirthday, () => {
       // Alert.alert('Successfully');
       setModalVisible(false);
       setSuccessModalVisible(true);
@@ -327,6 +328,15 @@ export default function CardDetail() {
                   // placeholderTextColor="#AAA"
                   value={name}
                   onChangeText={setName}
+                  style={styles.input}
+                />
+
+                <Text style={styles.label}>Surname</Text>
+
+                <TextInput
+                  placeholderTextColor="#AAA"
+                  value={surname}
+                  onChangeText={setSurname}
                   style={styles.input}
                 />
 

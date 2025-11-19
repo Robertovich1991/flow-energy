@@ -37,7 +37,7 @@ export const cardPurchaseSlice = createSlice({
   }
 });
 
-export const purchaseCard = (cardId: number, name: string, birthday: string, cb?: () => void) => async (dispatch: Dispatch) => {
+export const purchaseCard = (cardId: number, name: string, surname: string, birthday: string, cb?: () => void) => async (dispatch: Dispatch) => {
   console.log(cardId,name);
   
   dispatch(setCardPurchaseLoading(true));
@@ -45,6 +45,7 @@ export const purchaseCard = (cardId: number, name: string, birthday: string, cb?
   try {
     const response = await mainApi.post(`coins/cards/${cardId}/purchase`, { 
       name: name,
+      surname: surname,
       birthday: birthday
     });
     if (response?.data?.success === true) {

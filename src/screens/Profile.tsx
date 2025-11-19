@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert, ScrollView, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { theme, getFontFamily } from '../theme';
+import { theme } from '../theme';
 import { useApp } from '../store/app';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,6 +17,8 @@ import { ownedCardsListSelector, ownedCardsLoadingSelector } from '../store/sele
 import { getOwnedCardsList } from '../store/slices/ownedCardsSlice';
 import { ownedStreamsListSelector, ownedStreamsLoadingSelector } from '../store/selectors/ownedStreamsSelector';
 import { getOwnedStreamsList } from '../store/slices/ownedStreamsSlice';
+import { OwnedStreamTile, StreamTile } from '../components/StreamTile';
+import { CardTile } from '../components/CardTile';
 
 export default function Profile() {
   const { t, i18n } = useTranslation();
@@ -128,7 +130,12 @@ export default function Profile() {
 
   return (
     <BackgroundWrapper>
-      <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
+      <ScrollView 
+        style={styles.container} 
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={true}
+        nestedScrollEnabled={true}
+      >
       <Text style={styles.title}>{'More'}</Text>
       
       {/* {userEmail && (
@@ -150,17 +157,22 @@ export default function Profile() {
       </View> */}
       {/* <TouchableOpacity style={styles.card} onPress={() => nav.navigate('MyCards')}>
         <Text style={styles.row}>{t('profile.myCards')}</Text>
+      </TouchableOpacity>
+       */}
+      
+      {/* <TouchableOpacity style={styles.card} onPress={() => nav.navigate('MyStreams')}>
+        <Text style={styles.row}>{t('common.myStreams')}</Text>
       </TouchableOpacity> */}
+      <Text style={styles.sectionTitle}>Your collection</Text>
       
       {/* Horizontal owned cards section */}
       {ownedCards && ownedCards.length > 0 && (
         <View style={styles.ownedCardsSection}>
-          <Text style={styles.sectionTitle}>Your Collection</Text>
           <ScrollView 
-            horizontal 
+           horizontal 
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.horizontalScrollContent}
-            style={styles.horizontalScroll}
+            contentContainerStyle={[styles.horizontalScrollContent, {gap: 16}]}
+            style={[styles.horizontalScroll, {gap: 16}]}
             nestedScrollEnabled={true}
           >
             {ownedCards.map((ownedCard: any) => {
@@ -169,7 +181,8 @@ export default function Profile() {
                 : { uri: 'http://api.go2winbet.online' + ownedCard.card.video };
               
               return (
-                <TouchableOpacity
+              <>
+                {/* <TouchableOpacity
                   key={ownedCard.id}
                   style={styles.horizontalCard}
                   onPress={() => nav.navigate('ImageGallery', { 
@@ -180,11 +193,7 @@ export default function Profile() {
                   })}
                   activeOpacity={0.8}
                 >
-                  <Image
-                    source={imageSource}
-                    resizeMode="cover"
-                    style={styles.horizontalCardImage}
-                  />
+                
                   <View style={styles.horizontalCardInfo}>
                     <Text style={styles.horizontalCardTitle} numberOfLines={1}>
                       {ownedCard.card.title}
@@ -193,23 +202,32 @@ export default function Profile() {
                       👤 {ownedCard.name}
                     </Text>
                   </View>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
+              <CardTile
+                style={{maxWidth: 145}}
+                  key={ownedCard.id}
+                  title={ownedCard.card.title}
+                  price={ownedCard.coins_spent}
+                  intensity={ownedCard.card.intensity}
+               //   useCases={ownedCard.card.use_cases}
+                  onPress={() => nav.navigate('ImageGallery', { 
+                    images: ownedCard.card.video === '/images/default.jpg' 
+                      ? [require('../assets/images/flowImage.jpg')]
+                      : ['http://api.go2winbet.online' + ownedCard.card.video], 
+                    initialIndex: 0 
+                  })}/>
+                </>
               );
             })}
           </ScrollView>
         </View>
       )}
-      
-      {/* <TouchableOpacity style={styles.card} onPress={() => nav.navigate('MyStreams')}>
-        <Text style={styles.row}>{t('common.myStreams')}</Text>
-      </TouchableOpacity> */}
-      
+
       {/* Horizontal owned streams section */}
       {ownedStreams && ownedStreams.length > 0 && (
         <View style={styles.ownedCardsSection}>
           <Text style={styles.sectionTitle}>Joined Flows</Text>
           <ScrollView 
-            horizontal 
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.horizontalScrollContent}
             style={styles.horizontalScroll}
@@ -221,9 +239,10 @@ export default function Profile() {
                 : { uri: 'http://api.go2winbet.online' + ownedStream.stream.image };
               
               return (
-                <TouchableOpacity
+              <> 
+               <TouchableOpacity
                   key={ownedStream.id}
-                  style={styles.horizontalCard}
+                //  style={styles.horizontalCard}
                   onPress={() => nav.navigate('ImageGallery', { 
                     images: ownedStream.stream.image === '/images/default.jpg' 
                       ? [require('../assets/images/flowImage.jpg')]
@@ -232,12 +251,12 @@ export default function Profile() {
                   })}
                   activeOpacity={0.8}
                 >
-                  <Image
+                  {/* <Image
                     source={imageSource}
                     resizeMode="cover"
                     style={styles.horizontalCardImage}
-                  />
-                  <View style={styles.horizontalCardInfo}>
+                  /> */}
+                  {/* <View style={styles.horizontalCardInfo}>
                     <Text style={styles.horizontalCardTitle} numberOfLines={1}>
                       {ownedStream.stream.title}
                     </Text>
@@ -249,15 +268,24 @@ export default function Profile() {
                         {ownedStream.stream.category.name}
                       </Text>
                     )}
-                  </View>
+                  </View> */}
                 </TouchableOpacity>
+                <OwnedStreamTile
+                  key={ownedStream.id}
+                  title={ownedStream.stream.title}
+               //   price={ownedStream.coins_spent}
+                  intensity={ownedStream.stream.intensity}
+                  useCases={ownedStream.stream.use_cases}
+                  onPress={() => nav.navigate('StreamDetail', { stream: ownedStream.stream })}
+                />
+                </>
               );
             })}
           </ScrollView>
         </View>
       )}
 
-      <View style={styles.actionsContainer}>
+      {/* <View style={styles.actionsContainer}>
         <PrimaryButton 
           label={t('profile.logout')} 
           onPress={handleLogout}
@@ -268,7 +296,7 @@ export default function Profile() {
           onPress={handleDeleteAccount}
           style={styles.deleteButton}
         />
-      </View>
+      </View> */}
       </ScrollView>
     </BackgroundWrapper>
   );
@@ -277,7 +305,7 @@ export default function Profile() {
 const styles = StyleSheet.create({
   container: { flex:1, backgroundColor: 'transparent' },
   scrollContent: { padding:16, paddingBottom: 32 },
-  title: { color:'#fff', fontSize: 32, fontWeight:'900', fontFamily: getFontFamily('900') },
+  title: { color:'#fff', fontSize: 32, fontWeight:'900' },
   userInfoCard: { 
     borderColor: theme.colors.border, 
     borderWidth:2, 
@@ -290,20 +318,18 @@ const styles = StyleSheet.create({
     color: '#fff', 
     fontSize: 16, 
     fontWeight: '700',
-    fontFamily: getFontFamily('700'),
     marginBottom: 8
   },
   userInfoText: { 
     color: theme.colors.subtext, 
     fontSize: 14,
-    fontFamily: getFontFamily('400'),
     marginBottom: 4
   },
   card: { borderColor: theme.colors.border, borderWidth:2, borderRadius:16, padding:12, marginTop:12 },
-  row: { color: theme.colors.subtext, fontFamily: getFontFamily('400') },
+  row: { color: theme.colors.subtext },
   lang: { borderColor: theme.colors.border, borderWidth:2, borderRadius:20, paddingHorizontal:12, paddingVertical:8, marginRight:8, marginTop:8 },
   langActive: { backgroundColor: '#fff' },
-  langText: { color: '#fff', fontWeight:'800', fontFamily: getFontFamily('800') },
+  langText: { color: '#fff', fontWeight:'800' },
   langTextActive: { color: '#000' },
   actionsContainer: {
     marginTop: 32,
@@ -327,7 +353,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: '700',
-    fontFamily: getFontFamily('700'),
     marginBottom: 12,
     marginLeft: 4,
   },
@@ -338,11 +363,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   horizontalCard: {
-    width: 160,
-    height: 200,
+    width: '100%',
+   // height: 200,
     borderRadius: 16,
     overflow: 'hidden',
-    backgroundColor: theme.colors.card,
+    backgroundColor: '#2A263E',
     borderWidth: 2,
     borderColor: theme.colors.border,
     marginRight: 12,
@@ -361,18 +386,15 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
     fontWeight: '700',
-    fontFamily: getFontFamily('700'),
     marginBottom: 4,
   },
   horizontalCardName: {
     color: theme.colors.subtext,
     fontSize: 12,
-    fontFamily: getFontFamily('400'),
   },
   horizontalCardCategory: {
     color: theme.colors.primary,
     fontSize: 11,
-    fontFamily: getFontFamily('400'),
     marginTop: 2,
   },
 });

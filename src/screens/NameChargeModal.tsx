@@ -17,6 +17,7 @@ export default function NameChargeModal() {
   const route = useRoute<any>();
   const id = route.params?.id;
   const [name, setName] = useState('');
+  const [surname, setSurname] = useState('');
   const [birthday, setBirthday] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const charge = useApp(s => s.chargeCardName);
@@ -42,8 +43,8 @@ export default function NameChargeModal() {
     // Format birthday as YYYY-MM-DD
     const formattedBirthday = birthday.toISOString().split('T')[0];
     
-    // Call purchase endpoint with name and birthday, then navigate back
-    dispatch(purchaseCard(id, name, formattedBirthday, () => {
+    // Call purchase endpoint with name, surname and birthday, then navigate back
+    dispatch(purchaseCard(id, name, surname, formattedBirthday, () => {
       Alert.alert('Successfully');
       nav.goBack();
     }) as any);
@@ -65,6 +66,14 @@ export default function NameChargeModal() {
         placeholderTextColor="#AAA" 
         value={name}
         onChangeText={setName} 
+        style={styles.input} 
+      />
+      
+      <TextInput 
+        placeholder="Surname" 
+        placeholderTextColor="#AAA" 
+        value={surname}
+        onChangeText={setSurname} 
         style={styles.input} 
       />
       
