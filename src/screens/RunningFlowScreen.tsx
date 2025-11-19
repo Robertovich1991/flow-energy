@@ -120,15 +120,15 @@ export default function RunningFlowScreen() {
 
         {ownedStream && (
           <View style={styles.streamInfo}>
-            {ownedStream.stream && (
+            {/* {ownedStream.stream && (
               <Text style={styles.streamTitle}>{ownedStream.stream.title}</Text>
-            )}
+            )} */}
              <View style={styles.statusContainer}>
               <Text style={[
                 styles.statusText,
                 isActive ? styles.statusActive : styles.statusInactive
               ]}>
-                {isActive ? 'Stream is active' : 'Stream is inactive'}
+                {isActive ? 'Active' : 'Inactive'}
               </Text>
             </View>
 
@@ -142,13 +142,13 @@ export default function RunningFlowScreen() {
 
            
 
-            {ownedStream.created_at && (
+            {/* {ownedStream.created_at && (
               <View style={styles.dateContainer}>
                 <Text style={styles.dateLabel}>Started:</Text>
                 <Text style={styles.dateText}>{formatDate(ownedStream.created_at)}</Text>
               </View>
-            )}
-            {(ownedStream.duration_hours !== undefined || ownedStream.stream?.duration_hours !== undefined || ownedStream.stream?.duration !== undefined) && (
+            )} */}
+            {/* {(ownedStream.duration_hours !== undefined || ownedStream.stream?.duration_hours !== undefined || ownedStream.stream?.duration !== undefined) && (
               <View style={styles.durationContainer}>
                 <Text style={styles.durationLabel}>Duration:</Text>
                 <Text style={styles.durationText}>
@@ -161,7 +161,7 @@ export default function RunningFlowScreen() {
                     : ''}
                 </Text>
               </View>
-            )}
+            )} */}
             {ownedStream.stream?.description && (
               <Text style={styles.streamDescription}>{ownedStream.stream.description}</Text>
             )}
@@ -177,14 +177,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'transparent',
     padding: 16,
-    justifyContent: 'center',
+   // justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
     color: '#fff',
-    fontSize: 32,
-    fontWeight: '900',
-    marginBottom: 24,
+    fontSize: 36,
+    fontWeight: '600',
+  //  marginBottom: 24,
     textAlign: 'center',
   },
   streamInfo: {
@@ -239,11 +239,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   statusText: {
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: 14,
+    fontWeight: '600',
     paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
+    paddingHorizontal: 32,
+    borderRadius: 999,
   },
   statusActive: {
     color: 'white',
