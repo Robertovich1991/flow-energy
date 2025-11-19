@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions, Platform }
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { theme } from '../theme';
+import { theme, getFontFamily } from '../theme';
 import { coinsBalanceSelector } from '../store/selectors/authSelector';
 import { Icons } from '../assets/images/svg';
 import { TabNavigationContext } from '../navigation/index';
@@ -32,7 +32,7 @@ export default function CoinsHeader() {
 
   return (
     <View style={[styles.container, { paddingTop: statusBarHeight }]}>
-      <Text style={{ color: 'white',fontSize:18,fontWeight:'600' }}>Flow up</Text>
+      <Text style={[styles.headerText, { color: 'white', fontSize: 18, fontWeight: '600' }]}>Flow up</Text>
 
       <TouchableOpacity onPress={handlePress} style={styles.coinContainer}>
         <Icons.Coins width={16} height={16} />
@@ -63,10 +63,14 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     gap: 6,
   },
+  headerText: {
+    fontFamily: getFontFamily('600'),
+  },
   coinText: {
     color: theme.colors.text,
     fontSize: 14,
     fontWeight: '700',
+    fontFamily: getFontFamily('700'),
   },
 });
 

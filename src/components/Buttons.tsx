@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ViewStyle, View, ActivityIndicator } from 'react-native';
-import { theme } from '../theme';
+import { theme, getFontFamily } from '../theme';
 import Icon from './Icon';
 
 type BtnProps = {
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   primary: {
     backgroundColor: theme.colors.primary,paddingVertical:8, paddingHorizontal: 28, borderRadius: 96, alignItems: 'center',justifyContent:"center" 
   },
-  primaryText: { color:'#fff', fontSize: 16, fontWeight: '800', },
+  primaryText: { color:'#fff', fontSize: 16, fontWeight: '800', fontFamily: getFontFamily('800') },
   disabled: {
     backgroundColor: '#666',
     opacity: 0.6,
@@ -88,16 +88,17 @@ const styles = StyleSheet.create({
     color: 'white',
 fontSize:18,
 fontWeight:"400",
+fontFamily: getFontFamily('400'),
 letterSpacing:0.9
   },
   ghost: {
     borderColor: theme.colors.border, borderWidth: 2, paddingVertical: 12, paddingHorizontal: 18, borderRadius: 26, alignItems: 'center', flex: 1, minWidth: 0
   },
-  ghostText: { color: 'white', fontSize: 16, fontWeight: '700', flexShrink: 1 },
+  ghostText: { color: 'white', fontSize: 16, fontWeight: '700', fontFamily: getFontFamily('700'), flexShrink: 1 },
   apple: {
     backgroundColor: '#000', paddingVertical: 14, paddingHorizontal: 18, borderRadius: 26, alignItems: 'center', flex: 1, minWidth: 0
   },
-  appleText: { color: '#fff', fontSize: 16, fontWeight: '700', flexShrink: 1 },
+  appleText: { color: '#fff', fontSize: 16, fontWeight: '700', fontFamily: getFontFamily('700'), flexShrink: 1 },
   rowCenter: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   withLeft: { marginLeft: 8 },
   withRight: { marginRight: 8 }

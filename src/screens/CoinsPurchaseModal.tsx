@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { theme } from '../theme';
+import { theme, getFontFamily } from '../theme';
 import { PrimaryButton } from '../components/Buttons';
 import { useNavigation } from '@react-navigation/native';
  import { PurchaseError, requestSubscription } from 'react-native-iap';
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 18,
     fontWeight: '600',
-
+    fontFamily: getFontFamily('600'),
   },
   balanceContainer: {
     flexDirection: 'row',
@@ -180,6 +180,7 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     fontSize: 16,
     fontWeight: '700',
+    fontFamily: getFontFamily('700'),
   },
   title: {
     color: '#fff',
@@ -187,6 +188,7 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
     letterSpacing: 1.5,
     fontWeight: '700',
+    fontFamily: getFontFamily('700'),
   },
 
   packagesContainer: {
@@ -212,11 +214,13 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 20,
     fontWeight: '800',
+    fontFamily: getFontFamily('800'),
   },
   packagePrice: {
     color: theme.colors.grey,
     fontSize: 14,
     fontWeight: '400',
+    fontFamily: getFontFamily('400'),
   },
   buyButton: {
     backgroundColor: theme.colors.green,

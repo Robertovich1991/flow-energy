@@ -2,7 +2,7 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { theme } from '../theme';
+import { theme, getFontFamily } from '../theme';
 import { Icons } from '../assets/images/svg';
 
 type Props = {
@@ -49,8 +49,8 @@ export const CardTile: React.FC<Props> = ({title, price, intensity, image, onPre
 const styles = StyleSheet.create({
 
   tile: { borderWidth: 1, borderRadius: 16, padding: 16, overflow: 'hidden', marginBottom: 12, width: '48%', height: 181, backgroundColor: theme.colors.card,justifyContent:'space-between',  },
-  title: { color: '#fff', fontSize: 16, fontWeight: '800', marginTop: 6, marginBottom: 6,  },
+  title: { color: '#fff', fontSize: 16, fontWeight: '800', fontFamily: getFontFamily('800'), marginTop: 6, marginBottom: 6,  },
   priceContainer: { marginBottom: 6, alignItems: 'center', flexDirection: 'row' },
-  priceText: { color: theme.colors.primary, fontSize: 14, fontWeight: '700' },
-  meta: { color:'white', marginTop: 6, fontSize: 14,fontWeight:'700', textAlign: 'center' },
+  priceText: { color: theme.colors.primary, fontSize: 14, fontWeight: '700', fontFamily: getFontFamily('700') },
+  meta: { color:'white', marginTop: 6, fontSize: 14,fontWeight:'700', fontFamily: getFontFamily('700'), textAlign: 'center' },
 });

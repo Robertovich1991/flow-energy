@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { theme } from '../theme';
+import { theme, getFontFamily } from '../theme';
 import { CardTile } from '../components/CardTile';
 import BackgroundWrapper from '../components/BackgroundWrapper';
 import { useNavigation } from '@react-navigation/native';
@@ -99,8 +99,8 @@ export default function Cards() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: 'transparent', padding: 16 },
-  title: { color: '#fff', fontSize: 40, fontWeight: '700',paddingBottom:20 },
-  sub: { color: theme.colors.subtext, marginTop: 12 },
+  title: { color: '#fff', fontSize: 40, fontWeight: '700', fontFamily: getFontFamily('700'), paddingBottom:20 },
+  sub: { color: theme.colors.subtext, marginTop: 12, fontFamily: getFontFamily('400') },
   categoriesContainer: { 
     flexDirection: 'row', 
     flexWrap: 'wrap', 
@@ -143,17 +143,20 @@ const styles = StyleSheet.create({
     color: theme.colors.subtext,
     fontSize: 16,
     fontWeight: '600',
+    fontFamily: getFontFamily('600'),
     textAlign: 'center',
   },
   categoryTextActive: {
     color: theme.colors.primary,
     fontWeight: '700',
+    fontFamily: getFontFamily('700'),
   },
   cardsContainer: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginTop: 16 },
   emptyText: { 
     color: theme.colors.subtext, 
     textAlign: 'center', 
     marginTop: 20, 
-    fontSize: 16 
+    fontSize: 16,
+    fontFamily: getFontFamily('400')
   },
 });

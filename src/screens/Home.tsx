@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { theme } from '../theme';
+import { theme, getFontFamily } from '../theme';
 import { PrimaryButton, GhostButton } from '../components/Buttons';
 import { CardTile } from '../components/CardTile';
 import BackgroundWrapper from '../components/BackgroundWrapper';
@@ -86,12 +86,12 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: 'transparent', padding: 16 },
-  brand: { color: '#fff', fontSize: 40, fontWeight: '900', marginTop: 4 },
-  tagline: { color: theme.colors.subtext, fontSize: 15 },
+  brand: { color: '#fff', fontSize: 40, fontWeight: '900', fontFamily: getFontFamily('900'), marginTop: 4 },
+  tagline: { color: theme.colors.subtext, fontSize: 15, fontFamily: getFontFamily('400') },
   hero: { borderColor: theme.colors.border, borderWidth: 2, borderRadius: 24, padding: 16, marginTop: 16, backgroundColor: theme.colors.card },
-  heroSup: { color: theme.colors.subtext, marginBottom: 6 },
-  heroTitle: { color: '#fff', fontSize: 20, fontWeight: '900', lineHeight: 26 },
-  section: { color: '#fff', fontSize: 20, fontWeight: '900', marginTop: 24, marginBottom: 8 },
+  heroSup: { color: theme.colors.subtext, marginBottom: 6, fontFamily: getFontFamily('400') },
+  heroTitle: { color: '#fff', fontSize: 20, fontWeight: '900', fontFamily: getFontFamily('900'), lineHeight: 26 },
+  section: { color: '#fff', fontSize: 20, fontWeight: '900', fontFamily: getFontFamily('900'), marginTop: 24, marginBottom: 8 },
   ctaRow: { flexDirection: 'row', gap: 10, marginTop: 12, flexWrap: 'wrap' },
   cardsGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }
 });
