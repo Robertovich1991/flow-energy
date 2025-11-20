@@ -131,6 +131,7 @@ export default function MyProfile() {
 
   return (
     <BackgroundWrapper>
+      <CoinsHeader />
       <ScrollView 
         style={styles.container} 
         contentContainerStyle={styles.scrollContent}

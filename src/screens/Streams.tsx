@@ -6,6 +6,7 @@ import { theme } from '../theme';
 import { StreamTile } from '../components/StreamTile';
 import BackgroundWrapper from '../components/BackgroundWrapper';
 import { useNavigation } from '@react-navigation/native';
+import CoinsHeader from '../components/CoinsHeader';
 import { useSelector, useDispatch } from 'react-redux';
 import { streamListSelector } from '../store/selectors/streamSelector';
 import { categoriesListSelector } from '../store/selectors/categoriesSelector';
@@ -43,6 +44,7 @@ export default function Streams() {
 
   return (
     <BackgroundWrapper>
+      <CoinsHeader showArrow={false} />
       <ScrollView style={styles.container}>
       <Text style={styles.title}>{"Connect to Flows"}</Text>
       {/* <Text style={styles.sub}>{t('sections.chooseCategory')}</Text> */}

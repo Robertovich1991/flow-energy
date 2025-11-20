@@ -31,8 +31,8 @@ import ImageGallery from '../screens/ImageGallery';
 import CategoryCards from '../screens/CategoryCards';
 import CategoryStreams from '../screens/CategoryStreams';
 import { HomeIcon, CardsIcon, StreamsIcon, ProfileIcon } from '../components/TabBarIcons';
-import CoinsHeader from '../components/CoinsHeader';
 import BackgroundWrapper from '../components/BackgroundWrapper';
+import { useApp } from '../store/app';
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -90,10 +90,8 @@ function ProfileStackScreen() {
 }
 
 function TabsRoot() {
-  const insets = useSafeAreaInsets();
-  const statusBarHeight = insets.top || (Platform.OS === 'ios' ? 44 : 24);
-  // CoinsHeader content height: ~44px (content) + 12px (paddingBottom) = ~56px
-  const headerHeight = statusBarHeight + 30; // status bar + CoinsHeader content height
+  const { t, i18n } = useTranslation();
+  const lang = useApp(s => s.lang);
   const [tabNavigation, setTabNavigation] = useState<any>(null);
   
   // Helper to capture navigation from any tab screen
@@ -109,11 +107,9 @@ function TabsRoot() {
   
   return (
     <TabNavigationContext.Provider value={tabNavigation}>
-      <BackgroundWrapper topPadding={headerHeight}>
-        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 1000 }}>
-          <CoinsHeader />
-        </View>
+      <BackgroundWrapper topPadding={0}>
         <Tabs.Navigator
+          key={lang}
           screenOptions={{
             headerShown: false,
             tabBarStyle: {
@@ -148,7 +144,7 @@ function TabsRoot() {
                   textAlign: 'center',
                 }}
               >
-                Home
+                {t('tabs.home')}
               </Text>
             ),
             tabBarIcon: ({ focused }: { focused: boolean }) => <HomeIcon focused={focused} />
@@ -159,7 +155,7 @@ function TabsRoot() {
           name="StreamsTab"
           component={createTabScreenWrapper(StreamsStackScreen)}
           options={{
-            title: 'Flow',
+            title: t('tabs.streams'),
             tabBarLabel: ({ focused }: { focused: boolean }) => (
               <Text
                 style={{
@@ -169,7 +165,7 @@ function TabsRoot() {
                   textAlign: 'center',
                 }}
               >
-                Flow
+                {t('tabs.streams')}
               </Text>
             ),
             tabBarIcon: ({ focused }: { focused: boolean }) => (
@@ -181,7 +177,7 @@ function TabsRoot() {
           name="CardsTab"
           component={createTabScreenWrapper(CardsStackScreen)}
           options={{
-            title: 'Cards',
+            title: t('tabs.cards'),
             tabBarLabel: ({ focused }: { focused: boolean }) => (
               <Text
                 style={{
@@ -191,7 +187,7 @@ function TabsRoot() {
                   textAlign: 'center',
                 }}
               >
-                Cards
+                {t('tabs.cards')}
               </Text>
             ),
             tabBarIcon: ({ focused }: { focused: boolean }) => <CardsIcon focused={focused} />
@@ -210,7 +206,7 @@ function TabsRoot() {
                   textAlign: 'center',
                 }}
               >
-                More
+                {t('tabs.profile')}
               </Text>
             ),
             tabBarIcon: ({ focused }: { focused: boolean }) => <ProfileIcon focused={focused} />
@@ -271,9 +267,30 @@ export default function RootNavigator() {
   return (
     <NavigationContainer theme={DarkTheme}>
       <Stack.Navigator initialRouteName={isLoggedIn ? 'Tabs' : 'Login'}>
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-        <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
-        <Stack.Screen name="Tabs" component={TabsRoot} options={{ headerShown: false }} />
+        <Stack.Screen 
+          name="Login" 
+          component={Login} 
+          options={{ 
+            headerShown: false,
+            gestureEnabled: false,
+            animationEnabled: false
+          }} 
+        />
+        <Stack.Screen 
+          name="SignUp" 
+          component={SignUp} 
+          options={{ 
+            headerShown: false 
+          }} 
+        />
+        <Stack.Screen 
+          name="Tabs" 
+          component={TabsRoot} 
+          options={{ 
+            headerShown: false,
+            gestureEnabled: false
+          }} 
+        />
         {/* <Stack.Screen name="CardDetail" component={CardDetail} options={{headerShown:false}} /> */}
         <Stack.Screen name="MyCards" component={MyCards} options={{ title: t('profile.myCards') }} />
         <Stack.Screen name="MyStreams" component={MyStreams} options={{ title: t('common.myStreams') }} />

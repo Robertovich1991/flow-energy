@@ -135,6 +135,7 @@ export default function CoinsPurchaseModal() {
               </View>
             </View>
               <PrimaryButton
+                textStyle={{ color: 'white' }}
                 label={t('coins.buy')}
                 onPress={() => handleBuyProducts(package_.productId)}
                 style={styles.buyButton}

@@ -19,7 +19,9 @@
     "getAccess": "Zugang erhalten",
     "confirm": "Bestätigen",
     "login": "Anmelden",
-    "signUp": "Registrieren"
+    "signUp": "Registrieren",
+    "connectToFlows": "Mit Strömen verbinden",
+    "join": "Beitreten"
   },
   "sections": {
     "popular": "Heute im Trend",
@@ -60,7 +62,8 @@
     "subscriptionUnlimited": "Abonnement — unbegrenzte Streams",
     "logout": "Abmelden",
     "deleteAccount": "Konto löschen",
-    "language": "Sprache:"
+    "language": "Sprache:",
+    "joinedFlows": "Beigetretene Ströme"
   },
   "auth": {
     "welcome": "Willkommen zurück",
@@ -115,7 +118,11 @@
     "cardsInCategory": "Karten in dieser Kategorie",
     "cardInCategory": "Karte in dieser Kategorie",
     "streamsInCategory": "Streams in dieser Kategorie",
-    "streamInCategory": "Stream in dieser Kategorie"
+    "streamInCategory": "Stream in dieser Kategorie",
+    "hour": "Stunde",
+    "day": "Tag",
+    "week": "Woche",
+    "month": "Monat"
   },
   "home": {
     "heroTitle": "«Einkommenssteigerung» + 10 Min «Finanzielle Klarheit»"

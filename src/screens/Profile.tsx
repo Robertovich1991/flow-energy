@@ -12,6 +12,7 @@ import { getStreamList } from '../store/slices/streamSlice';
 import { getCategoriesList } from '../store/slices/categoriesSlice';
 import { PrimaryButton, GhostButton } from '../components/Buttons';
 import BackgroundWrapper from '../components/BackgroundWrapper';
+import CoinsHeader from '../components/CoinsHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ownedCardsListSelector, ownedCardsLoadingSelector } from '../store/selectors/ownedCardsSelector';
 import { getOwnedCardsList } from '../store/slices/ownedCardsSlice';
@@ -130,6 +131,7 @@ export default function Profile() {
 
   return (
     <BackgroundWrapper>
+      <CoinsHeader showArrow={false} />
       <ScrollView 
         style={styles.container} 
         contentContainerStyle={styles.scrollContent}
@@ -186,9 +188,8 @@ export default function Profile() {
                 : { uri: 'http://api.go2winbet.online' + ownedCard?.card?.video };
               
               return (
-              <>
+              <React.Fragment key={`card-${ownedCard.id}`}>
                 {/* <TouchableOpacity
-                  key={ownedCard.id}
                   style={styles.horizontalCard}
                   onPress={() => nav.navigate('ImageGallery', { 
                     images: ownedCard.card.video === '/images/default.jpg' 
@@ -210,11 +211,10 @@ export default function Profile() {
                 </TouchableOpacity> */}
               <CardTile
                 style={{maxWidth: 145}}
-                  key={ownedCard.id}
                   title={ownedCard?.card?.title}
                   image={ownedCard?.card?.image}
                   price={ownedCard.coins_spent}
-                  intensity={ownedCard.card.intensity}
+                  intensity={ownedCard?.card?.intensity}
                //   useCases={ownedCard.card.use_cases}
                   onPress={() => nav.navigate('ImageGallery', { 
                     images: ownedCard.card.video === '/images/default.jpg' 
@@ -222,7 +222,7 @@ export default function Profile() {
                       : ['http://api.go2winbet.online' + ownedCard.card.video], 
                     initialIndex: 0 
                   })}/>
-                </>
+                </React.Fragment>
               );
             })}
           </ScrollView>
@@ -232,7 +232,7 @@ export default function Profile() {
       {/* Horizontal owned streams section */}
       {ownedStreams && ownedStreams.length > 0 && (
         <View style={styles.ownedCardsSection}>
-          <Text style={[styles.sectionTitle, {paddingBottom: 22}]}>Joined Flows</Text>
+          <Text style={[styles.sectionTitle, {paddingBottom: 22}]}>{t('profile.joinedFlows')}</Text>
           <ScrollView 
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.horizontalScrollContent}
@@ -240,19 +240,18 @@ export default function Profile() {
             nestedScrollEnabled={true}
           >
             {ownedStreams.map((ownedStream: any) => {
-              const imageSource = ownedStream.stream.image === '/images/default.jpg'
+              const imageSource = ownedStream?.stream?.image === '/images/default.jpg'
                 ? require('../assets/images/flowImage.jpg')
-                : { uri: 'http://api.go2winbet.online' + ownedStream.stream.image };
+                : { uri: 'http://api.go2winbet.online' + ownedStream?.stream?.image };
               
               return (
-              <> 
+              <React.Fragment key={`stream-${ownedStream.id}`}>
                <TouchableOpacity
-                  key={ownedStream.id}
                 //  style={styles.horizontalCard}
                   onPress={() => nav.navigate('ImageGallery', { 
-                    images: ownedStream.stream.image === '/images/default.jpg' 
+                    images: ownedStream?.stream?.image === '/images/default.jpg' 
                       ? [require('../assets/images/flowImage.jpg')]
-                      : ['http://api.go2winbet.online' + ownedStream.stream.image], 
+                      : ['http://api.go2winbet.online' + ownedStream?.stream?.image], 
                     initialIndex: 0 
                   })}
                   activeOpacity={0.8}
@@ -277,11 +276,10 @@ export default function Profile() {
                   </View> */}
                 </TouchableOpacity>
                 <OwnedStreamTile
-                  key={ownedStream.id}
-                  title={ownedStream.stream.title}
+                  title={ownedStream?.stream?.title}
                //   price={ownedStream.coins_spent}
-                  intensity={ownedStream.stream.intensity}
-                  useCases={ownedStream.stream.use_cases}
+                  intensity={ownedStream?.stream?.intensity}
+                  useCases={ownedStream?.stream?.use_cases}
                   onPress={() => {
                     nav.navigate('StreamsTab', {
                       screen: 'RunningFlowScreen',
@@ -289,7 +287,7 @@ export default function Profile() {
                     });
                   }}
                 />
-                </>
+                </React.Fragment>
               );
             })}
           </ScrollView>

@@ -15,6 +15,7 @@ import { RootState } from '../store/config/configStore';
 import { purchaseCard } from '../store/slices/cardPurchaseSlice';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { set } from 'react-hook-form';
+import CoinsHeader from '../components/CoinsHeader';
 
 export default function CardDetail() {
   const { t } = useTranslation();
@@ -240,6 +241,7 @@ export default function CardDetail() {
   return (
     <>
       <BackgroundWrapper>
+        <CoinsHeader />
        <ScrollView style={styles.container}>
         <View style={styles.imageWrapper}>
             {!successModalVisible && (isVideo ? (
@@ -304,9 +306,9 @@ export default function CardDetail() {
               <Text style={{ color: "white", fontSize: 32, fontWeight: '900' }}>{card.price}</Text>
             </View> {/* <PrimaryButton leftIcon="shopping-bag" rightIcon="arrow-right" label={t('cta.buy') + ' · $' + card.price} onPress={onBuy} /> */}
           </View>}
-          {/* {card.description && (
+          {card.description && (
           <Text style={styles.desc}>{card.description}</Text>
-        )} */}
+        )}
 
         </ScrollView>
 
@@ -460,7 +462,7 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
   // coverTitle: { color:'black', fontSize: 28, fontWeight:'900' },
-  desc: { color: theme.colors.subtext, marginTop: 20, fontSize: 16, lineHeight: 24 },
+  desc: { color: theme.colors.subtext, marginTop: 20, fontSize: 16, lineHeight: 24,paddingHorizontal: 16 },
   actionsRow: { flexDirection: 'row', gap: 10, marginTop: 12, paddingHorizontal: 16, alignItems: 'center', },
   infoRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 },
   infoItem: { flexDirection: 'row', alignItems: 'center', gap: 6 },

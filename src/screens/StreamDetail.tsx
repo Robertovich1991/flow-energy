@@ -9,6 +9,7 @@ import BackgroundWrapper from '../components/BackgroundWrapper';
 import { useDispatch } from 'react-redux';
 import { purchaseStream } from '../store/slices/streamPurchaseSlice';
 import { Icons } from '../assets/images/svg';
+import CoinsHeader from '../components/CoinsHeader';
 
 export default function StreamDetail() {
   const { t } = useTranslation();
@@ -18,6 +19,20 @@ export default function StreamDetail() {
   const coinsBalance = useSelector(coinsBalanceSelector);
   const dispatch = useDispatch();
   const [selectedPrice, setSelectedPrice] = useState<any>(stream.prices?.[0] || null);
+
+  // Map API duration type name to translation key
+  const getDurationTranslation = (durationName: string) => {
+    if (!durationName) return '';
+    const normalized = durationName.toLowerCase().trim();
+    const durationMap: { [key: string]: string } = {
+      'hour': 'common.hour',
+      'day': 'common.day',
+      'week': 'common.week',
+      'month': 'common.month',
+    };
+    const translationKey = durationMap[normalized];
+    return translationKey ? t(translationKey) : durationName;
+  };
   
   const onStartStream = () => {
     // Check if a price is selected
@@ -63,7 +78,7 @@ export default function StreamDetail() {
               selectedPrice.duration_type_id,
               () => {
                 Alert.alert(t('common.streamSuccessful'));
-                nav.navigate('StreamSession', { stream: stream });
+                nav.goBack();
               }
             ) as any);
           }
@@ -88,8 +103,9 @@ export default function StreamDetail() {
 
   return (
     <BackgroundWrapper>
+      <CoinsHeader />
       <View style={styles.container}>
-        <Text  style={{color:'white', fontSize: 30, fontWeight: '700'}}>Connect to Flows</Text>
+        <Text  style={{color:'white', fontSize: 30, fontWeight: '700'}}>{t('cta.connectToFlows')}</Text>
      <View style={{backgroundColor:'#101423',paddingTop:40,paddingBottom:32,borderRadius:32}}><Text style={styles.title}>{stream.title}</Text>
 
       {stream.prices && stream.prices.length > 0 && (
@@ -112,7 +128,7 @@ export default function StreamDetail() {
                     styles.priceButtonTitle,
                     isSelected && styles.priceButtonTitleSelected
                   ]}>
-                    {price.duration_type?.name || ''}
+                    {getDurationTranslation(price.duration_type?.name || '')}
                   </Text>
                 </TouchableOpacity>
               );
@@ -144,7 +160,7 @@ export default function StreamDetail() {
       
       <View style={styles.actionsRow}>
         <TouchableOpacity style={styles.startButton} onPress={onStartStream}>
-          <Text style={{color:'white', fontSize: 24, fontWeight: '700'}}>Buy</Text>
+          <Text style={{color:'white', fontSize: 24, fontWeight: '700'}}>{t('cta.buy')}</Text>
         </TouchableOpacity>
         {/* <PrimaryButton 
         

@@ -7,11 +7,12 @@ import { PrimaryButton, GhostButton } from '../components/Buttons';
 import { CardTile } from '../components/CardTile';
 import BackgroundWrapper from '../components/BackgroundWrapper';
 import { useNavigation } from '@react-navigation/native';
+import CoinsHeader from '../components/CoinsHeader';
 import { getCardList } from '../store/slices/cardSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { cardListSelector } from '../store/selectors/cardSelector';
 import { getStreamList } from '../store/slices/streamSlice';
-// import * as RNIap from 'react-native-iap';
+ import * as RNIap from 'react-native-iap';
 import { getCategoriesList } from '../store/slices/categoriesSlice';
 
 
@@ -47,12 +48,13 @@ export default function Home() {
     init();
   
     return () => {
-    //  RNIap.endConnection();
+     RNIap.endConnection();
     };
    }, []);
 
   return (
     <BackgroundWrapper>
+      <CoinsHeader showArrow={false} />
       <ScrollView style={styles.container} contentInsetAdjustmentBehavior="automatic">
       <Text style={styles.brand}>Flow Up</Text>
       <Text style={styles.tagline}>{t('appTagline')}</Text>

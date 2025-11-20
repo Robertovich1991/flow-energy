@@ -32,7 +32,7 @@ export const StreamTile: React.FC<Props> = ({ title, price, intensity, colors, u
         {typeof intensity === 'number' && <Text style={styles.meta}>{t('fields.intensity')} {intensity}%</Text>}
       </View>
       <TouchableOpacity style={{ backgroundColor: '#007AFF', paddingVertical: 6, paddingHorizontal: 20, borderRadius: 99 }} onPress={onPress}>
-        <Text style={{ color: 'white', fontSize: 14, fontWeight: '600' }}>Join</Text>
+        <Text style={{ color: 'white', fontSize: 14, fontWeight: '600' }}>{t('cta.join')}</Text>
       </TouchableOpacity>
     </View>
   );

@@ -75,8 +75,11 @@ export default function Login() {
           (email: string) => {
             console.log(email,'emaillllllllllllllllllll');
             
-            // Navigate to Tabs when login is successful
-            nav.navigate('Tabs');
+            // Navigate to Tabs when login is successful and reset navigation stack
+            nav.reset({
+              index: 0,
+              routes: [{ name: 'Tabs' }],
+            });
           },
           (error: string) => {
             // Handle 401 error specifically
@@ -141,7 +144,10 @@ export default function Login() {
       // Dispatch the Apple login action
       dispatch(appleLogin(loginData, (user) => {
         console.log('🍎 Apple login successful:', user);
-        nav.navigate('Tabs');
+        nav.reset({
+          index: 0,
+          routes: [{ name: 'Tabs' }],
+        });
       }, (error) => {
         console.error('🍎 Apple login failed:', error);
         Alert.alert('Apple Login Failed', error);

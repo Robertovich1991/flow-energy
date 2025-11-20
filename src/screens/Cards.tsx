@@ -6,6 +6,7 @@ import { theme, getFontFamily } from '../theme';
 import { CardTile } from '../components/CardTile';
 import BackgroundWrapper from '../components/BackgroundWrapper';
 import { useNavigation } from '@react-navigation/native';
+import CoinsHeader from '../components/CoinsHeader';
 import { useSelector, useDispatch } from 'react-redux';
 import { cardListSelector } from '../store/selectors/cardSelector';
 import { categoriesListSelector } from '../store/selectors/categoriesSelector';
@@ -40,6 +41,7 @@ export default function Cards() {
 
   return (
     <BackgroundWrapper>
+      <CoinsHeader showArrow={false} />
       <ScrollView style={styles.container}>
       <Text style={styles.title}>{t('tabs.cards')}</Text>
       {/* <Text style={styles.sub}>{t('sections.chooseCategory')}</Text> */}

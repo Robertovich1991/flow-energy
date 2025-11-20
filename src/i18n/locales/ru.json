@@ -19,7 +19,9 @@
     "getAccess": "Получить доступ",
     "confirm": "Подтвердить",
     "login": "Войти",
-    "signUp": "Регистрация"
+    "signUp": "Регистрация",
+    "connectToFlows": "Подключиться к потокам",
+    "join": "Присоединиться"
   },
   "sections": {
     "popular": "Популярные сегодня",
@@ -60,7 +62,8 @@
     "subscriptionUnlimited": "Подписка — безлимитные потоки",
     "logout": "Выйти",
     "deleteAccount": "Удалить аккаунт",
-    "language": "Язык:"
+    "language": "Язык:",
+    "joinedFlows": "Присоединенные потоки"
   },
   "coins": {
     "title": "Купить монеты",
@@ -104,7 +107,11 @@
     "cardsInCategory": "карт в этой категории",
     "cardInCategory": "карта в этой категории",
     "streamsInCategory": "потоков в этой категории",
-    "streamInCategory": "поток в этой категории"
+    "streamInCategory": "поток в этой категории",
+    "hour": "Час",
+    "day": "День",
+    "week": "Неделя",
+    "month": "Месяц"
   },
   "home": {
     "heroTitle": "«Повышение дохода» + 10 мин «Финансовая ясность»"

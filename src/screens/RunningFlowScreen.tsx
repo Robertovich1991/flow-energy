@@ -114,7 +114,7 @@ export default function RunningFlowScreen() {
 
   return (
     <BackgroundWrapper>
-      {/* <CoinsHeader /> */}
+      <CoinsHeader />
       <View style={styles.container}>
         <Text style={styles.title}>Flow is running</Text>
 

@@ -19,7 +19,9 @@
     "getAccess": "Obtener acceso",
     "confirm": "Confirmar",
     "login": "Iniciar sesión",
-    "signUp": "Registrarse"
+    "signUp": "Registrarse",
+    "connectToFlows": "Conectar a flujos",
+    "join": "Unirse"
   },
   "sections": {
     "popular": "Tendencias de hoy",
@@ -60,7 +62,8 @@
     "subscriptionUnlimited": "Suscripción — flujos ilimitados",
     "logout": "Cerrar sesión",
     "deleteAccount": "Eliminar cuenta",
-    "language": "Idioma:"
+    "language": "Idioma:",
+    "joinedFlows": "Flujos unidos"
   },
   "auth": {
     "welcome": "Bienvenido de vuelta",
@@ -115,7 +118,11 @@
     "cardsInCategory": "cartas en esta categoría",
     "cardInCategory": "carta en esta categoría",
     "streamsInCategory": "flujos en esta categoría",
-    "streamInCategory": "flujo en esta categoría"
+    "streamInCategory": "flujo en esta categoría",
+    "hour": "Hora",
+    "day": "Día",
+    "week": "Semana",
+    "month": "Mes"
   },
   "home": {
     "heroTitle": "«Aumento de ingresos» + 10 min «Claridad financiera»"

@@ -8,7 +8,11 @@ import { coinsBalanceSelector } from '../store/selectors/authSelector';
 import { Icons } from '../assets/images/svg';
 import { TabNavigationContext } from '../navigation/index';
 
-export default function CoinsHeader() {
+type CoinsHeaderProps = {
+  showArrow?: boolean;
+};
+
+export default function CoinsHeader({ showArrow = true }: CoinsHeaderProps) {
   const nav = useNavigation<any>();
   const coinsBalance = useSelector(coinsBalanceSelector);
   const insets = useSafeAreaInsets();
@@ -28,11 +32,24 @@ export default function CoinsHeader() {
     }
   };
 
+  const handleBackPress = () => {
+    if (nav.canGoBack()) {
+      nav.goBack();
+    }
+  };
+
   const statusBarHeight = insets.top || (Platform.OS === 'ios' ? 44 : 24);
 
   return (
-    <View style={[styles.container, { paddingTop: statusBarHeight }]}>
-      <Text style={[styles.headerText, { color: 'white', fontSize: 18, fontWeight: '600' }]}>Flow up</Text>
+    <View style={[styles.container, { paddingTop: statusBarHeight - 15 }]}>
+      <View style={styles.leftSection}>
+        {showArrow && (
+          <TouchableOpacity onPress={handleBackPress} style={styles.backButton}>
+            <Icons.Arrow width={24} height={24} />
+          </TouchableOpacity>
+        )}
+        <Text style={[styles.headerText, { color: 'white', fontSize: 18, fontWeight: '600' }]}>Flow up</Text>
+      </View>
 
       <TouchableOpacity onPress={handlePress} style={styles.coinContainer}>
         <Icons.Coins width={16} height={16} />
@@ -51,6 +68,7 @@ const styles = StyleSheet.create({
     backgroundColor:'#161427',
     paddingHorizontal:16,
     paddingBottom: 2,
+    marginBottom: 5,
   },
   coinContainer: {
     flexDirection: 'row',
@@ -62,6 +80,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     gap: 6,
+  },
+  leftSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  backButton: {
+    padding: 4,
   },
   headerText: {
     fontFamily: getFontFamily('600'),

@@ -19,7 +19,9 @@
     "getAccess": "Get access",
     "confirm": "Confirm",
     "login": "Login",
-    "signUp": "Sign up"
+    "signUp": "Sign up",
+    "connectToFlows": "Connect to Flows",
+    "join": "Join"
   },
   "sections": {
     "popular": "Trending today",
@@ -60,7 +62,8 @@
     "subscriptionUnlimited": "Subscription — unlimited streams",
     "logout": "Logout",
     "deleteAccount": "Delete Account",
-    "language": "Language:"
+    "language": "Language:",
+    "joinedFlows": "Joined Flows"
   },
   "auth": {
     "welcome": "Welcome back",
@@ -115,7 +118,11 @@
     "cardsInCategory": "cards in this category",
     "cardInCategory": "card in this category",
     "streamsInCategory": "streams in this category",
-    "streamInCategory": "stream in this category"
+    "streamInCategory": "stream in this category",
+    "hour": "Hour",
+    "day": "Day",
+    "week": "Week",
+    "month": "Month"
   },
   "home": {
     "heroTitle": "«Income Boost» + 10 min «Financial Clarity»"
