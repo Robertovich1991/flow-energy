@@ -83,6 +83,7 @@ export default function Cards() {
             <CardTile
               key={card.id}
               title={card.title}
+              image={card.image}
               price={card.priceUSD || card.price}
               intensity={card.intensityPct || card.intensity}
               onPress={() => nav.navigate('CardDetail', { card: card })}

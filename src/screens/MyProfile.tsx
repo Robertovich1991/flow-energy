@@ -12,6 +12,7 @@ import { getStreamList } from '../store/slices/streamSlice';
 import { getCategoriesList } from '../store/slices/categoriesSlice';
 import { PrimaryButton, GhostButton } from '../components/Buttons';
 import BackgroundWrapper from '../components/BackgroundWrapper';
+import CoinsHeader from '../components/CoinsHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ownedCardsListSelector, ownedCardsLoadingSelector } from '../store/selectors/ownedCardsSelector';
 import { getOwnedCardsList } from '../store/slices/ownedCardsSlice';
@@ -20,7 +21,7 @@ import { getOwnedStreamsList } from '../store/slices/ownedStreamsSlice';
 import { OwnedStreamTile, StreamTile } from '../components/StreamTile';
 import { CardTile } from '../components/CardTile';
 
-export default function Profile() {
+export default function MyProfile() {
   const { t, i18n } = useTranslation();
   const nav = useNavigation<any>();
   const dispatch = useDispatch();
@@ -136,22 +137,17 @@ export default function Profile() {
         showsVerticalScrollIndicator={true}
         nestedScrollEnabled={true}
       >
-     <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}><Text style={styles.title}>{'More'}</Text>
-      <TouchableOpacity onPress={() => nav.navigate('MyProfile')}>
-        <ImageBackground source={require('../assets/images/gradient.png')} 
-        >
-          <Text style={{color:'#fff', fontSize: 20, fontWeight:'700',paddingVertical:12,paddingHorizontal:32}}>{'My profile'}</Text>
-        </ImageBackground>
-      </TouchableOpacity></View> 
-      {/* {userEmail && (
+     <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center'}}><Text style={styles.title}>{'Profile'}</Text>
+     </View> 
+      {userEmail && (
         <View style={styles.userInfoCard}>
           <Text style={styles.userInfoLabel}>{t('profile.userInfo')}</Text>
           <Text style={styles.userInfoText}>{t('profile.nameLabel')} {userName}</Text>
           <Text style={styles.userInfoText}>{t('profile.emailLabel')} {userEmail}</Text>
         </View>
-      )} */}
+      )}
       
-      {/* <View style={styles.card}><Text style={styles.row}>{t('profile.language')}</Text>
+      <View style={styles.card}><Text style={styles.row}>{t('profile.language')}</Text>
         <View style={{flexDirection:'row', flexWrap:'wrap'}}>
           {(['ru','en','es','de'] as const).map(l => (
             <TouchableOpacity key={l} onPress={()=>set(l)} style={[styles.lang, lang===l && styles.langActive]}>
@@ -159,155 +155,23 @@ export default function Profile() {
             </TouchableOpacity>
           ))}
         </View>
-      </View> */}
-      {/* <TouchableOpacity style={styles.card} onPress={() => nav.navigate('MyCards')}>
-        <Text style={styles.row}>{t('profile.myCards')}</Text>
+      </View>
+    
+      <View style={styles.spacer} />
+   
+      <View style={styles.actionsContainer}>
+      <TouchableOpacity style={{backgroundColor: '#00D4C8', paddingVertical: 12, paddingHorizontal: 24, borderRadius: 16}} onPress={handleLogout}>
+        <Text style={{color: '#fff',textAlign: 'center', fontSize: 16, fontWeight: '700'}}>{t('profile.logout')}</Text>
       </TouchableOpacity>
-       */}
-      
-      {/* <TouchableOpacity style={styles.card} onPress={() => nav.navigate('MyStreams')}>
-        <Text style={styles.row}>{t('common.myStreams')}</Text>
-      </TouchableOpacity> */}
-      <Text style={styles.sectionTitle}>Your collection</Text>
-      
-      {/* Horizontal owned cards section */}
-      {ownedCards && ownedCards.length > 0 && (
-        <View style={styles.ownedCardsSection}>
-          <ScrollView 
-           horizontal 
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={[styles.horizontalScrollContent, {gap: 16}]}
-            style={[styles.horizontalScroll, {gap: 16}]}
-            nestedScrollEnabled={true}
-          >
-            {ownedCards.map((ownedCard: any) => {
-              const imageSource = ownedCard?.card?.video === '/images/default.jpg'
-                ? require('../assets/images/flowImage.jpg')
-                : { uri: 'http://api.go2winbet.online' + ownedCard?.card?.video };
-              
-              return (
-              <>
-                {/* <TouchableOpacity
-                  key={ownedCard.id}
-                  style={styles.horizontalCard}
-                  onPress={() => nav.navigate('ImageGallery', { 
-                    images: ownedCard.card.video === '/images/default.jpg' 
-                      ? [require('../assets/images/flowImage.jpg')]
-                      : ['http://api.go2winbet.online' + ownedCard.card.video], 
-                    initialIndex: 0 
-                  })}
-                  activeOpacity={0.8}
-                >
-                
-                  <View style={styles.horizontalCardInfo}>
-                    <Text style={styles.horizontalCardTitle} numberOfLines={1}>
-                      {ownedCard.card.title}
-                    </Text>
-                    <Text style={styles.horizontalCardName} numberOfLines={1}>
-                      👤 {ownedCard.name}
-                    </Text>
-                  </View>
-                </TouchableOpacity> */}
-              <CardTile
-                style={{maxWidth: 145}}
-                  key={ownedCard.id}
-                  title={ownedCard?.card?.title}
-                  image={ownedCard?.card?.image}
-                  price={ownedCard.coins_spent}
-                  intensity={ownedCard.card.intensity}
-               //   useCases={ownedCard.card.use_cases}
-                  onPress={() => nav.navigate('ImageGallery', { 
-                    images: ownedCard.card.video === '/images/default.jpg' 
-                      ? [require('../assets/images/flowImage.jpg')]
-                      : ['http://api.go2winbet.online' + ownedCard.card.video], 
-                    initialIndex: 0 
-                  })}/>
-                </>
-              );
-            })}
-          </ScrollView>
-        </View>
-      )}
-
-      {/* Horizontal owned streams section */}
-      {ownedStreams && ownedStreams.length > 0 && (
-        <View style={styles.ownedCardsSection}>
-          <Text style={[styles.sectionTitle, {paddingBottom: 22}]}>Joined Flows</Text>
-          <ScrollView 
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.horizontalScrollContent}
-            style={styles.horizontalScroll}
-            nestedScrollEnabled={true}
-          >
-            {ownedStreams.map((ownedStream: any) => {
-              const imageSource = ownedStream.stream.image === '/images/default.jpg'
-                ? require('../assets/images/flowImage.jpg')
-                : { uri: 'http://api.go2winbet.online' + ownedStream.stream.image };
-              
-              return (
-              <> 
-               <TouchableOpacity
-                  key={ownedStream.id}
-                //  style={styles.horizontalCard}
-                  onPress={() => nav.navigate('ImageGallery', { 
-                    images: ownedStream.stream.image === '/images/default.jpg' 
-                      ? [require('../assets/images/flowImage.jpg')]
-                      : ['http://api.go2winbet.online' + ownedStream.stream.image], 
-                    initialIndex: 0 
-                  })}
-                  activeOpacity={0.8}
-                >
-                  {/* <Image
-                    source={imageSource}
-                    resizeMode="cover"
-                    style={styles.horizontalCardImage}
-                  /> */}
-                  {/* <View style={styles.horizontalCardInfo}>
-                    <Text style={styles.horizontalCardTitle} numberOfLines={1}>
-                      {ownedStream.stream.title}
-                    </Text>
-                    <Text style={styles.horizontalCardName} numberOfLines={1}>
-                      💰 {ownedStream.coins_spent} coins
-                    </Text>
-                    {ownedStream.stream.category && (
-                      <Text style={styles.horizontalCardCategory} numberOfLines={1}>
-                        {ownedStream.stream.category.name}
-                      </Text>
-                    )}
-                  </View> */}
-                </TouchableOpacity>
-                <OwnedStreamTile
-                  key={ownedStream.id}
-                  title={ownedStream.stream.title}
-               //   price={ownedStream.coins_spent}
-                  intensity={ownedStream.stream.intensity}
-                  useCases={ownedStream.stream.use_cases}
-                  onPress={() => {
-                    nav.navigate('StreamsTab', {
-                      screen: 'RunningFlowScreen',
-                      params: { stream: ownedStream }
-                    });
-                  }}
-                />
-                </>
-              );
-            })}
-          </ScrollView>
-        </View>
-      )}
-
-      {/* <View style={styles.actionsContainer}>
-        <PrimaryButton 
-          label={t('profile.logout')} 
-          onPress={handleLogout}
-          style={styles.logoutButton}
-        />
-        <GhostButton 
+      <TouchableOpacity style={{backgroundColor: '#D91B72', paddingVertical: 12, paddingHorizontal: 24, borderRadius: 16}} onPress={handleDeleteAccount}>
+        <Text style={{color: '#fff',textAlign: 'center', fontSize: 16, fontWeight: '700'}}>{t('profile.deleteAccount')}</Text>
+      </TouchableOpacity>
+        {/* <GhostButton 
           label={t('profile.deleteAccount')} 
           onPress={handleDeleteAccount}
           style={styles.deleteButton}
-        />
-      </View> */}
+        /> */}
+      </View>
       </ScrollView>
     </BackgroundWrapper>
   );
@@ -315,29 +179,30 @@ export default function Profile() {
 
 const styles = StyleSheet.create({
   container: { flex:1, backgroundColor: 'transparent' },
-  scrollContent: { padding:16, paddingBottom: 32 },
+  scrollContent: { padding:16, paddingBottom: 32, flexGrow: 1 },
+  spacer: { flex: 1, minHeight: 100 },
   title: { color:'#fff', fontSize: 36, fontWeight:'700' },
-  userInfoCard: { 
-    borderColor: theme.colors.border, 
-    borderWidth:2, 
+userInfoCard: { 
+    borderColor: '#161E31', 
     borderRadius:16, 
     padding:12, 
     marginTop:25,
-    backgroundColor: theme.colors.card
+    backgroundColor: '#161E31'
   },
   userInfoLabel: { 
     color: '#fff', 
-    fontSize: 16, 
-    fontWeight: '700',
+    fontSize: 20, 
+    fontWeight: '400',
     marginBottom: 8
   },
   userInfoText: { 
     color: theme.colors.subtext, 
-    fontSize: 14,
+    fontSize: 16,
+    fontWeight: '400',
     marginBottom: 4
   },
-  card: { borderColor: theme.colors.border, borderWidth:2, borderRadius:16, padding:12, marginTop:12 },
-  row: { color: theme.colors.subtext },
+  card: { backgroundColor: '#161E31', borderRadius:16, padding:12, marginTop:12 },
+  row: { color: '#fff',fontSize: 20, fontWeight: '400' },
   lang: { borderColor: theme.colors.border, borderWidth:2, borderRadius:20, paddingHorizontal:12, paddingVertical:8, marginRight:8, marginTop:8 },
   langActive: { backgroundColor: '#fff' },
   langText: { color: '#fff', fontWeight:'800' },

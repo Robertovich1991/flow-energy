@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Alert, ImageBackground, TouchableOpacity } from 'react-native';
+import { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
-import { PrimaryButton, GhostButton } from '../components/Buttons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { coinsBalanceSelector } from '../store/selectors/authSelector';
-import Icon from '../components/Icon';
 import BackgroundWrapper from '../components/BackgroundWrapper';
 import { useDispatch } from 'react-redux';
 import { purchaseStream } from '../store/slices/streamPurchaseSlice';
-import CoinsHeader from '../components/CoinsHeader';
 import { Icons } from '../assets/images/svg';
 
 export default function StreamDetail() {
@@ -21,7 +18,6 @@ export default function StreamDetail() {
   const coinsBalance = useSelector(coinsBalanceSelector);
   const dispatch = useDispatch();
   const [selectedPrice, setSelectedPrice] = useState<any>(stream.prices?.[0] || null);
-  console.log(stream,'jfhfhfhfhfhhfhfhfhfhfhhhffhhfhfhfhfhfhfhfhffhfhhfhf');
   
   const onStartStream = () => {
     // Check if a price is selected

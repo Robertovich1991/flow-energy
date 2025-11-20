@@ -298,7 +298,7 @@ export default function CardDetail() {
 
          {!successModalVisible && <View style={styles.actionsRow}>
             <TouchableOpacity style={{ width: '50%', backgroundColor: '#00B149DE', paddingVertical: 0, paddingHorizontal: 52, borderRadius: 14 }} onPress={onBuy}>
-              <Text style={{ lineHeight: 38, color: "white", textAlign: 'center', fontSize: 32, fontWeight: '900', paddingVertical: 12 }}>{t('cta.buy')}</Text>
+              <Text style={{ lineHeight: 38, color: "white", textAlign: 'center', fontSize: (t('cta.buy') as string).length > 3 ? 20 : 32, fontWeight: '900', paddingVertical: 12 }}>{t('cta.buy')}</Text>
             </TouchableOpacity>
             <View style={{ width: '50%', flexDirection: 'row', alignItems: 'center', gap: 10, justifyContent: 'center' }}><View style={{ backgroundColor: '#FBBF24', width: 16, height: 16, borderRadius: 90 }}></View>
               <Text style={{ color: "white", fontSize: 32, fontWeight: '900' }}>{card.price}</Text>
@@ -411,7 +411,7 @@ export default function CardDetail() {
 const styles = StyleSheet.create({
   container: { backgroundColor: '#161427' },
   title: { color: '#fff', fontSize: 30, fontWeight: '700', textAlign: 'center',letterSpacing:1.5 },
-  imageWrapper: {backgroundColor:'red', borderRadius: 20, overflow: 'hidden', alignSelf: 'center', },
+  imageWrapper: { borderRadius: 20, overflow: 'hidden', alignSelf: 'center', },
   cover: { height: 600, width: 400, borderRadius: 20, overflow: 'hidden' },
   // overlay: { position: 'absolute', top: 16, left: 16, right: 16, flex: 1, justifyContent: 'space-between' },
   loadingOverlay: {

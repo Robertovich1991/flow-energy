@@ -30,28 +30,98 @@ export const CardTile: React.FC<Props> = ({title, price,style, intensity, image,
   
   const randomBorderColor = useMemo(() => generateRandomColor(), []);
 
-  return (
-    <TouchableOpacity onPress={onPress} style={[styles.tile, {backgroundColor: theme.colors.card, borderColor: randomBorderColor, ...style}]}>
-      {/* <View style={[styles.gradient,{backgroundColor: randomColors[0]}]} /> */}
+  const imageSource = image && image !== '/images/default.jpg'
+    ? { uri: 'http://api.go2winbet.online' + image }
+    : require('../assets/images/flowImage.jpg');
+
+  const content = (
+    <>
       <Text style={styles.title}>{title}</Text>
       {price && (
         <View style={styles.priceContainer}>
           <Icons.Coins/>
           <Text style={styles.priceText}>{price}</Text>
-          {/* <Icon name="coin" size={14} color={theme.colors.primary} /> */}
         </View>
       )}
+    </>
+  );
 
-      {/* {typeof intensity === 'number' && <Text style={styles.meta}>{t('fields.intensity')} {intensity}%</Text>} */}
+  return (
+    <TouchableOpacity 
+      onPress={onPress} 
+      style={[styles.tile, {borderColor: randomBorderColor, ...style}]}
+      activeOpacity={0.8}
+    >
+      {image ? (
+        <ImageBackground
+          source={imageSource}
+          style={styles.imageBackground}
+          imageStyle={styles.imageStyle}
+        >
+          <View style={styles.overlay} />
+          {content}
+        </ImageBackground>
+      ) : (
+        <>
+          {content}
+        </>
+      )}
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-
-  tile: {minWidth:145, borderWidth: 1, borderRadius: 16, padding: 16, overflow: 'hidden', marginBottom: 12, width: '48%', height: 221, backgroundColor: theme.colors.card,justifyContent:'space-between',  },
-  title: { color: '#fff', fontSize: 16, fontWeight: '800', fontFamily: getFontFamily('800'), marginTop: 6, marginBottom: 6,  },
-  priceContainer: { marginBottom: 6, alignItems: 'center', flexDirection: 'row' },
-  priceText: { color: theme.colors.primary, fontSize: 14, fontWeight: '700', fontFamily: getFontFamily('700') },
-  meta: { color:'white', marginTop: 6, fontSize: 14,fontWeight:'700', fontFamily: getFontFamily('700'), textAlign: 'center' },
+  tile: {
+    minWidth: 145,
+    borderWidth: 2,
+    borderRadius: 16,
+    overflow: 'hidden',
+    marginBottom: 12,
+    width: '48%',
+    height: 221,
+    backgroundColor: theme.colors.card,
+  },
+  imageBackground: {
+    flex: 1,
+    padding: 16,
+    justifyContent: 'space-between',
+  },
+  imageStyle: {
+    borderRadius: 14,
+    resizeMode: 'cover',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    borderRadius: 14,
+  },
+  title: { 
+    color: '#fff', 
+    fontSize: 16, 
+    fontWeight: '800', 
+    fontFamily: getFontFamily('800'), 
+    marginTop: 6, 
+    marginBottom: 6,
+    zIndex: 1,
+  },
+  priceContainer: { 
+    marginBottom: 6, 
+    alignItems: 'center', 
+    flexDirection: 'row',
+    zIndex: 1,
+  },
+  priceText: { 
+    color: theme.colors.primary, 
+    fontSize: 14, 
+    fontWeight: '700', 
+    fontFamily: getFontFamily('700') 
+  },
+  meta: { 
+    color: 'white', 
+    marginTop: 6, 
+    fontSize: 14,
+    fontWeight: '700', 
+    fontFamily: getFontFamily('700'), 
+    textAlign: 'center' 
+  },
 });

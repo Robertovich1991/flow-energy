@@ -26,6 +26,7 @@ import SignUp from '../screens/SignUp';
 import CoinsPurchaseModal from '../screens/CoinsPurchaseModal';
 import MyCards from '../screens/MyCards';
 import MyStreams from '../screens/MyStreams';
+import MyProfile from '../screens/MyProfile';
 import ImageGallery from '../screens/ImageGallery';
 import CategoryCards from '../screens/CategoryCards';
 import CategoryStreams from '../screens/CategoryStreams';
@@ -47,6 +48,16 @@ export const useTabNavigation = () => {
   return navigation;
 };
 
+const HomeStack = createNativeStackNavigator();
+function HomeStackScreen() {
+  return (
+    <HomeStack.Navigator screenOptions={{ headerShown: false }}>
+      <HomeStack.Screen name="HomeMain" component={Home} />
+      <HomeStack.Screen name="CardDetail" component={CardDetail} options={{ headerShown: false }} />
+    </HomeStack.Navigator>
+  );
+}
+
 const CardsStack = createNativeStackNavigator();
 function CardsStackScreen() {
   return (
@@ -65,6 +76,16 @@ function StreamsStackScreen() {
       <StreamsStack.Screen name="StreamDetail" component={StreamDetail} options={{ headerShown: false }} />
       <StreamsStack.Screen name="RunningFlowScreen" component={RunningFlowScreen} options={{ headerShown: false }} />
     </StreamsStack.Navigator>
+  );
+}
+
+const ProfileStack = createNativeStackNavigator();
+function ProfileStackScreen() {
+  return (
+    <ProfileStack.Navigator screenOptions={{ headerShown: false }}>
+      <ProfileStack.Screen name="ProfileMain" component={Profile} />
+      <ProfileStack.Screen name="MyProfile" component={MyProfile} options={{ headerShown: false }} />
+    </ProfileStack.Navigator>
   );
 }
 
@@ -116,7 +137,7 @@ function TabsRoot() {
         >
         <Tabs.Screen
           name="HomeTab"
-          component={createTabScreenWrapper(Home)}
+          component={createTabScreenWrapper(HomeStackScreen)}
           options={{
             tabBarLabel: ({ focused }: { focused: boolean }) => (
               <Text
@@ -178,7 +199,7 @@ function TabsRoot() {
         />
         <Tabs.Screen
           name="ProfileTab"
-          component={createTabScreenWrapper(Profile)}
+          component={createTabScreenWrapper(ProfileStackScreen)}
           options={{
             tabBarLabel: ({ focused }: { focused: boolean }) => (
               <Text

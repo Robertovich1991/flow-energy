@@ -30,12 +30,14 @@ export const PrimaryButton: React.FC<BtnProps> = ({label, onPress, style, leftIc
       ) : (
         <>
           {leftIcon && <Icon name={leftIcon} size={18} color="#000" />}
-          <Text style={[
-            styles.primaryText, 
-            (disabled || loading) && styles.disabledText,
-            leftIcon && styles.withLeft, 
-            rightIcon && styles.withRight
-          ]}>{label}</Text>
+          <Text 
+            numberOfLines={2}
+            style={[
+              styles.primaryText, 
+              (disabled || loading) && styles.disabledText,
+              leftIcon && styles.withLeft, 
+              rightIcon && styles.withRight
+            ]}>{label}</Text>
           {rightIcon && <Icon name={rightIcon} size={18} color="#000" />}
         </>
       )}
@@ -47,7 +49,10 @@ export const GhostButton: React.FC<BtnProps> = ({label, onPress, style, leftIcon
   <TouchableOpacity onPress={onPress} style={[styles.ghost, style]}>
     <View style={styles.rowCenter}>
       {leftIcon && <Icon name={leftIcon} size={18} color={theme.colors.text} />} 
-      <Text style={[styles.ghostText, leftIcon && styles.withLeft, rightIcon && styles.withRight]}>{label}</Text>
+      <Text 
+        numberOfLines={2}
+        ellipsizeMode="tail"
+        style={[styles.ghostText, leftIcon && styles.withLeft, rightIcon && styles.withRight]}>{label}</Text>
       {rightIcon && <Icon name={rightIcon} size={18} color={theme.colors.text} />}
     </View>
   </TouchableOpacity>
@@ -55,7 +60,7 @@ export const GhostButton: React.FC<BtnProps> = ({label, onPress, style, leftIcon
 
 export const SubmitButton: React.FC<BtnProps> = ({label, onPress, style, leftIcon, rightIcon}) => (
   <TouchableOpacity onPress={onPress} style={[styles.submit, style]}>
-      <Text style={[styles.submitText]}>{label}</Text>
+      <Text numberOfLines={2} ellipsizeMode="tail" style={[styles.submitText]}>{label}</Text>
   </TouchableOpacity>
 );
 
@@ -63,7 +68,10 @@ export const AppleButton: React.FC<BtnProps> = ({label, onPress, style, leftIcon
   <TouchableOpacity onPress={onPress} style={[styles.apple, style]}>
     <View style={styles.rowCenter}>
       {leftIcon && <Icon name={leftIcon} size={18} color="#fff" />} 
-      <Text style={[styles.appleText, leftIcon && styles.withLeft, rightIcon && styles.withRight]}>{label}</Text>
+      <Text 
+        numberOfLines={2}
+        ellipsizeMode="tail"
+        style={[styles.appleText, leftIcon && styles.withLeft, rightIcon && styles.withRight]}>{label}</Text>
       {rightIcon && <Icon name={rightIcon} size={18} color="#fff" />}
     </View>
   </TouchableOpacity>
@@ -73,7 +81,7 @@ const styles = StyleSheet.create({
   primary: {
     backgroundColor: theme.colors.primary,paddingVertical:8, paddingHorizontal: 28, borderRadius: 96, alignItems: 'center',justifyContent:"center" 
   },
-  primaryText: { color:'#fff', fontSize: 16, fontWeight: '800', fontFamily: getFontFamily('800') },
+  primaryText: { color:'black', fontSize: 16, fontWeight: '800', fontFamily: getFontFamily('800') },
   disabled: {
     backgroundColor: '#666',
     opacity: 0.6,
@@ -92,7 +100,7 @@ fontFamily: getFontFamily('400'),
 letterSpacing:0.9
   },
   ghost: {
-    borderColor: theme.colors.border, borderWidth: 2, paddingVertical: 12, paddingHorizontal: 18, borderRadius: 26, alignItems: 'center', flex: 1, minWidth: 0
+    borderColor: theme.colors.border, borderWidth: 2, paddingVertical: 12, paddingHorizontal: 8, borderRadius: 26, alignItems: 'center', flex: 1, minWidth: 0
   },
   ghostText: { color: 'white', fontSize: 16, fontWeight: '700', fontFamily: getFontFamily('700'), flexShrink: 1 },
   apple: {
