@@ -57,6 +57,8 @@ export const CardTile: React.FC<Props> = ({title, price,style, intensity, image,
           source={imageSource}
           style={styles.imageBackground}
           imageStyle={styles.imageStyle}
+          defaultSource={require('../assets/images/flowImage.jpg')}
+          resizeMode="cover"
         >
           <View style={styles.overlay} />
           {content}
