@@ -48,12 +48,13 @@ export default function CoinsHeader({ showArrow = true }: CoinsHeaderProps) {
             <Icons.Arrow width={24} height={24} />
           </TouchableOpacity>
         )}
-        <Text style={[styles.headerText, { color: 'white', fontSize: 18, fontWeight: '600' }]}>Flow up</Text>
+        <Text style={[styles.headerText, { color: 'white', fontSize: 18, fontWeight: '400', paddingLeft: 20 }]}>Flow up</Text>
       </View>
 
       <TouchableOpacity onPress={handlePress} style={styles.coinContainer}>
-        <Icons.Coins width={16} height={16} />
+        <Icons.YellowCoins width={16} height={16} />
         <Text style={styles.coinText}>{coinsBalance.toLocaleString()}</Text>
+        <Icons.BluePlus />
       </TouchableOpacity>
     </View>
   );
@@ -61,19 +62,19 @@ export default function CoinsHeader({ showArrow = true }: CoinsHeaderProps) {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent:'space-between',
-    alignItems:'center',
-    flexDirection:'row' ,
-    width:Dimensions.get('window').width ,
-    backgroundColor:'#161427',
-    paddingHorizontal:16,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    width: Dimensions.get('window').width,
+    backgroundColor: '#161427',
+    paddingHorizontal: 16,
     paddingBottom: 2,
     marginBottom: 5,
   },
   coinContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor:'#2A263E',
+    backgroundColor: 'rgba(30, 41, 59, 0.7)',
     borderColor: theme.colors.border,
     borderWidth: 1,
     borderRadius: 20,

@@ -1,6 +1,6 @@
 
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, ViewStyle } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, ViewStyle, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme, getFontFamily } from '../theme';
 import { Icons } from '../assets/images/svg';
@@ -11,7 +11,7 @@ type Props = {
   intensity?: number;
   image?: string;
   onPress?: () => void;
-  style:ViewStyle
+  style: ViewStyle
 };
 
 const generateRandomColor = (): string => {
@@ -22,12 +22,20 @@ const generateRandomColor = (): string => {
     '#1ABC9C', '#3498DB', '#E67E22', '#E91E63', '#00BCD4',
     '#FF5722', '#009688', '#FFC107', '#9C27B0', '#3F51B5'
   ];
-  return colors[Math.floor(Math.random() * colors.length)];
+
+  const hex = colors[Math.floor(Math.random() * colors.length)];
+
+  // Convert hex → rgba with opacity
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+
+  return `rgba(${r}, ${g}, ${b}, 0.4)`; // <-- opacity here
 };
 
-export const CardTile: React.FC<Props> = ({title, price,style, intensity, image, onPress}) => {
+export const CardTile: React.FC<Props> = ({ title, price, style, intensity, image, onPress }) => {
   const { t } = useTranslation();
-  
+
   const randomBorderColor = useMemo(() => generateRandomColor(), []);
 
   const imageSource = image && image !== '/images/default.jpg'
@@ -36,33 +44,36 @@ export const CardTile: React.FC<Props> = ({title, price,style, intensity, image,
 
   const content = (
     <>
-      <Text style={styles.title}>{title}</Text>
       {price && (
-        <View style={styles.priceContainer}>
-          <Icons.Coins/>
-          <Text style={styles.priceText}>{price}</Text>
+        <View >
+          <Text style={styles.title}>{title}</Text>
+          <View style={styles.priceContainer}>
+            <View style={{flexDirection:'row',alignItems:'center'}}><Icons.Coins />
+              <Text style={styles.priceText}>{price}</Text></View>
+            <Icons.Add />
+          </View>
         </View>
       )}
     </>
   );
 
   return (
-    <TouchableOpacity 
-      onPress={onPress} 
-      style={[styles.tile, {borderColor: randomBorderColor, ...style}]}
+    <TouchableOpacity
+      onPress={onPress}
+      style={[styles.tile, { borderColor: randomBorderColor, ...style }]}
       activeOpacity={0.8}
     >
       {image ? (
-        <ImageBackground
+        <View style={{ flex: 1, paddingHorizontal: 8, paddingVertical: 8, justifyContent: 'space-between' }}><View style={{ padding: 8, height: '65%', width: '85%', backgroundColor: 'rgba(168, 85, 247, 0.1)', alignSelf: 'center' }}><Image
           source={imageSource}
           style={styles.imageBackground}
-          imageStyle={styles.imageStyle}
+          // imageStyle={styles.imageStyle}
           defaultSource={require('../assets/images/flowImage.jpg')}
           resizeMode="cover"
-        >
+        /></View>
           <View style={styles.overlay} />
           {content}
-        </ImageBackground>
+        </View>
       ) : (
         <>
           {content}
@@ -75,18 +86,18 @@ export const CardTile: React.FC<Props> = ({title, price,style, intensity, image,
 const styles = StyleSheet.create({
   tile: {
     minWidth: 145,
-    borderWidth: 2,
+    borderWidth: 1,
     borderRadius: 16,
     overflow: 'hidden',
     marginBottom: 12,
     width: '48%',
-    height: 221,
-    backgroundColor: theme.colors.card,
+    height: 232,
+    backgroundColor: 'rgba(30, 41, 59, 0.7)',
   },
   imageBackground: {
     flex: 1,
-    padding: 16,
-    justifyContent: 'space-between',
+    margin: 10,
+    // padding: 16,
   },
   imageStyle: {
     borderRadius: 14,
@@ -97,33 +108,34 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
     borderRadius: 14,
   },
-  title: { 
-    color: '#fff', 
-    fontSize: 16, 
-    fontWeight: '800', 
-    fontFamily: getFontFamily('800'), 
-    marginTop: 6, 
+  title: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
+    fontFamily: getFontFamily('600'),
+    marginTop: 6,
     marginBottom: 6,
     zIndex: 1,
   },
-  priceContainer: { 
-    marginBottom: 6, 
-    alignItems: 'center', 
+  priceContainer: {
+    marginBottom: 6,
+    alignItems: 'center',
     flexDirection: 'row',
     zIndex: 1,
+    justifyContent: 'space-between'
   },
-  priceText: { 
-    color: theme.colors.primary, 
-    fontSize: 14, 
-    fontWeight: '700', 
-    fontFamily: getFontFamily('700') 
-  },
-  meta: { 
-    color: 'white', 
-    marginTop: 6, 
+  priceText: {
+    color: '#FFD700',
     fontSize: 14,
-    fontWeight: '700', 
-    fontFamily: getFontFamily('700'), 
-    textAlign: 'center' 
+    fontWeight: '700',
+    fontFamily: getFontFamily('700')
+  },
+  meta: {
+    color: 'white',
+    marginTop: 6,
+    fontSize: 14,
+    fontWeight: '700',
+    fontFamily: getFontFamily('700'),
+    textAlign: 'center'
   },
 });

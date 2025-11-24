@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet,ImageBackground, TouchableOpacity, Alert, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, TouchableOpacity, Alert, ScrollView, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { useApp } from '../store/app';
@@ -20,18 +20,20 @@ import { ownedStreamsListSelector, ownedStreamsLoadingSelector } from '../store/
 import { getOwnedStreamsList } from '../store/slices/ownedStreamsSlice';
 import { OwnedStreamTile, StreamTile } from '../components/StreamTile';
 import { CardTile } from '../components/CardTile';
+import GradientButton from '../components/GradientButton';
+import { Icons } from '../assets/images/svg';
 
 export default function MyProfile() {
   const { t, i18n } = useTranslation();
   const nav = useNavigation<any>();
   const dispatch = useDispatch();
-  const lang = useApp(s=>s.lang);
-  const setLang = useApp(s=>s.setLang);
+  const lang = useApp(s => s.lang);
+  const setLang = useApp(s => s.setLang);
   const [userEmail, setUserEmail] = useState<string>('');
   const [userName, setUserName] = useState<string>('');
 
-  const set = (l: any) => { 
-    setLang(l); 
+  const set = (l: any) => {
+    setLang(l);
     i18n.changeLanguage(l);
     // Refresh API data with new tenant slug
     dispatch(getCardList() as any);
@@ -40,33 +42,33 @@ export default function MyProfile() {
     dispatch(getCoinsBalance() as any);
   };
 
-   const ownedCards = useSelector(ownedCardsListSelector);
-    const loadingOwnedCards = useSelector(ownedCardsLoadingSelector);
+  const ownedCards = useSelector(ownedCardsListSelector);
+  const loadingOwnedCards = useSelector(ownedCardsLoadingSelector);
   const ownedStreams = useSelector(ownedStreamsListSelector);
   const loadingOwnedStreams = useSelector(ownedStreamsLoadingSelector);
-  console.log(ownedCards,'ownedCards');
-  
-    // Fetch owned cards and streams on component mount
-    useEffect(() => {
-      dispatch(getOwnedCardsList() as any);
-      dispatch(getOwnedStreamsList() as any);
-    }, [dispatch]);
+  console.log(ownedCards, 'ownedCards');
+
+  // Fetch owned cards and streams on component mount
+  useEffect(() => {
+    dispatch(getOwnedCardsList() as any);
+    dispatch(getOwnedStreamsList() as any);
+  }, [dispatch]);
 
   useEffect(() => {
     const logAsyncStorage = async () => {
       try {
         const accessToken = await AsyncStorage.getItem('accessToken');
         const storedUserEmail = await AsyncStorage.getItem('userEmail');
-        
+
         console.log('=== AsyncStorage Data ===');
         console.log('accessToken:', accessToken);
         console.log('userEmail:', storedUserEmail);
         console.log('========================');
-        
+
         // Set user information for display
         if (storedUserEmail) {
           const parsedData = JSON.parse(storedUserEmail);
-          
+
           // Handle both string and object formats
           if (typeof parsedData === 'string') {
             setUserEmail(parsedData);
@@ -92,8 +94,8 @@ export default function MyProfile() {
         t('common.confirmLogout'),
         [
           { text: t('common.cancel'), style: 'cancel' },
-          { 
-            text: t('common.logout'), 
+          {
+            text: t('common.logout'),
             onPress: () => {
               console.log('Logout confirmed, navigating to Login'); // Debug log
               dispatch(signOut() as any);
@@ -116,8 +118,8 @@ export default function MyProfile() {
       t('common.confirmDeleteAccount'),
       [
         { text: t('common.cancel'), style: 'cancel' },
-        { 
-          text: t('common.delete'), 
+        {
+          text: t('common.delete'),
           style: 'destructive',
           onPress: () => {
             // TODO: Implement actual account deletion logic
@@ -132,84 +134,97 @@ export default function MyProfile() {
   return (
     <BackgroundWrapper>
       <CoinsHeader />
-      <ScrollView 
-        style={styles.container} 
+      <ScrollView
+        style={styles.container}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={true}
         nestedScrollEnabled={true}
       >
-     <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center'}}><Text style={styles.title}>{'Profile'}</Text>
-     </View> 
-      {userEmail && (
-        <View style={styles.userInfoCard}>
-          <Text style={styles.userInfoLabel}>{t('profile.userInfo')}</Text>
-          <Text style={styles.userInfoText}>{t('profile.nameLabel')} {userName}</Text>
-          <Text style={styles.userInfoText}>{t('profile.emailLabel')} {userEmail}</Text>
+        <View style={{ alignItems: 'center', justifyContent: 'center',marginHorizontal:90 }}><Text style={styles.title}>{'Profile'}</Text>
+          <Text style={{ color: '#9CA3AF', fontSize: 14, fontWeight: 400 }}>Manage your energy identity</Text>
+
         </View>
-      )}
-      
-      <View style={styles.card}><Text style={styles.row}>{t('profile.language')}</Text>
-        <View style={{flexDirection:'row', flexWrap:'wrap'}}>
-          {(['ru','en','es','de'] as const).map(l => (
-            <TouchableOpacity key={l} onPress={()=>set(l)} style={[styles.lang, lang===l && styles.langActive]}>
-              <Text style={[styles.langText, lang===l && styles.langTextActive]}>{t('langs.'+l)}</Text>
-            </TouchableOpacity>
-          ))}
+        {userEmail && (
+          <View style={styles.userInfoCard}>
+            <Text style={styles.userInfoLabel}>{t('profile.userInfo')}</Text>
+            <View style={{alignItems:'center', padding: 13, gap: 10, flexDirection: 'row', backgroundColor: 'rgba(255, 255, 255, 0.05)', borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.05)' }}>
+              <Icons.MyProfile />
+              <View>
+                <Text style={styles.userInfoText}>{'Full name'}</Text><Text style={styles.userInfoText}>{userName}</Text></View></View>
+            <View style={{alignItems:'center', padding: 13, gap: 10, flexDirection: 'row', backgroundColor: 'rgba(255, 255, 255, 0.05)', borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.05)' }}>
+              <Icons.MyEmail />
+              <View>
+                <Text style={styles.userInfoText}>{"Email Address"} </Text><Text style={styles.userInfoText}>{userEmail}</Text></View></View>
+          </View>
+        )}
+
+        <View style={styles.card}>
+          <Text style={{ color: "#fff", fontSize: 18, fontWeight: 600, paddingBottom: 13 }}>Preferences</Text>
+          <Text style={styles.row}>{t('profile.language')}</Text>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+            {(['ru', 'en', 'es', 'de'] as const).map(l => (
+              <TouchableOpacity key={l} onPress={() => set(l)} style={[styles.lang, lang === l && styles.langActive]}>
+                <Text style={[styles.langText, lang === l && styles.langTextActive]}>{t('langs.' + l)}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
-      </View>
-    
-      <View style={styles.spacer} />
-   
-      <View style={styles.actionsContainer}>
-      <TouchableOpacity style={{backgroundColor: '#00D4C8', paddingVertical: 12, paddingHorizontal: 24, borderRadius: 16}} onPress={handleLogout}>
-        <Text style={{color: '#fff',textAlign: 'center', fontSize: 16, fontWeight: '700'}}>{t('profile.logout')}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={{backgroundColor: '#D91B72', paddingVertical: 12, paddingHorizontal: 24, borderRadius: 16}} onPress={handleDeleteAccount}>
-        <Text style={{color: '#fff',textAlign: 'center', fontSize: 16, fontWeight: '700'}}>{t('profile.deleteAccount')}</Text>
-      </TouchableOpacity>
-        {/* <GhostButton 
+
+        <View style={styles.spacer} />
+
+        <View style={styles.actionsContainer}>
+          <GradientButton onClickButton={handleLogout} iconLeft={<Icons.Logout />} textStyle={{ color: 'black', fontWeight: '700' }} title={'Logout'} locations={[0.3, 0.5]} colors={['rgba(45, 212, 191, 1)', 'rgba(52, 211, 153, 1)']} />
+          {/* <TouchableOpacity style={{ backgroundColor: '#00D4C8', paddingVertical: 12, paddingHorizontal: 24, borderRadius: 16 }} onPress={handleLogout}>
+            <Text style={{ color: '#fff', textAlign: 'center', fontSize: 16, fontWeight: '700' }}>{t('profile.logout')}</Text>
+          </TouchableOpacity> */}
+          <TouchableOpacity style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)',borderColor:'rgba(239, 68, 68, 0.3)',borderWidth:1, paddingVertical: 21, paddingHorizontal: 24, borderRadius: 16 }} onPress={handleDeleteAccount}>
+            <Text style={{ color: '#EF4444', textAlign: 'center', fontSize: 16, fontWeight: '700' }}>{t('profile.deleteAccount')}</Text>
+          </TouchableOpacity>
+          {/* <GhostButton 
           label={t('profile.deleteAccount')} 
           onPress={handleDeleteAccount}
           style={styles.deleteButton}
         /> */}
-      </View>
+        </View>
       </ScrollView>
-    </BackgroundWrapper>
+    </BackgroundWrapper >
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex:1, backgroundColor: 'transparent' },
-  scrollContent: { padding:16, paddingBottom: 32, flexGrow: 1 },
+  container: { flex: 1, backgroundColor: 'transparent' },
+  scrollContent: { padding: 16, paddingBottom: 32, flexGrow: 1 },
   spacer: { flex: 1, minHeight: 100 },
-  title: { color:'#fff', fontSize: 36, fontWeight:'700' },
-userInfoCard: { 
-    borderColor: '#161E31', 
-    borderRadius:16, 
-    padding:12, 
-    marginTop:25,
-    backgroundColor: '#161E31'
+  title: { color: '#fff', fontSize: 36, fontWeight: '700' },
+  userInfoCard: {
+    borderColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: 16,
+    borderWidth: 1,
+    padding: 12,
+    gap: 16,
+    marginTop: 25,
+    backgroundColor: 'rgba(26, 29, 41, 0.7)'
   },
-  userInfoLabel: { 
-    color: '#fff', 
-    fontSize: 20, 
+  userInfoLabel: {
+    color: '#fff',
+    fontSize: 20,
     fontWeight: '400',
     marginBottom: 8
   },
-  userInfoText: { 
-    color: theme.colors.subtext, 
+  userInfoText: {
+    color: theme.colors.subtext,
     fontSize: 16,
     fontWeight: '400',
     marginBottom: 4
   },
-  card: { backgroundColor: '#161E31', borderRadius:16, padding:12, marginTop:12 },
-  row: { color: '#fff',fontSize: 20, fontWeight: '400' },
-  lang: { borderColor: theme.colors.border, borderWidth:2, borderRadius:20, paddingHorizontal:12, paddingVertical:8, marginRight:8, marginTop:8 },
+  card: { backgroundColor: 'rgba(26, 29, 41, 0.7)', borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.05)', borderRadius: 16, padding: 12, marginTop: 12 },
+  row: { color: 'rgba(156, 163, 175, 1)', fontSize: 14, fontWeight: '400' },
+  lang: { borderColor: theme.colors.border, borderWidth: 2, borderRadius: 20, paddingHorizontal: 12, paddingVertical: 8, marginRight: 8, marginTop: 8 },
   langActive: { backgroundColor: '#fff' },
-  langText: { color: '#fff', fontWeight:'800' },
+  langText: { color: '#fff', fontWeight: '800' },
   langTextActive: { color: '#000' },
   actionsContainer: {
-    marginTop: 32,
+    // marginTop: 32,
     gap: 12,
   },
   logoutButton: {
@@ -230,7 +245,7 @@ userInfoCard: {
     color: '#fff',
     fontSize: 20,
     fontWeight: '700',
-  //  marginBottom: 12,
+    //  marginBottom: 12,
     marginLeft: 4,
     paddingTop: 32,
   },
@@ -242,7 +257,7 @@ userInfoCard: {
   },
   horizontalCard: {
     width: '100%',
-   // height: 200,
+    // height: 200,
     borderRadius: 16,
     overflow: 'hidden',
     backgroundColor: '#2A263E',

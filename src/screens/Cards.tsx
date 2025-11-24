@@ -20,6 +20,7 @@ export default function Cards() {
   const cards = useSelector(cardListSelector)
   const categories = useSelector(categoriesListSelector)
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+  console.log(cards);
   
   // Fetch data on component mount
   useEffect(() => {

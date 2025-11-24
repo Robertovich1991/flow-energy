@@ -16,6 +16,8 @@ import { purchaseCard } from '../store/slices/cardPurchaseSlice';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { set } from 'react-hook-form';
 import CoinsHeader from '../components/CoinsHeader';
+import GradientButton from '../components/GradientButton';
+import { Icons } from '../assets/images/svg';
 
 export default function CardDetail() {
   const { t } = useTranslation();
@@ -242,8 +244,8 @@ export default function CardDetail() {
     <>
       <BackgroundWrapper>
         <CoinsHeader />
-       <ScrollView style={styles.container}>
-        <View style={styles.imageWrapper}>
+        <ScrollView style={styles.container}>
+          <View style={styles.imageWrapper}>
             {!successModalVisible && (isVideo ? (
               <View style={styles.cover}>
                 <Video
@@ -288,7 +290,7 @@ export default function CardDetail() {
               </View>
             ) : (
               <Image source={cachedImageUri || mediaSource} style={styles.cover} resizeMode='contain' />
-           ) )}
+            ))}
             {/* <View style={styles.overlay}>
               <View style={{ flexDirection: 'row', marginLeft: 35, alignItems: 'center', gap: 6 }}>
                 <Icon name="sparkle" color="#fff" />
@@ -296,9 +298,9 @@ export default function CardDetail() {
               </View>
             </View> */}
           </View>
-         {!successModalVisible && <Text style={styles.title}>{card.title}</Text>}
+          {!successModalVisible && <Text style={styles.title}>{card.title}</Text>}
 
-         {!successModalVisible && <View style={styles.actionsRow}>
+          {!successModalVisible && <View style={styles.actionsRow}>
             <TouchableOpacity style={{ width: '50%', backgroundColor: '#00B149DE', paddingVertical: 0, paddingHorizontal: 52, borderRadius: 14 }} onPress={onBuy}>
               <Text style={{ lineHeight: 38, color: "white", textAlign: 'center', fontSize: (t('cta.buy') as string).length > 3 ? 20 : 32, fontWeight: '900', paddingVertical: 12 }}>{t('cta.buy')}</Text>
             </TouchableOpacity>
@@ -307,8 +309,8 @@ export default function CardDetail() {
             </View> {/* <PrimaryButton leftIcon="shopping-bag" rightIcon="arrow-right" label={t('cta.buy') + ' · $' + card.price} onPress={onBuy} /> */}
           </View>}
           {card.description && (
-          <Text style={styles.desc}>{card.description}</Text>
-        )}
+            <Text style={styles.desc}>{card.description}</Text>
+          )}
 
         </ScrollView>
 
@@ -323,24 +325,32 @@ export default function CardDetail() {
             <TouchableWithoutFeedback>
               <View style={styles.bottomSheet}>
                 <Text style={styles.title}>Activation</Text>
+                <Text style={{ color: '#9CA3AF', fontSize: 14, fontWeight: '400', textAlign: 'center' }}>Enter your details to connect with the energy flow.</Text>
                 <Text style={styles.label}>Name</Text>
-
-                <TextInput
-                  //  placeholder={t('fields.name') as string}
-                  // placeholderTextColor="#AAA"
-                  value={name}
-                  onChangeText={setName}
-                  style={styles.input}
-                />
+                <View style={styles.inputContainer}>
+                  <Icons.Name style={styles.icon} />
+                  <TextInput
+                    placeholder={'Enter your name'}
+                    placeholderTextColor="#AAA"
+                    value={name}
+                    onChangeText={setName}
+                    style={styles.input}
+                  />
+                </View>
 
                 <Text style={styles.label}>Surname</Text>
 
-                <TextInput
-                  placeholderTextColor="#AAA"
-                  value={surname}
-                  onChangeText={setSurname}
-                  style={styles.input}
-                />
+                <View style={styles.inputContainer}>
+                  <Icons.Surname style={styles.icon} />
+
+                  <TextInput
+                    placeholder="Enter your surname"
+                    placeholderTextColor="#AAA"
+                    value={surname}
+                    onChangeText={setSurname}
+                    style={styles.input}
+                  />
+                </View>
 
                 <Text style={styles.label}>Date of Birth</Text>
 
@@ -348,6 +358,8 @@ export default function CardDetail() {
                   style={styles.datePickerButton}
                   onPress={() => setShowDatePicker(true)}
                 >
+                  <Icons.Calendar style={styles.icon} />
+
                   <Text style={styles.datePickerText}>
                     {birthday.toLocaleDateString('ru-RU', {
                       year: 'numeric',
@@ -369,14 +381,8 @@ export default function CardDetail() {
                     themeVariant="dark"
                   />
                 )}
+                <GradientButton onClickButton={onConfirm} colors={['#00C853', '#10B981']} title='ACTIVATE' />
 
-                <SubmitButton
-                  label={'ACTIVATE'}
-                  onPress={onConfirm}
-                  style={styles.confirmButton}
-                  disabled={!!isLoading}
-                  loading={!!isLoading}
-                />
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -388,16 +394,17 @@ export default function CardDetail() {
         animationType="slide"
       >
         <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-          <View style={[styles.modalBackground,{justifyContent:'center',alignItems:'center'}]}>
+          <View style={[styles.modalBackground, { justifyContent: 'center', alignItems: 'center' }]}>
             <TouchableWithoutFeedback>
-              <View style={[styles.bottomSheet,{backgroundColor:'#0D0B16'}]}>
+              <View style={[styles.bottomSheet, { backgroundColor: '#0D0B16' }]}>
 
-                <Image source={require('../assets/images/congrats.png')} style={{ width: Dimensions.get('window').width-50, height: 400, alignSelf: 'center' }} />
+                <Image source={require('../assets/images/congrats.png')} style={{ width: Dimensions.get('window').width - 50, height: 400, alignSelf: 'center' }} />
+
 
                 <SubmitButton
                   label={'OK'}
-                  onPress={()=>setSuccessModalVisible(false)}
-                  style={[styles.confirmButton, { borderRadius: 36 ,marginHorizontal:60}]}
+                  onPress={() => setSuccessModalVisible(false)}
+                  style={[styles.confirmButton, { borderRadius: 36, marginHorizontal: 60 }]}
                   disabled={!!isLoading}
                   loading={!!isLoading}
                 />
@@ -412,7 +419,7 @@ export default function CardDetail() {
 
 const styles = StyleSheet.create({
   container: { backgroundColor: '#161427' },
-  title: { color: '#fff', fontSize: 30, fontWeight: '700', textAlign: 'center',letterSpacing:1.5 },
+  title: { color: '#fff', fontSize: 30, fontWeight: '400', textAlign: 'center', letterSpacing: 1.5 },
   imageWrapper: { borderRadius: 20, overflow: 'hidden', alignSelf: 'center', },
   cover: { height: 600, width: 400, borderRadius: 20, overflow: 'hidden' },
   // overlay: { position: 'absolute', top: 16, left: 16, right: 16, flex: 1, justifyContent: 'space-between' },
@@ -439,7 +446,7 @@ const styles = StyleSheet.create({
   },
 
   bottomSheet: {
-    backgroundColor: '#1C192B',
+    backgroundColor: 'rgba(21, 21, 34, 0.95)',
     padding: 20,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
@@ -462,13 +469,13 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
   // coverTitle: { color:'black', fontSize: 28, fontWeight:'900' },
-  desc: { color: theme.colors.subtext, marginTop: 20, fontSize: 16, lineHeight: 24,paddingHorizontal: 16 },
+  desc: { color: theme.colors.subtext, marginTop: 20, fontSize: 16, lineHeight: 24, paddingHorizontal: 16 },
   actionsRow: { flexDirection: 'row', gap: 10, marginTop: 12, paddingHorizontal: 16, alignItems: 'center', },
   infoRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 },
   infoItem: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   info: { color: '#E0E0E6' },
   sub: { color: theme.colors.subtext, marginTop: 8 },
-  input: { borderWidth: 1, borderColor: '#5A5A6A', borderRadius: 8, padding: 12, color: '#fff' },
+  input: { flex: 1, borderColor: '#2C2C3E', borderRadius: 8, backgroundColor: '#1E1E2E' },
   label: {
     color: '#B0B0C0',
     fontSize: 16,
@@ -478,9 +485,14 @@ const styles = StyleSheet.create({
   },
   datePickerButton: {
     borderWidth: 1,
-    borderColor: '#5A5A6A', borderRadius: 8,
-    padding: 12,
-    //  backgroundColor: 'rgba(255,255,255,0.1)'
+    borderColor: '#2C2C3E', borderRadius: 8,
+    paddingVertical: 20,
+    paddingHorizontal: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 20,
+    backgroundColor: '#1E1E2E'
   },
   datePickerText: {
     color: '#fff',
@@ -491,5 +503,26 @@ const styles = StyleSheet.create({
     backgroundColor: '#00B149DE',
     marginTop: 40,
   },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(44, 44, 62, 1)',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    // height: 50,
+    backgroundColor: 'rgba(30, 30, 46, 1)',
+  },
+
+  icon: {
+    marginRight: 8,
+  },
+
+  // input: {
+  //   flex: 1,
+  //   fontSize: 16,
+  //   color: '#000',
+  // },
   note: { color: theme.colors.subtext, marginTop: 12 }
 });

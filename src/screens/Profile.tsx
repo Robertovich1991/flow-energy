@@ -142,7 +142,7 @@ export default function Profile() {
       <TouchableOpacity onPress={() => nav.navigate('MyProfile')}>
         <ImageBackground source={require('../assets/images/gradient.png')} 
         >
-          <Text style={{color:'#fff', fontSize: 20, fontWeight:'700',paddingVertical:12,paddingHorizontal:32}}>{'My profile'}</Text>
+          <Text style={{color:'#fff', fontSize: 14, fontWeight:'400',paddingVertical:12,paddingHorizontal:32}}>{'My profile'}</Text>
         </ImageBackground>
       </TouchableOpacity></View> 
       {/* {userEmail && (
@@ -314,7 +314,7 @@ export default function Profile() {
 const styles = StyleSheet.create({
   container: { flex:1, backgroundColor: 'transparent' },
   scrollContent: { padding:16, paddingBottom: 32 },
-  title: { color:'#fff', fontSize: 36, fontWeight:'700' },
+  title: { color:'#fff', fontSize: 36, fontWeight:'400' },
   userInfoCard: { 
     borderColor: theme.colors.border, 
     borderWidth:2, 
@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     color: '#fff',
     fontSize: 20,
-    fontWeight: '700',
+    fontWeight: '400',
   //  marginBottom: 12,
     marginLeft: 4,
     paddingTop: 32,

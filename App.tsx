@@ -11,6 +11,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setScanMeApiAuthorization } from './src/services/instance/MainInstance';
 import { getCoinsBalance } from './src/store/slices/authSlice';
 import appsFlyer from 'react-native-appsflyer';
+import OnboardingFirst from './src/screens/OnboardingFirst';
+import OnboardingSecond from './src/screens/OnboardingSecond';
+import OnboardingThird from './src/screens/OnboardingThird';
 
 
 const Bootstrap = () => {

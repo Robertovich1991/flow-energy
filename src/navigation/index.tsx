@@ -266,6 +266,7 @@ export default function RootNavigator() {
 
   return (
     <NavigationContainer theme={DarkTheme}>
+      
       <Stack.Navigator initialRouteName={isLoggedIn ? 'Tabs' : 'Login'}>
         <Stack.Screen 
           name="Login" 
