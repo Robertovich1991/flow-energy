@@ -12,7 +12,7 @@ import { getCardList } from '../store/slices/cardSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { cardListSelector } from '../store/selectors/cardSelector';
 import { getStreamList } from '../store/slices/streamSlice';
- import * as RNIap from 'react-native-iap';
+//  import * as RNIap from 'react-native-iap';
 import { getCategoriesList } from '../store/slices/categoriesSlice';
 
 
@@ -35,9 +35,9 @@ export default function Home() {
       try {
         const suc= await RNIap.initConnection();
         setTimeout(async () => {
-           await RNIap.getSubscriptions({skus:productIds});
-          const x= await RNIap.getProducts({skus:productIds});
-         console.log(x,suc,'[[[[[[[[[[[[[[[[[[[[[[');
+         ////  await RNIap.getSubscriptions({skus:productIds});
+       //   const x= await RNIap.getProducts({skus:productIds});
+       //  console.log(x,suc,'[[[[[[[[[[[[[[[[[[[[[[');
          
         }, 1000); // Wait 1 second        console.log(products,'[[[[[[[[gggggggggggggggggg[[[[[[[[[[[[[[')
       } catch (err) {
@@ -48,7 +48,7 @@ export default function Home() {
     init();
   
     return () => {
-     RNIap.endConnection();
+   //  RNIap.endConnection();
     };
    }, []);
 
