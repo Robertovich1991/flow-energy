@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme, getFontFamily } from '../theme';
 import { PrimaryButton, GhostButton } from '../components/Buttons';
@@ -14,6 +14,7 @@ import { cardListSelector } from '../store/selectors/cardSelector';
 import { getStreamList } from '../store/slices/streamSlice';
 //  import * as RNIap from 'react-native-iap';
 import { getCategoriesList } from '../store/slices/categoriesSlice';
+import { Icons } from '../assets/images/svg';
 
 
 export default function Home() {
@@ -21,9 +22,9 @@ export default function Home() {
   const nav = useNavigation<any>();
   const dispatch = useDispatch();
   const cards = useSelector(cardListSelector);
-  
- const productIds=['coin10','coin50','coin100','coin500','coin1000']
-  
+
+  const productIds = ['coin10', 'coin50', 'coin100', 'coin500', 'coin1000']
+
   useEffect(() => {
     dispatch(getCardList() as any);
     dispatch(getStreamList() as any);
@@ -33,54 +34,59 @@ export default function Home() {
   useEffect(() => {
     async function init() {
       try {
-        const suc= await RNIap.initConnection();
+        const suc = await RNIap.initConnection();
         setTimeout(async () => {
-         ////  await RNIap.getSubscriptions({skus:productIds});
-       //   const x= await RNIap.getProducts({skus:productIds});
-       //  console.log(x,suc,'[[[[[[[[[[[[[[[[[[[[[[');
-         
+          ////  await RNIap.getSubscriptions({skus:productIds});
+          //   const x= await RNIap.getProducts({skus:productIds});
+          //  console.log(x,suc,'[[[[[[[[[[[[[[[[[[[[[[');
+
         }, 1000); // Wait 1 second        console.log(products,'[[[[[[[[gggggggggggggggggg[[[[[[[[[[[[[[')
       } catch (err) {
         console.log(err);
       }
     }
-  
+
     init();
-  
+
     return () => {
-   //  RNIap.endConnection();
+      //  RNIap.endConnection();
     };
-   }, []);
+  }, []);
 
   return (
     <BackgroundWrapper>
       <CoinsHeader showArrow={false} />
-      <ScrollView style={styles.container} contentInsetAdjustmentBehavior="automatic">
-      <Text style={styles.brand}>Flow Up</Text>
-      <Text style={styles.tagline}>{t('appTagline')}</Text>
-
-      <View style={styles.hero}>
-        <Text style={styles.heroSup}>AI • {t('sections.popular')}</Text>
-        <Text style={styles.heroTitle}>{t('home.heroTitle')}</Text>
-        <View style={styles.ctaRow}>
-          <PrimaryButton leftIcon="sparkle" rightIcon="arrow-right" label={t('cta.viewCard')} onPress={() => nav.navigate('CardsTab')} />
-          <GhostButton leftIcon="play" label={t('cta.startStream')} onPress={() => nav.navigate('StreamsTab')} />
+      <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }} contentInsetAdjustmentBehavior="automatic">
+        <Text style={styles.brand}>Flow Up</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}><Text style={styles.tagline}>{'Featured energy'}</Text>
+          <TouchableOpacity onPress={() => nav.navigate('CardsTab')}><Text style={{ color: '#4169E1', fontSize: 14, fontWeight: '400' }}>View all</Text>
+          </TouchableOpacity>
         </View>
-      </View>
 
-      <Text style={styles.section}>{t('sections.popular')}</Text>
-      <View style={styles.cardsGrid}>
-        {cards && cards.length > 0 && cards?.slice(0, 6).map((card: any) => (
-          <CardTile
-            key={card.id}
-            title={card.title}
-            price={`$${card.price}`}
-            intensity={card.intensityPct}
-            image={card.image}
-            onPress={() => nav.navigate('CardDetail', { card: card })}
-          />
-        ))}
-      </View>
+        <ImageBackground source={require('../assets/images/home.png')} style={styles.hero}>
+          {/* <Text style={styles.heroSup}>AI • {t('sections.popular')}</Text> */}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 16 }}><View><Text style={styles.heroTitle}>Eternal Flame</Text>
+            <Text style={{ color: '#D1D5DB', fontSize: 12, fontWeight: '400' }}>Boosts vitality and inner strength by 200%</Text></View>        <Icons.ArrowButton />
+          </View>
+          <View style={styles.ctaRow}>
+            {/* <PrimaryButton leftIcon="sparkle" rightIcon="arrow-right" label={t('cta.viewCard')} onPress={() => nav.navigate('CardsTab')} /> */}
+            {/* <GhostButton leftIcon="play" label={t('cta.startStream')} onPress={() => nav.navigate('StreamsTab')} /> */}
+          </View>
+        </ImageBackground>
+
+        {/* <Text style={styles.section}>{t('sections.popular')}</Text> */}
+        <View style={styles.cardsGrid}>
+          {cards && cards.length > 0 && cards?.slice(0, 6).map((card: any) => (
+            <CardTile
+              key={card.id}
+              title={card.title}
+              price={`$${card.price}`}
+              intensity={card.intensityPct}
+              image={card.image}
+              onPress={() => nav.navigate('CardDetail', { card: card })}
+            />
+          ))}
+        </View>
       </ScrollView>
     </BackgroundWrapper>
   );
@@ -90,10 +96,10 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: 'transparent', padding: 16 },
   brand: { color: '#fff', fontSize: 40, fontWeight: '900', fontFamily: getFontFamily('900'), marginTop: 4 },
   tagline: { color: theme.colors.subtext, fontSize: 15, fontFamily: getFontFamily('400') },
-  hero: { borderColor: theme.colors.border, borderWidth: 2, borderRadius: 24, padding: 16, marginTop: 16, backgroundColor: theme.colors.card },
+  hero: { borderColor: theme.colors.border, borderRadius: 24, paddingTop: 145, paddingBottom: 28, marginTop: 16, backgroundColor: theme.colors.card },
   heroSup: { color: theme.colors.subtext, marginBottom: 6, fontFamily: getFontFamily('400') },
   heroTitle: { color: '#fff', fontSize: 20, fontWeight: '900', fontFamily: getFontFamily('900'), lineHeight: 26 },
   section: { color: '#fff', fontSize: 20, fontWeight: '900', fontFamily: getFontFamily('900'), marginTop: 24, marginBottom: 8 },
   ctaRow: { flexDirection: 'row', gap: 10, marginTop: 12, flexWrap: 'wrap' },
-  cardsGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }
+  cardsGrid: { marginTop: 20, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }
 });

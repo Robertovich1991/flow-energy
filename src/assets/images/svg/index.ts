@@ -27,6 +27,7 @@ import BluePlus from './bluePlus.svg';
 import Name from './name.svg';
 import Surname from './surname.svg';
 import Calendar from './calendar.svg';
+import ArrowButton from './arrowButton.svg';
 
 
 export const Icons = {
@@ -34,6 +35,7 @@ export const Icons = {
     Name,
     Surname,
     Calendar,
+    ArrowButton,
     BluePlus,
     Logout,
     Add,

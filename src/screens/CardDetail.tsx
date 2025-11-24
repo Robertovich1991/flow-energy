@@ -317,7 +317,7 @@ export default function CardDetail() {
       </BackgroundWrapper>
       <Modal
         transparent={true}
-        visible={true}
+        visible={modalVisible}
         animationType="slide"
       >
         <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
