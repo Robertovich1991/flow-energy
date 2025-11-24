@@ -173,7 +173,7 @@ export default function MyProfile() {
         <View style={styles.spacer} />
 
         <View style={styles.actionsContainer}>
-          <GradientButton iconLeft={<Icons.Logout />} textStyle={{ color: 'black', fontWeight: '700' }} title={'Logout'} locations={[0.3, 0.5]} colors={['rgba(45, 212, 191, 1)', 'rgba(52, 211, 153, 1)']} />
+          <GradientButton onClickButton={handleLogout} iconLeft={<Icons.Logout />} textStyle={{ color: 'black', fontWeight: '700' }} title={'Logout'} locations={[0.3, 0.5]} colors={['rgba(45, 212, 191, 1)', 'rgba(52, 211, 153, 1)']} />
           {/* <TouchableOpacity style={{ backgroundColor: '#00D4C8', paddingVertical: 12, paddingHorizontal: 24, borderRadius: 16 }} onPress={handleLogout}>
             <Text style={{ color: '#fff', textAlign: 'center', fontSize: 16, fontWeight: '700' }}>{t('profile.logout')}</Text>
           </TouchableOpacity> */}
