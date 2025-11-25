@@ -2,19 +2,21 @@ import { Text, View, StyleSheet, ScrollView, ImageBackground, } from 'react-nati
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icons } from '../assets/images/svg';
 import GradientButton from '../components/GradientButton';
 
 
 export default function OnboardingFirst() {
     const { t } = useTranslation();
-    // const nav = useNavigation<any>();
+    const nav = useNavigation<any>();
+    const insets = useSafeAreaInsets();
 
     return (
-        <ImageBackground source={require('../assets/images/onboard.png')} style={styles.container} >
+        <ImageBackground source={require('../assets/images/onboard.png')} style={[styles.container, { paddingTop: insets.top + 16 }]} >
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}><Icons.Stream /> <Text style={styles.brand}>Flow up</Text>
             </View>
-            <View style={{paddingBottom:70,gap:32}}><Text style={styles.welcome}>Unlock Your <Text style={{ color: '#4169E1' }}>Cosmic Destiny </Text></Text>
+            <View style={{paddingBottom:70,gap:32}}><Text style={styles.welcome}>Unlock Your <Text style={{ color: '#4169E1' }}> Cosmic  {'\n'} Destiny </Text></Text>
                 <Text style={styles.subtitle}>Discover how universal energy flows shape your path. Harness the power of exchange to elevate your soul and transform your fate.</Text>
                 <Icons.DotsStart style={{alignSelf:'center'}} />
                 <GradientButton
@@ -23,6 +25,7 @@ export default function OnboardingFirst() {
                     title="Start Journey"
                     colors={['#4169E1', '#A855F7', '#FFD700']}
                     locations={[0.3, 0.4, 0.9]}
+                    onClickButton={() => nav.navigate('OnboardingSecond')}
                 />
             </View>
         </ImageBackground>

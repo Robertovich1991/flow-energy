@@ -10,9 +10,10 @@ import { TabNavigationContext } from '../navigation/index';
 
 type CoinsHeaderProps = {
   showArrow?: boolean;
+  transparent?: boolean;
 };
 
-export default function CoinsHeader({ showArrow = true }: CoinsHeaderProps) {
+export default function CoinsHeader({ showArrow = true, transparent = false }: CoinsHeaderProps) {
   const nav = useNavigation<any>();
   const coinsBalance = useSelector(coinsBalanceSelector);
   const insets = useSafeAreaInsets();
@@ -41,7 +42,7 @@ export default function CoinsHeader({ showArrow = true }: CoinsHeaderProps) {
   const statusBarHeight = insets.top || (Platform.OS === 'ios' ? 44 : 24);
 
   return (
-    <View style={[styles.container, { paddingTop: statusBarHeight - 15 }]}>
+    <View style={[styles.container, { paddingTop: statusBarHeight - 15, backgroundColor: transparent ? 'transparent' : '#161427' }]}>
       <View style={styles.leftSection}>
         {showArrow && (
           <TouchableOpacity onPress={handleBackPress} style={styles.backButton}>
@@ -66,7 +67,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     width: Dimensions.get('window').width,
-    backgroundColor: '#161427',
     paddingHorizontal: 16,
     paddingBottom: 2,
     marginBottom: 5,

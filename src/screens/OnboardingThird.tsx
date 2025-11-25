@@ -1,7 +1,8 @@
-import { Text, View, StyleSheet, ScrollView, ImageBackground, } from 'react-native';
+import { Text, View, StyleSheet, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icons } from '../assets/images/svg';
 import GradientButton from '../components/GradientButton';
 import BoardInfo from '../components/BoardInfo';
@@ -10,13 +11,16 @@ import BoardCard from '../components/BoardCard';
 
 export default function OnboardingThird() {
     const { t } = useTranslation();
-    // const nav = useNavigation<any>();
+    const nav = useNavigation<any>();
+    const insets = useSafeAreaInsets();
 
     return (
-        <ImageBackground source={require('../assets/images/boardThree.png')} style={styles.container} >
+        <ImageBackground source={require('../assets/images/boardThree.png')} style={[styles.container, { paddingTop: insets.top + 16 }]} >
             <View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
-                    <Icons.Left />
+                    <TouchableOpacity onPress={() => nav.goBack()}>
+                        <Icons.Left />
+                    </TouchableOpacity>
                     <Text style={styles.brand}>3 of 3</Text>
                     <View>
 
@@ -40,6 +44,7 @@ export default function OnboardingThird() {
                 title="Start Journey"
                 colors={['#4169E1', '#A855F7', '#FFD700']}
                 locations={[0.3, 0.4, 0.9]}
+                onClickButton={() => nav.navigate('Login')}
             />
         </ImageBackground>
     );
@@ -50,7 +55,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: theme.colors.bg,
         justifyContent: 'space-between',
-        padding: 16
+        padding: 16,
+        paddingBottom:40
     },
     header: {
         marginTop: 40,

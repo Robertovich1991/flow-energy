@@ -63,7 +63,12 @@
     "logout": "Logout",
     "deleteAccount": "Delete Account",
     "language": "Language:",
-    "joinedFlows": "Joined Flows"
+    "joinedFlows": "Joined Flows",
+    "profile": "Profile",
+    "manageEnergyIdentity": "Manage your energy identity",
+    "fullName": "Full name",
+    "emailAddress": "Email Address",
+    "preferences": "Preferences"
   },
   "auth": {
     "welcome": "Welcome back",
@@ -87,6 +92,7 @@
     "loading": "Loading...",
     "processing": "Processing...",
     "timeRemaining": "Time Remaining",
+    "expired": "Expired",
     "timeLost": "Time Lost",
     "min": "min",
     "coins": "coins",
@@ -122,7 +128,30 @@
     "hour": "Hour",
     "day": "Day",
     "week": "Week",
-    "month": "Month"
+    "month": "Month",
+    "flowActive": "Flow Active",
+    "inactive": "Inactive",
+    "more": "More",
+    "myProfile": "My profile",
+    "yourCollection": "Your collection",
+    "newCard": "New card",
+    "congratulations": "Congratulations!",
+    "cardPurchaseSuccess": "You have successfully purchased a rare energy card. It has been added to your collection.",
+    "awesome": "Awesome!",
+    "viewDetailsInThe": "View details in the",
+    "viewDetails": "View Details",
+    "collection": "Collection",
+    "section": "section.",
+    "flowUp": "Flow Up",
+    "featuredEnergy": "Featured energy",
+    "viewAll": "View all",
+    "eternalFlame": "Eternal Flame",
+    "boostsVitality": "Boosts vitality and inner strength by 200%",
+    "enterYourName": "Enter your name",
+    "enterYourSurname": "Enter your surname",
+    "surname": "Surname",
+    "dateOfBirth": "Date of Birth",
+    "flowIsRunning": "Flow is running"
   },
   "home": {
     "heroTitle": "«Income Boost» + 10 min «Financial Clarity»"

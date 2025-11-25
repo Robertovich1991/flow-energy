@@ -1,7 +1,8 @@
-import { Text, View, StyleSheet, ScrollView, ImageBackground, } from 'react-native';
+import { Text, View, StyleSheet, ScrollView, ImageBackground, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Icons } from '../assets/images/svg';
 import GradientButton from '../components/GradientButton';
 import BoardInfo from '../components/BoardInfo';
@@ -9,26 +10,34 @@ import BoardInfo from '../components/BoardInfo';
 
 export default function OnboardingSecond() {
     const { t } = useTranslation();
-    // const nav = useNavigation<any>();
+    const nav = useNavigation<any>();
+    const insets = useSafeAreaInsets();
 
     return (
-        <ImageBackground source={require('../assets/images/secondBoard.png')} style={styles.container} >
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}><Icons.Left /> <Text style={styles.brand}>2 of 3</Text><View></View>
+        <ImageBackground source={require('../assets/images/secondBoard.png')} style={[styles.container, { paddingTop: insets.top + 16 }]} >
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+                <TouchableOpacity onPress={() => nav.goBack()}>
+                    <Icons.Left />
+                </TouchableOpacity>
+                <Text style={styles.brand}>2 of 3</Text>
+                <View></View>
             </View>
-            <View style={{ paddingBottom: 20, gap: 16 }}><Text style={styles.welcome}>The Power of {'\n'}<Text style={{ color: '#4169E1' }}>Energy Exchange </Text></Text>
+            <View style={{ paddingBottom: 20, gap: 16 ,}}><Text style={styles.welcome}>The Power of {'\n'}<Text style={{ color: '#4169E1' }}>Energy Exchange </Text></Text>
                 <Text style={styles.subtitle}>Universal energy flows connect all living beings. Learn how to channel this force for your destiny.</Text>
                 <BoardInfo icon={<Icons.Repeat />} title='Continuous Exchange' subtitle='Energy flows in cycles. Give and receive to maintain harmony and unlock your potential.' />
                 <BoardInfo icon={<Icons.Stars />} title='Transform Your Fate' subtitle="Channel cosmic forces to reshape your destiny and align with your soul's true purpose." />
                 <BoardInfo icon={<Icons.Spirit />} title='Elevate Your Spirit' subtitle='Connect with universal wisdom to strengthen your inner self and achieve spiritual growth.' />
 
-                <GradientButton
+               
+            </View>
+            <GradientButton
                     iconLeft={<Icons.Question />}
                     icon={<Icons.Right />}
                     title="Start Journey"
                     colors={['#4169E1', '#A855F7', '#FFD700']}
                     locations={[0.3, 0.4, 0.9]}
+                    onClickButton={() => nav.navigate('OnboardingThird')}
                 />
-            </View>
         </ImageBackground>
     );
 }
@@ -37,8 +46,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: theme.colors.bg,
-        justifyContent: 'space-between',
-        padding: 16
+      justifyContent: 'space-between',
+        padding: 16,
+        paddingBottom:70
     },
     header: {
         marginTop: 40,

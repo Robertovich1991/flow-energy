@@ -64,7 +64,7 @@ export const CardTile: React.FC<Props> = ({ title, price, style, intensity, imag
       activeOpacity={0.8}
     >
       {image ? (
-        <View style={{ flex: 1, paddingHorizontal: 8, paddingVertical: 8, justifyContent: 'space-between' }}><View style={{ padding: 8, height: '65%', width: '85%', backgroundColor: 'rgba(168, 85, 247, 0.1)', alignSelf: 'center' }}><Image
+        <View style={{ flex: 1, justifyContent: 'space-between' }}><View style={{  height: '75%', width: '80%', alignSelf: 'center',borderRadius:16,overflow:'hidden', }}><Image
           source={imageSource}
           style={styles.imageBackground}
           // imageStyle={styles.imageStyle}
@@ -90,13 +90,15 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     overflow: 'hidden',
     marginBottom: 12,
+  //  padding:9,
     width: '48%',
-    height: 232,
-    backgroundColor: 'rgba(30, 41, 59, 0.7)',
+    height: 280,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    padding:9
   },
   imageBackground: {
     flex: 1,
-    margin: 10,
+   // margin: 10,
     // padding: 16,
   },
   imageStyle: {

@@ -140,8 +140,8 @@ export default function MyProfile() {
         showsVerticalScrollIndicator={true}
         nestedScrollEnabled={true}
       >
-        <View style={{ alignItems: 'center', justifyContent: 'center',marginHorizontal:90 }}><Text style={styles.title}>{'Profile'}</Text>
-          <Text style={{ color: '#9CA3AF', fontSize: 14, fontWeight: 400 }}>Manage your energy identity</Text>
+        <View style={{ alignItems: 'center', justifyContent: 'center',marginHorizontal:90 }}><Text style={styles.title}>{t('profile.profile')}</Text>
+          <Text style={{ color: '#9CA3AF', fontSize: 14, fontWeight: 400 }}>{t('profile.manageEnergyIdentity')}</Text>
 
         </View>
         {userEmail && (
@@ -150,16 +150,16 @@ export default function MyProfile() {
             <View style={{alignItems:'center', padding: 13, gap: 10, flexDirection: 'row', backgroundColor: 'rgba(255, 255, 255, 0.05)', borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.05)' }}>
               <Icons.MyProfile />
               <View>
-                <Text style={styles.userInfoText}>{'Full name'}</Text><Text style={styles.userInfoText}>{userName}</Text></View></View>
+                <Text style={styles.userInfoText}>{t('profile.fullName')}</Text><Text style={styles.userInfoText}>{userName}</Text></View></View>
             <View style={{alignItems:'center', padding: 13, gap: 10, flexDirection: 'row', backgroundColor: 'rgba(255, 255, 255, 0.05)', borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.05)' }}>
               <Icons.MyEmail />
               <View>
-                <Text style={styles.userInfoText}>{"Email Address"} </Text><Text style={styles.userInfoText}>{userEmail}</Text></View></View>
+                <Text style={styles.userInfoText}>{t('profile.emailAddress')} </Text><Text style={styles.userInfoText}>{userEmail}</Text></View></View>
           </View>
         )}
 
         <View style={styles.card}>
-          <Text style={{ color: "#fff", fontSize: 18, fontWeight: 600, paddingBottom: 13 }}>Preferences</Text>
+          <Text style={{ color: "#fff", fontSize: 18, fontWeight: 600, paddingBottom: 13 }}>{t('profile.preferences')}</Text>
           <Text style={styles.row}>{t('profile.language')}</Text>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
             {(['ru', 'en', 'es', 'de'] as const).map(l => (
@@ -173,7 +173,7 @@ export default function MyProfile() {
         <View style={styles.spacer} />
 
         <View style={styles.actionsContainer}>
-          <GradientButton onClickButton={handleLogout} iconLeft={<Icons.Logout />} textStyle={{ color: 'black', fontWeight: '700' }} title={'Logout'} locations={[0.3, 0.5]} colors={['rgba(45, 212, 191, 1)', 'rgba(52, 211, 153, 1)']} />
+          <GradientButton onClickButton={handleLogout} iconLeft={<Icons.Logout />} textStyle={{ color: 'black', fontWeight: '700' }} title={t('common.logout')} locations={[0.3, 0.5]} colors={['rgba(45, 212, 191, 1)', 'rgba(52, 211, 153, 1)']} />
           {/* <TouchableOpacity style={{ backgroundColor: '#00D4C8', paddingVertical: 12, paddingHorizontal: 24, borderRadius: 16 }} onPress={handleLogout}>
             <Text style={{ color: '#fff', textAlign: 'center', fontSize: 16, fontWeight: '700' }}>{t('profile.logout')}</Text>
           </TouchableOpacity> */}

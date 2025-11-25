@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert,  } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert, ImageBackground } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { PrimaryButton, AppleButton } from '../components/Buttons';
@@ -11,6 +11,7 @@ import { AppDispatch } from '../store/config/configStore';
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { ILoginData } from '../store/types';
 import appleAuth from '@invertase/react-native-apple-authentication';
+import { Icons } from '../assets/images/svg';
 
 
 
@@ -161,7 +162,16 @@ export default function Login() {
   };
 
   return (
-    <ScrollView style={styles.container} contentInsetAdjustmentBehavior="automatic">
+    <ImageBackground 
+      source={require('../assets/images/login.png')} 
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+    <ScrollView 
+      style={styles.container} 
+      contentContainerStyle={styles.scrollContent}
+      contentInsetAdjustmentBehavior="automatic"
+    >
       <View style={styles.header}>
         <Text style={styles.brand}>Flow up</Text>
         <Text style={styles.welcome}>{t('auth.welcome')}</Text>
@@ -170,7 +180,11 @@ export default function Login() {
       <View style={styles.form}>
         <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
-            <Icon name="mail" size={18} color={theme.colors.subtext} />
+            <View style={{ marginRight: 12 }}>
+              <Icons.EmailLogin />
+            </View>
+
+            {/* <Icon name="mail" size={18} color={theme.colors.subtext} /> */}
             <Controller
               control={control}
               name={'email'}
@@ -182,20 +196,24 @@ export default function Login() {
                 },
               }}
               render={({ field: { onChange, value } }) => (
-                <TextInput
-                  style={styles.input}
-                  placeholder={t('fields.email')}
-                  placeholderTextColor={theme.colors.subtext}
-                  value={value}
-                  onChangeText={(text) => {
-                    onChange(text);
-                    // Clear error when user starts typing
-                    if (loginError) setLoginError('');
-                  }}
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                />
+                <View style={{paddingVertical:8,flexDirection:'row',alignItems:'center',justifyContent:'space-between',width:'90%'}}>
+                <View><Text style={{paddingBottom:3,color:'#6B7280',fontSize:10,fontWeight:'400'}}>{t('fields.email')}</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder={t('fields.email')}
+                    placeholderTextColor={theme.colors.subtext}
+                    value={value}
+                    onChangeText={(text) => {
+                      onChange(text);
+                      // Clear error when user starts typing
+                      if (loginError) setLoginError('');
+                    }}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                  />
+                  </View>
+                </View>
               )}
             />
           </View>
@@ -205,7 +223,10 @@ export default function Login() {
         </View>
         <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
-            <Icon name="lock" size={18} color={theme.colors.subtext} />
+            <View style={{ marginRight: 12 }}>
+              <Icons.Password />
+            </View>
+            {/* <Icon name="lock" size={18} color={theme.colors.subtext} /> */}
             <Controller
               control={control}
               name="password"
@@ -217,7 +238,8 @@ export default function Login() {
                 },
               }}
               render={({ field: { onChange, value } }) => (
-                <>
+                <View style={{paddingVertical:8,flexDirection:'row',alignItems:'center',justifyContent:'space-between',width:'85%'}}>
+                <View><Text style={{paddingBottom:3,color:'#6B7280',fontSize:10,fontWeight:'400'}}>{t('fields.password')}</Text>
                   <TextInput
                     style={styles.input}
                     placeholder={t('fields.password')}
@@ -231,7 +253,7 @@ export default function Login() {
                     secureTextEntry={!showPassword}
                     autoCapitalize="none"
                     autoCorrect={false}
-                  />
+                  /></View>
                   <TouchableOpacity
                     onPress={() => setShowPassword(!showPassword)}
                     style={styles.eyeButton}
@@ -242,7 +264,7 @@ export default function Login() {
                       color={theme.colors.subtext}
                     />
                   </TouchableOpacity>
-                </>
+                </View>
               )}
             />
           </View>
@@ -256,13 +278,16 @@ export default function Login() {
         </TouchableOpacity>
 
         <PrimaryButton
+        
           label={t('cta.login')}
           onPress={handleSubmit(onSubmit)}
           style={styles.loginButton}
+          textStyle={{color:'black',fontSize:16,fontWeight:'400'}}
         />
-
+       
+<Text style={styles.orText}>Or continue with</Text>
         <AppleButton
-          label="Continue with Apple"
+          label="Apple"
           leftIcon="apple"
           onPress={onAppleButtonPress}
           style={styles.appleButton}
@@ -280,14 +305,26 @@ export default function Login() {
         </View>
       </View>
     </ScrollView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
   container: {
     flex: 1,
-    backgroundColor: theme.colors.bg,
-    padding: 16
+    backgroundColor: 'transparent',
+    paddingTop: '30%',
+  },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'flex-end',
+    padding: 16,
+    paddingBottom: 40,
   },
   header: {
     marginTop: 40,
@@ -296,18 +333,28 @@ const styles = StyleSheet.create({
   brand: {
     color: '#fff',
     fontSize: 40,
-    fontWeight: '900',
-    marginBottom: 8
+    fontWeight: '400',
+    marginBottom: 8,
+    textAlign:'center'
   },
   welcome: {
     color: '#fff',
-    fontSize: 28,
-    fontWeight: '800',
-    marginBottom: 4
+    fontSize: 20,
+    fontWeight: '400',
+    marginBottom: 4,
+    textAlign:'center'
+  },
+  orText: {
+    color: '#6B7280',
+    fontSize: 14,
+    fontWeight: '400',
+    textAlign:'center',
+    marginBottom: 16,
   },
   subtitle: {
     color: theme.colors.subtext,
-    fontSize: 16
+    fontSize: 14,
+    textAlign:'center'
   },
   form: {
     flex: 1,
@@ -325,7 +372,7 @@ const styles = StyleSheet.create({
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.card,
+    backgroundColor: 'rgba(45, 38, 75, 0.4)',
     borderColor: theme.colors.border,
     borderWidth: 2,
     borderRadius: theme.radius,
@@ -352,9 +399,26 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   loginButton: {
+    backgroundColor:'white',
+    paddingVertical: 19,
+    paddingHorizontal: 24,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
     marginBottom: 16,
   },
   appleButton: {
+    backgroundColor:'rgba(255, 255, 255, 0.05)',
+    paddingVertical: 19,
+    paddingHorizontal: 24,
+    borderRadius: 16,
+    borderWidth:1,
+    borderColor:'rgba(255, 255, 255, 0.05)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+
     marginBottom: 24,
   },
   errorText: {

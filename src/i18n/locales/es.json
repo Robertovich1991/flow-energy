@@ -63,7 +63,12 @@
     "logout": "Cerrar sesión",
     "deleteAccount": "Eliminar cuenta",
     "language": "Idioma:",
-    "joinedFlows": "Flujos unidos"
+    "joinedFlows": "Flujos unidos",
+    "profile": "Perfil",
+    "manageEnergyIdentity": "Gestiona tu identidad energética",
+    "fullName": "Nombre completo",
+    "emailAddress": "Dirección de correo electrónico",
+    "preferences": "Preferencias"
   },
   "auth": {
     "welcome": "Bienvenido de vuelta",
@@ -87,6 +92,7 @@
     "loading": "Cargando...",
     "processing": "Procesando...",
     "timeRemaining": "Tiempo restante",
+    "expired": "Expirado",
     "timeLost": "Tiempo perdido",
     "min": "min",
     "coins": "monedas",
@@ -122,7 +128,30 @@
     "hour": "Hora",
     "day": "Día",
     "week": "Semana",
-    "month": "Mes"
+    "month": "Mes",
+    "flowActive": "Flujo activo",
+    "inactive": "Inactivo",
+    "more": "Más",
+    "myProfile": "Mi perfil",
+    "yourCollection": "Tu colección",
+    "newCard": "Nueva carta",
+    "congratulations": "¡Felicidades!",
+    "cardPurchaseSuccess": "Has comprado exitosamente una carta de energía rara. Ha sido agregada a tu colección.",
+    "awesome": "¡Genial!",
+    "viewDetailsInThe": "Ver detalles en la",
+    "viewDetails": "Ver detalles",
+    "collection": "Colección",
+    "section": "sección.",
+    "flowUp": "Flow Up",
+    "featuredEnergy": "Energía destacada",
+    "viewAll": "Ver todo",
+    "eternalFlame": "Llama eterna",
+    "boostsVitality": "Aumenta la vitalidad y la fuerza interior en un 200%",
+    "enterYourName": "Ingresa tu nombre",
+    "enterYourSurname": "Ingresa tu apellido",
+    "surname": "Apellido",
+    "dateOfBirth": "Fecha de nacimiento",
+    "flowIsRunning": "El flujo está corriendo"
   },
   "home": {
     "heroTitle": "«Aumento de ingresos» + 10 min «Claridad financiera»"

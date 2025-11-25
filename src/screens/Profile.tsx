@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet,ImageBackground, TouchableOpacity, Alert, ScrollView, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { theme } from '../theme';
+import { theme, getFontFamily } from '../theme';
 import { useApp } from '../store/app';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,6 +20,7 @@ import { ownedStreamsListSelector, ownedStreamsLoadingSelector } from '../store/
 import { getOwnedStreamsList } from '../store/slices/ownedStreamsSlice';
 import { OwnedStreamTile, StreamTile } from '../components/StreamTile';
 import { CardTile } from '../components/CardTile';
+import { Icons } from '../assets/images/svg';
 
 export default function Profile() {
   const { t, i18n } = useTranslation();
@@ -138,11 +139,11 @@ export default function Profile() {
         showsVerticalScrollIndicator={true}
         nestedScrollEnabled={true}
       >
-     <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}><Text style={styles.title}>{'More'}</Text>
+     <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}><Text style={styles.title}>{t('common.more')}</Text>
       <TouchableOpacity onPress={() => nav.navigate('MyProfile')}>
         <ImageBackground source={require('../assets/images/gradient.png')} 
         >
-          <Text style={{color:'#fff', fontSize: 14, fontWeight:'400',paddingVertical:12,paddingHorizontal:32}}>{'My profile'}</Text>
+          <Text style={{color:'#fff', fontSize: 14, fontWeight:'400',paddingVertical:12,paddingHorizontal:32}}>{t('common.myProfile')}</Text>
         </ImageBackground>
       </TouchableOpacity></View> 
       {/* {userEmail && (
@@ -170,7 +171,7 @@ export default function Profile() {
       {/* <TouchableOpacity style={styles.card} onPress={() => nav.navigate('MyStreams')}>
         <Text style={styles.row}>{t('common.myStreams')}</Text>
       </TouchableOpacity> */}
-      <Text style={styles.sectionTitle}>Your collection</Text>
+      <Text style={styles.sectionTitle}>{t('common.yourCollection')}</Text>
       
       {/* Horizontal owned cards section */}
       {ownedCards && ownedCards.length > 0 && (
@@ -209,19 +210,40 @@ export default function Profile() {
                     </Text>
                   </View>
                 </TouchableOpacity> */}
-              <CardTile
-                style={{maxWidth: 145}}
-                  title={ownedCard?.card?.title}
-                  image={ownedCard?.card?.image}
-                  price={ownedCard.coins_spent}
-                  intensity={ownedCard?.card?.intensity}
-               //   useCases={ownedCard.card.use_cases}
-                  onPress={() => nav.navigate('ImageGallery', { 
-                    images: ownedCard.card.video === '/images/default.jpg' 
-                      ? [require('../assets/images/flowImage.jpg')]
-                      : ['http://api.go2winbet.online' + ownedCard.card.video], 
-                    initialIndex: 0 
-                  })}/>
+              <TouchableOpacity
+                style={[profileCardStyles.tile, { maxWidth: 145 }]}
+                onPress={() => nav.navigate('ImageGallery', { 
+                  images: ownedCard.card.video === '/images/default.jpg' 
+                    ? [require('../assets/images/flowImage.jpg')]
+                    : ['http://api.go2winbet.online' + ownedCard.card.video], 
+                  initialIndex: 0 
+                })}
+                activeOpacity={0.8}
+              >
+                <Text style={profileCardStyles.title} numberOfLines={2}>{ownedCard?.card?.title}</Text>
+                {ownedCard?.card?.image && ownedCard?.card?.image !== '/images/default.jpg' ? (
+                  <Image
+                    source={{ uri: 'http://api.go2winbet.online' + ownedCard?.card?.image }}
+                    style={profileCardStyles.image}
+                    resizeMode="cover"
+                    defaultSource={require('../assets/images/flowImage.jpg')}
+                  />
+                ) : (
+                  <Image
+                    source={require('../assets/images/flowImage.jpg')}
+                    style={profileCardStyles.image}
+                    resizeMode="cover"
+                  />
+                )}
+                {ownedCard.coins_spent && (
+                  <View style={profileCardStyles.priceContainer}>
+                    <View style={{flexDirection:'row',alignItems:'center'}}>
+                      <Icons.Coins />
+                      <Text style={profileCardStyles.priceText}>{ownedCard.coins_spent}</Text>
+                    </View>
+                  </View>
+                )}
+              </TouchableOpacity>
                 </React.Fragment>
               );
             })}
@@ -406,5 +428,45 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     fontSize: 11,
     marginTop: 2,
+  },
+});
+
+const profileCardStyles = StyleSheet.create({
+  tile: {
+    minWidth: 145,
+    borderWidth: 1,
+    borderRadius: 16,
+    overflow: 'hidden',
+    marginBottom: 12,
+    width: 145,
+    backgroundColor: 'rgba(30, 41, 59, 0.7)',
+    padding: 12,
+  },
+  title: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '400',
+    fontFamily: getFontFamily('400'),
+    marginBottom: 12,
+  //  textAlign: 'center',
+  },
+  image: {
+    width: '100%',
+    height: 120,
+    borderRadius: 12,
+    marginBottom: 8,
+  },
+  priceContainer: {
+    marginTop: 8,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  priceText: {
+    color: '#FFD700',
+    fontSize: 14,
+    fontWeight: '700',
+    fontFamily: getFontFamily('700'),
+    marginLeft: 6,
   },
 });

@@ -88,6 +88,7 @@ export const getOwnedCardsList = () => async (dispatch: Dispatch) => {
   try {
     dispatch(setLoading(true));
     const response = await mainApi.get('cards/user/owned');
+    console.log('pppppppppppp----------',response.data);
     
     if (response.data.success) {
       dispatch(setOwnedCardsList(response.data.data));

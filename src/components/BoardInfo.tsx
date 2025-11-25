@@ -12,7 +12,7 @@ export default function BoardInfo({ icon, title, subtitle }: Props) {
         <View style={{flexDirection:'row',gap:16,backgroundColor:'rgba(26, 31, 51, 0.6)',padding:21,borderWidth:1,borderColor:'rgba(255, 255, 255, 0.08)',borderRadius:16}}>
             {icon}
             <View><Text style={{fontSize:16,fontWeight:'600',color:'#fff'}}>{title}</Text>
-                <Text style={{color:'#9CA3AF',fontSize:14,fontWeight:'400',lineHeight:23,maxWidth:'90%'}}>{subtitle}</Text></View>
+                <Text style={{color:'#9CA3AF',fontSize:14,fontWeight:'400',lineHeight:23,maxWidth:'80%',}}>{subtitle}</Text></View>
         </View>
     );
 }

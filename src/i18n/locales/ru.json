@@ -63,7 +63,12 @@
     "logout": "Выйти",
     "deleteAccount": "Удалить аккаунт",
     "language": "Язык:",
-    "joinedFlows": "Присоединенные потоки"
+    "joinedFlows": "Присоединенные потоки",
+    "profile": "Профиль",
+    "manageEnergyIdentity": "Управляйте своей энергетической идентичностью",
+    "fullName": "Полное имя",
+    "emailAddress": "Адрес электронной почты",
+    "preferences": "Настройки"
   },
   "coins": {
     "title": "Купить монеты",
@@ -76,6 +81,7 @@
     "loading": "Загрузка...",
     "processing": "Обработка...",
     "timeRemaining": "Время осталось",
+    "expired": "Истекло",
     "timeLost": "Время истекло",
     "min": "мин",
     "coins": "монет",
@@ -111,7 +117,30 @@
     "hour": "Час",
     "day": "День",
     "week": "Неделя",
-    "month": "Месяц"
+    "month": "Месяц",
+    "flowActive": "Поток активен",
+    "inactive": "Неактивен",
+    "more": "Еще",
+    "myProfile": "Мой профиль",
+    "yourCollection": "Ваша коллекция",
+    "newCard": "Новая карта",
+    "congratulations": "Поздравляем!",
+    "cardPurchaseSuccess": "Вы успешно приобрели редкую энергетическую карту. Она добавлена в вашу коллекцию.",
+    "awesome": "Отлично!",
+    "viewDetailsInThe": "Просмотреть детали в",
+    "viewDetails": "Посмотреть детали",
+    "collection": "Коллекции",
+    "section": "разделе.",
+    "flowUp": "Flow Up",
+    "featuredEnergy": "Рекомендуемая энергия",
+    "viewAll": "Посмотреть все",
+    "eternalFlame": "Вечное пламя",
+    "boostsVitality": "Повышает жизненную силу и внутреннюю силу на 200%",
+    "enterYourName": "Введите ваше имя",
+    "enterYourSurname": "Введите вашу фамилию",
+    "surname": "Фамилия",
+    "dateOfBirth": "Дата рождения",
+    "flowIsRunning": "Поток запущен"
   },
   "home": {
     "heroTitle": "«Повышение дохода» + 10 мин «Финансовая ясность»"

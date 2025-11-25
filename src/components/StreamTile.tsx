@@ -56,7 +56,7 @@ export const OwnedStreamTile: React.FC<Props> = ({ title, price, intensity, colo
         {typeof intensity === 'number' && <Text style={styles.meta}>{t('fields.intensity')} {intensity}%</Text>}
       </View>
       <TouchableOpacity style={{ backgroundColor: '#E0F0FF', paddingVertical: 8, paddingHorizontal: 20, borderRadius: 99 }} onPress={onPress}>
-        <Text style={{ color: '#3F8CFF', fontSize: 14, fontWeight: '600' }}>View Details</Text>
+        <Text style={{ color: '#3F8CFF', fontSize: 14, fontWeight: '600' }}>{t('common.viewDetails')}</Text>
       </TouchableOpacity>
     </View>
   );

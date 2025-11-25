@@ -63,7 +63,12 @@
     "logout": "Abmelden",
     "deleteAccount": "Konto löschen",
     "language": "Sprache:",
-    "joinedFlows": "Beigetretene Ströme"
+    "joinedFlows": "Beigetretene Ströme",
+    "profile": "Profil",
+    "manageEnergyIdentity": "Verwalte deine Energie-Identität",
+    "fullName": "Vollständiger Name",
+    "emailAddress": "E-Mail-Adresse",
+    "preferences": "Einstellungen"
   },
   "auth": {
     "welcome": "Willkommen zurück",
@@ -87,6 +92,7 @@
     "loading": "Laden...",
     "processing": "Verarbeitung...",
     "timeRemaining": "Verbleibende Zeit",
+    "expired": "Abgelaufen",
     "timeLost": "Zeit abgelaufen",
     "min": "Min",
     "coins": "Münzen",
@@ -122,7 +128,30 @@
     "hour": "Stunde",
     "day": "Tag",
     "week": "Woche",
-    "month": "Monat"
+    "month": "Monat",
+    "flowActive": "Flow aktiv",
+    "inactive": "Inaktiv",
+    "more": "Mehr",
+    "myProfile": "Mein Profil",
+    "yourCollection": "Deine Sammlung",
+    "newCard": "Neue Karte",
+    "congratulations": "Glückwunsch!",
+    "cardPurchaseSuccess": "Du hast erfolgreich eine seltene Energiekarte gekauft. Sie wurde zu deiner Sammlung hinzugefügt.",
+    "awesome": "Großartig!",
+    "viewDetailsInThe": "Details anzeigen in der",
+    "viewDetails": "Details anzeigen",
+    "collection": "Sammlung",
+    "section": "Sektion.",
+    "flowUp": "Flow Up",
+    "featuredEnergy": "Empfohlene Energie",
+    "viewAll": "Alle anzeigen",
+    "eternalFlame": "Ewige Flamme",
+    "boostsVitality": "Steigert Vitalität und innere Stärke um 200%",
+    "enterYourName": "Gib deinen Namen ein",
+    "enterYourSurname": "Gib deinen Nachnamen ein",
+    "surname": "Nachname",
+    "dateOfBirth": "Geburtsdatum",
+    "flowIsRunning": "Flow läuft"
   },
   "home": {
     "heroTitle": "«Einkommenssteigerung» + 10 Min «Finanzielle Klarheit»"

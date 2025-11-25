@@ -1,22 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
 import { useRoute } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
-import BackgroundWrapper from '../components/BackgroundWrapper';
 import CoinsHeader from '../components/CoinsHeader';
 import { ownedStreamsListSelector } from '../store/selectors/ownedStreamsSelector';
 import { useSelector } from 'react-redux';
 import Svg, { Circle } from 'react-native-svg';
+import GradientButton from '../components/GradientButton';
+import { Icons } from '../assets/images/svg';
 
 export default function RunningFlowScreen() {
+  const { t } = useTranslation();
   const route = useRoute<any>();
   const ownedStream = route.params?.stream;
   const [isActive, setIsActive] = useState<boolean>(true);
   const [remainingTime, setRemainingTime] = useState<number>(0);
   const [progress, setProgress] = useState<number>(0);
+  const [selectedDuration, setSelectedDuration] = useState<any>(null);
+
+  // Map API duration type name to translation key
+  const getDurationTranslation = (durationName: string) => {
+    if (!durationName) return '';
+    const normalized = durationName.toLowerCase().trim();
+    const durationMap: { [key: string]: string } = {
+      'hour': 'common.hour',
+      'day': 'common.day',
+      'week': 'common.week',
+      'month': 'common.month',
+    };
+    return durationMap[normalized] || '';
+  };
 
   useEffect(() => {
-    console.log('Selected stream:', ownedStream.duration_hours, '..........................duration_hours..........................');
+    console.log('Selected stream:', ownedStream, '..........................duration_hours..........................');
     
     if (!ownedStream?.created_at || ownedStream?.duration_hours === undefined) return;
 
@@ -71,7 +88,7 @@ export default function RunningFlowScreen() {
     const circumference = 2 * Math.PI * radius;
     const strokeDashoffset = circumference - (progress / 100) * circumference;
     const center = size / 2;
-    const progressColor = active ? '#00D4C8' : '#FF6B6B';
+    const progressColor = active ? '#34D399' : '#FF6B6B';
     const bgColor = active ? '#0A3941' : '#0A3941';
 
     return (
@@ -105,7 +122,7 @@ export default function RunningFlowScreen() {
             {formatTime(time)}
           </Text>
           <Text style={[styles.timerLabel, { color: theme.colors.subtext }]}>
-            {active ? 'Time remaining' : 'Expired'}
+            {active ? t('common.timeRemaining') : t('common.expired')}
           </Text>
         </View>
       </View>
@@ -113,10 +130,14 @@ export default function RunningFlowScreen() {
   };
 
   return (
-    <BackgroundWrapper>
+    <ImageBackground 
+      source={require('../assets/images/onboard.png')} 
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
       <CoinsHeader />
       <View style={styles.container}>
-        <Text style={styles.title}>Flow is running</Text>
+        <Text style={styles.title}>{t('common.flowIsRunning')}</Text>
 
         {ownedStream && (
           <View style={styles.streamInfo}>
@@ -124,11 +145,12 @@ export default function RunningFlowScreen() {
               <Text style={styles.streamTitle}>{ownedStream.stream.title}</Text>
             )} */}
              <View style={styles.statusContainer}>
+              <View style={{width:8,height:8,borderRadius:999,backgroundColor:isActive ? '#34D399' : '#FF6B6B', }}></View>
               <Text style={[
                 styles.statusText,
                 isActive ? styles.statusActive : styles.statusInactive
               ]}>
-                {isActive ? 'Active' : 'Inactive'}
+                {isActive ? t('common.flowActive') : t('common.inactive')}
               </Text>
             </View>
 
@@ -140,7 +162,43 @@ export default function RunningFlowScreen() {
               remainingTime={remainingTime}
             />
 
-           
+            <GradientButton 
+              title="EXTEND FLOW" 
+              onClickButton={() => {}}
+              colors={['rgba(0, 198, 255, 1)', 'rgba(0, 114, 255, 1)']}
+              buttonStyle={styles.extendButton}
+              icon={<Icons.Flesh width={24} height={24} />}
+              textStyle={{color:'white',fontSize:16,fontWeight:'600',paddingHorizontal:0}}
+            />
+
+            {ownedStream?.stream?.prices && ownedStream.stream.prices.length > 0 && (
+              <View style={styles.durationButtonsContainer}>
+                {ownedStream.stream.prices.map((price: any, index: number) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={[
+                      styles.durationButton,
+                      selectedDuration?.duration_type === price.duration_type && styles.durationButtonSelected
+                    ]}
+                    onPress={() => setSelectedDuration(price)}
+                  >
+                    <Text style={[
+                      styles.durationButtonText,
+                      selectedDuration?.duration_type === price.duration_type && styles.durationButtonTextSelected
+                    ]}>
+                      {getDurationTranslation(price.duration_type?.name || price.duration_type) ? t(getDurationTranslation(price.duration_type?.name || price.duration_type)) : (price.duration_type?.name || price.duration_type)}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
+
+            {selectedDuration && selectedDuration.price_coins && (
+              <View style={styles.priceContainer}>
+                <Icons.YellowCoins width={24} height={24} />
+                <Text style={styles.priceText}>{selectedDuration.price_coins}</Text>
+              </View>
+            )}
 
             {/* {ownedStream.created_at && (
               <View style={styles.dateContainer}>
@@ -168,11 +226,16 @@ export default function RunningFlowScreen() {
           </View>
         )}
       </View>
-    </BackgroundWrapper>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
   container: {
     flex: 1,
     backgroundColor: 'transparent',
@@ -184,8 +247,9 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 36,
     fontWeight: '600',
-  //  marginBottom: 24,
     textAlign: 'center',
+    width: '100%',
+  //  marginBottom: 24,
   },
   streamInfo: {
     alignItems: 'center',
@@ -237,21 +301,33 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginBottom: 8,
     alignItems: 'center',
+    flexDirection:'row',
+    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+    borderWidth:1,
+    paddingHorizontal: 32,
+    paddingVertical: 8,
+gap:16,
+    borderRadius: 999,
+
   },
   statusText: {
     fontSize: 14,
     fontWeight: '600',
-    paddingVertical: 8,
-    paddingHorizontal: 32,
-    borderRadius: 999,
   },
   statusActive: {
-    color: 'white',
-    backgroundColor: '#0A3941',
+    color: '#34D399',
+    borderColor:'rgba(16, 185, 129, 0.2)',
+    fontSize:12,fontWeight:'700'
   },
   statusInactive: {
     color: '#FF6B6B',
     backgroundColor: 'rgba(255, 107, 107, 0.2)',
+  },
+  extendButton: {
+    marginTop: 24,
+    width:250,
+    marginBottom: 16,
+   // width: '100%',
   },
   progressContainer: {
     position: 'relative',
@@ -275,6 +351,55 @@ const styles = StyleSheet.create({
   timerLabel: {
     fontSize: 14,
     fontWeight: '600',
+  },
+  durationButtonsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    padding:8,
+    marginTop: 16,
+    borderWidth :1,
+    borderColor:'rgba(255, 255, 255, 0.1)',
+    marginBottom: 12,
+    justifyContent: 'center',
+    backgroundColor:'rgba(15, 17, 26, 0.5)',
+    borderRadius:16
+  },
+  durationButton: {
+    backgroundColor: 'rgba(15, 17, 26, 0.5)',
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 80,
+  },
+  durationButtonSelected: {
+    backgroundColor: '#1A1A1A',
+    borderWidth: 1,
+    borderColor: '#00D4C8',
+  },
+  durationButtonText: {
+    color: '#9CA3AF',
+    fontSize: 16,
+    fontWeight: '500',
+    textAlign: 'center',
+  },
+  durationButtonTextSelected: {
+    color: '#FFFFFF',
+  },
+  priceContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    marginTop: 12,
+    marginBottom: 8,
+  },
+  priceText: {
+    color: theme.colors.primary,
+    fontSize: 24,
+    fontWeight: '700',
   },
 });
 

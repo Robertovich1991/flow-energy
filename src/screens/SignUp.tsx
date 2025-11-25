@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert, ImageBackground } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { PrimaryButton, AppleButton } from '../components/Buttons';
 import { useNavigation } from '@react-navigation/native';
 import Icon from '../components/Icon';
+import { Icons } from '../assets/images/svg';
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { ISignUpData } from '../store/types';
 import { register } from '../store/slices/authSlice';
@@ -46,7 +47,16 @@ const dispatch = useDispatch<AppDispatch>()
   };
 
   return (
-    <ScrollView style={styles.container} contentInsetAdjustmentBehavior="automatic">
+    <ImageBackground 
+      source={require('../assets/images/login.png')} 
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+    <ScrollView 
+      style={styles.container} 
+      contentContainerStyle={styles.scrollContent}
+      contentInsetAdjustmentBehavior="automatic"
+    >
       <View style={styles.header}>
         <Text style={styles.brand}>Flow up</Text>
         <Text style={styles.welcome}>{t('auth.createAccount')}</Text>
@@ -56,7 +66,9 @@ const dispatch = useDispatch<AppDispatch>()
       <View style={styles.form}>
         <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
-            <Icon name="user" size={18} color={theme.colors.subtext} />
+            <View style={{ marginRight: 12 }}>
+              <Icon name="user" size={18} color={theme.colors.subtext} />
+            </View>
             <Controller
               control={control}
               name="name"
@@ -68,15 +80,19 @@ const dispatch = useDispatch<AppDispatch>()
                 },
               }}
               render={({ field: { onChange, value } }) => (
-                <TextInput
-                  style={styles.input}
-                  placeholder={t('fields.name')}
-                  placeholderTextColor={theme.colors.subtext}
-                  value={value}
-                  onChangeText={onChange}
-                  autoCapitalize="words"
-                  autoCorrect={false}
-                />
+                <View style={{paddingVertical:8,flexDirection:'row',alignItems:'center',justifyContent:'space-between',width:'85%'}}>
+                  <View><Text style={{paddingBottom:3,color:'#6B7280',fontSize:10,fontWeight:'400'}}>{t('fields.name')}</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder={t('fields.name')}
+                      placeholderTextColor={theme.colors.subtext}
+                      value={value}
+                      onChangeText={onChange}
+                      autoCapitalize="words"
+                      autoCorrect={false}
+                    />
+                  </View>
+                </View>
               )}
             />
           </View>
@@ -87,7 +103,9 @@ const dispatch = useDispatch<AppDispatch>()
 
         <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
-            <Icon name="mail" size={18} color={theme.colors.subtext} />
+            <View style={{ marginRight: 12 }}>
+              <Icons.EmailLogin />
+            </View>
             <Controller
               control={control}
               name="email"
@@ -99,16 +117,20 @@ const dispatch = useDispatch<AppDispatch>()
                 },
               }}
               render={({ field: { onChange, value } }) => (
-                <TextInput
-                  style={styles.input}
-                  placeholder={t('fields.email')}
-                  placeholderTextColor={theme.colors.subtext}
-                  value={value}
-                  onChangeText={onChange}
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                />
+                <View style={{paddingVertical:8,flexDirection:'row',alignItems:'center',justifyContent:'space-between',width:'85%'}}>
+                  <View><Text style={{paddingBottom:3,color:'#6B7280',fontSize:10,fontWeight:'400'}}>{t('fields.email')}</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder={t('fields.email')}
+                      placeholderTextColor={theme.colors.subtext}
+                      value={value}
+                      onChangeText={onChange}
+                      keyboardType="email-address"
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                    />
+                  </View>
+                </View>
               )}
             />
           </View>
@@ -119,7 +141,9 @@ const dispatch = useDispatch<AppDispatch>()
 
         <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
-            <Icon name="lock" size={18} color={theme.colors.subtext} />
+            <View style={{ marginRight: 12 }}>
+              <Icons.Password />
+            </View>
             <Controller
               control={control}
               name="password"
@@ -131,24 +155,26 @@ const dispatch = useDispatch<AppDispatch>()
                 },
               }}
               render={({ field: { onChange, value } }) => (
-                <>
-                  <TextInput
-                    style={styles.input}
-                    placeholder={t('fields.password')}
-                    placeholderTextColor={theme.colors.subtext}
-                    value={value}
-                    onChangeText={onChange}
-                    secureTextEntry={!showPassword}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                  />
+                <View style={{paddingVertical:8,flexDirection:'row',alignItems:'center',justifyContent:'space-between',width:'85%'}}>
+                  <View><Text style={{paddingBottom:3,color:'#6B7280',fontSize:10,fontWeight:'400'}}>{t('fields.password')}</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder={t('fields.password')}
+                      placeholderTextColor={theme.colors.subtext}
+                      value={value}
+                      onChangeText={onChange}
+                      secureTextEntry={!showPassword}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                    />
+                  </View>
                   <TouchableOpacity
                     onPress={() => setShowPassword(!showPassword)}
                     style={styles.eyeButton}
                   >
                     <Icon name={showPassword ? "eye-off" : "eye"} size={18} color={theme.colors.subtext} />
                   </TouchableOpacity>
-                </>
+                </View>
               )}
             />
           </View>
@@ -159,7 +185,9 @@ const dispatch = useDispatch<AppDispatch>()
 
         <View style={styles.inputContainer}>
           <View style={styles.inputWrapper}>
-            <Icon name="lock" size={18} color={theme.colors.subtext} />
+            <View style={{ marginRight: 12 }}>
+              <Icons.Password />
+            </View>
             <Controller
               control={control}
               name="password_confirmation"
@@ -171,24 +199,26 @@ const dispatch = useDispatch<AppDispatch>()
                 },
               }}
               render={({ field: { onChange, value } }) => (
-                <>
-                  <TextInput
-                    style={styles.input}
-                    placeholder={t('fields.confirmPassword')}
-                    placeholderTextColor={theme.colors.subtext}
-                    value={value}
-                    onChangeText={onChange}
-                    secureTextEntry={!showConfirmPassword}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                  />
+                <View style={{paddingVertical:8,flexDirection:'row',alignItems:'center',justifyContent:'space-between',width:'85%'}}>
+                  <View><Text style={{paddingBottom:3,color:'#6B7280',fontSize:10,fontWeight:'400'}}>{t('fields.confirmPassword')}</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder={t('fields.confirmPassword')}
+                      placeholderTextColor={theme.colors.subtext}
+                      value={value}
+                      onChangeText={onChange}
+                      secureTextEntry={!showConfirmPassword}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                    />
+                  </View>
                   <TouchableOpacity
                     onPress={() => setShowConfirmPassword(!showConfirmPassword)}
                     style={styles.eyeButton}
                   >
                     <Icon name={showConfirmPassword ? "eye-off" : "eye"} size={18} color={theme.colors.subtext} />
                   </TouchableOpacity>
-                </>
+                </View>
               )}
             />
           </View>
@@ -201,6 +231,7 @@ const dispatch = useDispatch<AppDispatch>()
           label={t('cta.signUp')} 
           onPress={handleSubmit(onSubmit)}
           style={styles.signUpButton}
+          textStyle={{color:'black',fontSize:16,fontWeight:'400'}}
         />
 
         {/* <AppleButton
@@ -221,34 +252,48 @@ const dispatch = useDispatch<AppDispatch>()
         </View>
       </View>
     </ScrollView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
   container: { 
     flex: 1, 
-    backgroundColor: theme.colors.bg, 
-    padding: 16 
+    backgroundColor: 'transparent',
+    paddingTop: '30%',
+  },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'flex-end',
+    padding: 16,
+    paddingBottom: 40,
   },
   header: {
-    marginTop: 40,
     marginBottom: 32,
   },
   brand: { 
     color: '#fff', 
     fontSize: 40, 
-    fontWeight: '900', 
-    marginBottom: 8 
+    fontWeight: '400', 
+    marginBottom: 8,
+    textAlign: 'center'
   },
   welcome: { 
     color: '#fff', 
-    fontSize: 28, 
-    fontWeight: '800', 
-    marginBottom: 4 
+    fontSize: 20, 
+    fontWeight: '400', 
+    marginBottom: 4,
+    textAlign: 'center'
   },
   subtitle: { 
     color: theme.colors.subtext, 
-    fontSize: 16 
+    fontSize: 14,
+    textAlign: 'center'
   },
   form: {
     flex: 1,
@@ -266,7 +311,7 @@ const styles = StyleSheet.create({
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.card,
+    backgroundColor: 'rgba(45, 38, 75, 0.4)',
     borderColor: theme.colors.border,
     borderWidth: 2,
     borderRadius: theme.radius,
@@ -284,6 +329,13 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   signUpButton: {
+    backgroundColor: 'white',
+    paddingVertical: 19,
+    paddingHorizontal: 24,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
     marginTop: 8,
     marginBottom: 16,
   },

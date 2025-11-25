@@ -70,7 +70,7 @@ export default function NameChargeModal() {
       />
       
       <TextInput 
-        placeholder="Surname" 
+        placeholder={t('common.surname')} 
         placeholderTextColor="#AAA" 
         value={surname}
         onChangeText={setSurname} 

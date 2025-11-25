@@ -107,7 +107,7 @@ letterSpacing:0.9
   },
   ghostText: { color: 'white', fontSize: 16, fontWeight: '700', fontFamily: getFontFamily('700'), flexShrink: 1 },
   apple: {
-    backgroundColor: '#000', paddingVertical: 14, paddingHorizontal: 18, borderRadius: 26, alignItems: 'center', flex: 1, minWidth: 0
+   marginHorizontal:110, backgroundColor: '#000', paddingVertical: 14,  alignItems: 'center',justifyContent:'center' 
   },
   appleText: { color: '#fff', fontSize: 16, fontWeight: '700', fontFamily: getFontFamily('700'), flexShrink: 1 },
   rowCenter: { flexDirection: 'row', alignItems: 'center', gap: 8 },

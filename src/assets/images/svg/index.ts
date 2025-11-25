@@ -28,10 +28,17 @@ import Name from './name.svg';
 import Surname from './surname.svg';
 import Calendar from './calendar.svg';
 import ArrowButton from './arrowButton.svg';
-
+import Success from './success.svg';
+import EmailLogin from './emailLogin.svg';
+import Password from './password.svg';
+import Flesh from './flesh.svg';
 
 export const Icons = {
+    Password,
+    Flesh,
     Cards,
+    EmailLogin,
+    Success,
     Name,
     Surname,
     Calendar,

@@ -30,6 +30,9 @@ import MyProfile from '../screens/MyProfile';
 import ImageGallery from '../screens/ImageGallery';
 import CategoryCards from '../screens/CategoryCards';
 import CategoryStreams from '../screens/CategoryStreams';
+import OnboardingFirst from '../screens/OnboardingFirst';
+import OnboardingSecond from '../screens/OnboardingSecond';
+import OnboardingThird from '../screens/OnboardingThird';
 import { HomeIcon, CardsIcon, StreamsIcon, ProfileIcon } from '../components/TabBarIcons';
 import BackgroundWrapper from '../components/BackgroundWrapper';
 import { useApp } from '../store/app';
@@ -267,7 +270,29 @@ export default function RootNavigator() {
   return (
     <NavigationContainer theme={DarkTheme}>
       
-      <Stack.Navigator initialRouteName={isLoggedIn ? 'Tabs' : 'Login'}>
+      <Stack.Navigator initialRouteName={isLoggedIn ? 'Tabs' : 'OnboardingFirst'}>
+        <Stack.Screen 
+          name="OnboardingFirst" 
+          component={OnboardingFirst} 
+          options={{ 
+            headerShown: false,
+            gestureEnabled: false
+          }} 
+        />
+        <Stack.Screen 
+          name="OnboardingSecond" 
+          component={OnboardingSecond} 
+          options={{ 
+            headerShown: false
+          }} 
+        />
+        <Stack.Screen 
+          name="OnboardingThird" 
+          component={OnboardingThird} 
+          options={{ 
+            headerShown: false
+          }} 
+        />
         <Stack.Screen 
           name="Login" 
           component={Login} 
