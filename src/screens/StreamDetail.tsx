@@ -134,10 +134,11 @@ export default function StreamDetail() {
                 // Wait for Redux state to update, then navigate
                 // RunningFlowScreen will find the stream from the updated list using streamId
                 setTimeout(() => {
-                  nav.navigate('StreamsTab', {
+                  nav.navigate('ProfileTab', {
                     screen: 'RunningFlowScreen',
                     params: { 
-                      streamId: stream.id
+                      streamId: stream.id,
+                      returnToScreen: 'StreamsMain'
                     }
                   });
                 }, 500);
@@ -155,7 +156,10 @@ export default function StreamDetail() {
   
   // Hide header
   useEffect(() => {
-    nav.setOptions({ headerShown: false });
+    nav.setOptions({ 
+      headerShown: false,
+      gestureEnabled: true, // Allow swipe back
+    });
   }, [nav]);
 
   return (

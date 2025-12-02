@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useLayoutEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Alert, BackHandler } from 'react-native';
-import { useRoute, useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useRoute, useNavigation, useFocusEffect, CommonActions } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { theme, getFontFamily } from '../theme';
 import CoinsHeader from '../components/CoinsHeader';
@@ -25,6 +25,12 @@ export default function RunningFlowScreen() {
   // Get ownedStream from route params or find it from the refreshed list (prioritize list for updated data)
   const routeOwnedStream = route.params?.stream;
   const routeStreamId = route.params?.streamId;
+  const returnToScreen = route.params?.returnToScreen; // Track where to return to (undefined if not set)
+  
+  // Debug: log the returnToScreen value
+  React.useEffect(() => {
+    console.log('RunningFlowScreen - returnToScreen:', returnToScreen);
+  }, [returnToScreen]);
   
   // If streamId is provided, find it from the list, otherwise use route params or find by id
   const ownedStream = routeStreamId 
@@ -48,7 +54,57 @@ export default function RunningFlowScreen() {
     return durationMap[normalized] || '';
   };
 
-  // Override back button to always navigate to Profile
+  // Function to handle back navigation
+  const handleBackNavigation = React.useCallback(() => {
+    nav.navigate('ProfileTab', { screen: 'ProfileMain' });
+    // console.log('handleBackNavigation - returnToScreen:', returnToScreen, 'type:', typeof returnToScreen);
+    // console.log('route.params:', route.params);
+    
+    // // Get returnToScreen from route params directly to ensure we have the latest value
+    // const currentReturnToScreen = route.params?.returnToScreen;
+    // console.log('currentReturnToScreen:', currentReturnToScreen);
+    
+    // // Only navigate to MyStreams if explicitly set to 'MyStreams'
+    // if (currentReturnToScreen === 'MyStreams') {
+    //   console.log('Navigating to MyStreams');
+    //   // Navigate to MyStreams using root navigator
+    //   // Get the root navigator (3 levels up: RunningFlowScreen -> ProfileStack -> ProfileTab -> Tabs -> Root)
+    //   const rootNav = nav.getParent()?.getParent()?.getParent()?.getParent();
+    //   if (rootNav) {
+    //     // Navigate to MyStreams in the root stack
+    //     rootNav.navigate('MyStreams');
+    //   } else {
+    //     // Fallback: try navigating through parent navigators
+    //     try {
+    //       const parentNav = nav.getParent();
+    //       if (parentNav) {
+    //         const grandParentNav = parentNav.getParent();
+    //         if (grandParentNav) {
+    //           const greatGrandParentNav = grandParentNav.getParent();
+    //           if (greatGrandParentNav) {
+    //             greatGrandParentNav.navigate('MyStreams');
+    //           } else {
+    //             // Try using CommonActions
+    //             nav.dispatch(CommonActions.navigate({ name: 'MyStreams' }));
+    //           }
+    //         }
+    //       }
+    //     } catch (error) {
+    //       console.log('Navigation error:', error);
+    //     }
+    //   }
+    // } else if (currentReturnToScreen === 'StreamsMain') {
+    //   console.log('Navigating to StreamsMain');
+    //   // If we came from StreamsMain, navigate back to it
+    //   nav.navigate('StreamsTab', { screen: 'StreamsMain' });
+    // } else {
+    //   console.log('Navigating to Profile (default)');
+    //   // Default: navigate to Profile (when returnToScreen is null, undefined, 'Profile', or any other value)
+    //   nav.navigate('ProfileTab', { screen: 'ProfileMain' });
+    // }
+  }, [nav, route.params]);
+
+  // Override back button to navigate to the appropriate screen
   useLayoutEffect(() => {
     nav.setOptions({
       headerLeft: () => null, // Remove default back button
@@ -58,18 +114,17 @@ export default function RunningFlowScreen() {
     const unsubscribe = nav.addListener('beforeRemove', (e: any) => {
       // Prevent default behavior
       e.preventDefault();
-      // Navigate to Profile instead
-      nav.navigate('ProfileTab', { screen: 'ProfileMain' });
+      handleBackNavigation();
     });
 
     return unsubscribe;
-  }, [nav]);
+  }, [nav, returnToScreen]);
 
-  // Handle Android hardware back button to navigate to Profile
+  // Handle Android hardware back button
   useFocusEffect(
     React.useCallback(() => {
       const onBackPress = () => {
-        nav.navigate('ProfileTab', { screen: 'ProfileMain' });
+        handleBackNavigation();
         return true; // Prevent default back behavior
       };
 
@@ -77,7 +132,7 @@ export default function RunningFlowScreen() {
       const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
 
       return () => backHandler.remove();
-    }, [nav])
+    }, [nav, returnToScreen])
   );
 
   // Set default selected duration to "hour" when ownedStream prices are available
@@ -247,7 +302,7 @@ export default function RunningFlowScreen() {
   };
 
   const handleBackToProfile = () => {
-    nav.navigate('ProfileTab', { screen: 'ProfileMain' });
+    handleBackNavigation();
   };
 
   return (

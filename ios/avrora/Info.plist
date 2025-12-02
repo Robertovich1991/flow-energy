@@ -45,6 +45,10 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your photo library to save videos and images to your gallery.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We need permission to add videos and images to your photo library.</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

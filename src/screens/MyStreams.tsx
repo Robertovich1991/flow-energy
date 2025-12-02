@@ -61,15 +61,13 @@ export default function MyStreams() {
               ownedStream={ownedStream}
               totalDuration={(transactions as any)?.data?.[index]}
               onPress={() => {
-                // Navigate to ImageGallery with stream image (convert single image to array)
-                const images = ownedStream.stream.image 
-                  ? (ownedStream.stream.image === '/images/default.jpg' 
-                      ? [require('../assets/images/flowImage.jpg')]
-                      : [`http://api.go2winbet.online${ownedStream.stream.image}`])
-                  : [];
-                navigation.navigate('ImageGallery', {
-                  images: images,
-                  initialIndex: 0
+                // Navigate to RunningFlowScreen with returnToScreen parameter
+                navigation.navigate('ProfileTab', {
+                  screen: 'RunningFlowScreen',
+                  params: { 
+                    stream: ownedStream,
+                    returnToScreen: 'MyStreams'
+                  }
                 });
               }}
             />

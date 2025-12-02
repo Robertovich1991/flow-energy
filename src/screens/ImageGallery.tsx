@@ -1,11 +1,13 @@
 import React, { useMemo, useRef, useCallback, useState } from 'react';
-import { View, FlatList, Image, Dimensions, StatusBar, TouchableWithoutFeedback, Animated, TouchableOpacity, Alert, Platform, Share, Text, StyleSheet } from 'react-native';
+import { View, FlatList, Image, Dimensions, StatusBar, TouchableWithoutFeedback, Animated, TouchableOpacity, Alert, Platform, Share, Text, StyleSheet, PermissionsAndroid } from 'react-native';
 import Video from 'react-native-video';
 import Icon from '../components/Icon';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { theme, getFontFamily } from '../theme';
 import { Icons } from '../assets/images/svg';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import RNFS from 'react-native-fs';
+import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 
 type GalleryRouteParams = {
   ImageGallery: {
@@ -41,17 +43,41 @@ console.log(cardTitle,'[[[[[[[[[');
     }, 0);
   }, [initialIndex]);
 
+  const requestStoragePermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Storage Permission',
+            message: 'App needs access to storage to save media to your gallery',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          }
+        );
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    }
+    // iOS permissions are requested automatically when saving
+    // They are configured in Info.plist
+    return true;
+  };
+
   const downloadImage = async () => {
     if (isDownloading) return;
     
     const currentImage = images[currentImageIndex];
     if (!currentImage) return;
 
-    // Check if it's a local image (number) - can't share local images
+    // Check if it's a local image (number) - can't download local images
     if (typeof currentImage === 'number') {
       Alert.alert(
-        'Local Image',
-        'This is a local image and cannot be shared directly.',
+        'Local Media',
+        'This is a local file and cannot be downloaded.',
         [{ text: 'OK' }]
       );
       return;
@@ -60,32 +86,110 @@ console.log(cardTitle,'[[[[[[[[[');
     setIsDownloading(true);
     
     try {
-      // Use React Native's Share API to save the image
-      const result = await Share.share({
-        url: currentImage,
-        message: Platform.OS === 'ios' 
-          ? 'Save this image to your Photos app' 
-          : 'Save this image to your device'
-      });
-
-      if (result.action === Share.sharedAction) {
+      const mediaUrl = typeof currentImage === 'string' ? currentImage : String(currentImage);
+      const isVideo = mediaUrl.toLowerCase().endsWith('.mp4');
+      
+      // Construct full URL if it's a relative path
+      const fullUrl = mediaUrl.startsWith('http') 
+        ? mediaUrl 
+        : `http://api.go2winbet.online${mediaUrl}`;
+      
+      // Get file name from URL
+      const fileName = mediaUrl.split('/').pop() || (isVideo ? 'video.mp4' : 'image.jpg');
+      
+      // Request permissions for Android
+      const hasPermission = await requestStoragePermission();
+      if (!hasPermission) {
         Alert.alert(
-          'Image Shared',
-          Platform.OS === 'ios' 
-            ? 'You can save the image to your Photos app from the share menu.'
-            : 'You can save the image to your device from the share menu.',
+          'Permission Denied',
+          'Storage permission is required to save media to your gallery.',
           [{ text: 'OK' }]
         );
-      } else if (result.action === Share.dismissedAction) {
-        // User dismissed the share dialog
-        console.log('Share dialog dismissed');
+        setIsDownloading(false);
+        return;
       }
       
-    } catch (error) {
-      console.error('Share error:', error);
+      // Determine save path for temporary download
+      const downloadPath = Platform.OS === 'ios'
+        ? `${RNFS.DocumentDirectoryPath}/${fileName}`
+        : `${RNFS.DownloadDirectoryPath}/${fileName}`;
+      
+      // Download the file first
+      const downloadResult = await RNFS.downloadFile({
+        fromUrl: fullUrl,
+        toFile: downloadPath,
+        background: true,
+        discretionary: true,
+      }).promise;
+      
+      if (downloadResult.statusCode === 200) {
+        // Verify file exists before saving
+        const fileExists = await RNFS.exists(downloadPath);
+        if (!fileExists) {
+          throw new Error('Downloaded file not found');
+        }
+
+        // Save to gallery using CameraRoll
+        try {
+          // Use the path without file:// prefix for CameraRoll
+          const fileUri = Platform.OS === 'ios' 
+            ? downloadPath // iOS doesn't need file:// prefix
+            : `file://${downloadPath}`; // Android needs file:// prefix
+          
+          const saveOptions = isVideo 
+            ? { type: 'video' as const, album: 'Flow Up' }
+            : { type: 'photo' as const, album: 'Flow Up' };
+          
+          const savedUri = await CameraRoll.save(fileUri, saveOptions);
+          console.log('Saved to gallery:', savedUri);
+          
+          Alert.alert(
+            'Success',
+            isVideo 
+              ? 'Video has been saved to your gallery!'
+              : 'Image has been saved to your gallery!',
+            [{ text: 'OK' }]
+          );
+          
+          // Clean up temporary file after saving to gallery
+          RNFS.unlink(downloadPath).catch(err => console.log('Cleanup error:', err));
+        } catch (saveError: any) {
+          console.error('Save to gallery error:', saveError);
+          // Fallback to Share API if CameraRoll fails
+          try {
+            const result = await Share.share({
+              url: Platform.OS === 'ios' 
+                ? `file://${downloadPath}`
+                : `file://${downloadPath}`,
+              message: Platform.OS === 'ios' 
+                ? `Save this ${isVideo ? 'video' : 'image'} to your Photos app` 
+                : `Save this ${isVideo ? 'video' : 'image'} to your device`
+            });
+
+            if (result.action === Share.sharedAction) {
+              Alert.alert(
+                'Downloaded',
+                `You can save the ${isVideo ? 'video' : 'image'} to your gallery from the share menu.`,
+                [{ text: 'OK' }]
+              );
+            }
+          } catch (shareError) {
+            Alert.alert(
+              'Error',
+              saveError?.message || 'Unable to save to gallery. Please try again.',
+              [{ text: 'OK' }]
+            );
+          }
+        }
+      } else {
+        throw new Error(`Download failed with status code: ${downloadResult.statusCode}`);
+      }
+      
+    } catch (error: any) {
+      console.error('Download error:', error);
       Alert.alert(
-        'Error',
-        'Unable to share the image. Please try again.',
+        'Download Error',
+        error?.message || 'Unable to download the media. Please try again.',
         [{ text: 'OK' }]
       );
     } finally {

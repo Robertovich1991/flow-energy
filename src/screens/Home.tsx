@@ -37,7 +37,7 @@ export default function Home() {
         setTimeout(async () => {
             await RNIap.getSubscriptions({skus:productIds});
              const x= await RNIap.getProducts({skus:productIds});
-          console.log(x,suc,'[[[[[[[[[[[[[[[[[[[[[[');
+          console.log(x,suc,'[[[[[[[[[ffffffffffffffff[[[[[[[[[[[[[');
 
         }, 1000); // Wait 1 second        console.log(products,'[[[[[[[[gggggggggggggggggg[[[[[[[[[[[[[[')
       } catch (err) {

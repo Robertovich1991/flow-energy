@@ -304,9 +304,12 @@ export default function Profile() {
                   intensity={ownedStream?.stream?.intensity}
                   useCases={ownedStream?.stream?.use_cases}
                   onPress={() => {
-                    nav.navigate('StreamsTab', {
+                    nav.navigate('ProfileTab', {
                       screen: 'RunningFlowScreen',
-                      params: { stream: ownedStream }
+                      params: { 
+                        stream: ownedStream,
+                        returnToScreen: 'Profile'
+                      }
                     });
                   }}
                 />

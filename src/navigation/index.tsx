@@ -83,7 +83,6 @@ function StreamsStackScreen() {
     >
       <StreamsStack.Screen name="StreamsMain" component={Streams} />
       <StreamsStack.Screen name="StreamDetail" component={StreamDetail} options={{ headerShown: false }} />
-      <StreamsStack.Screen name="RunningFlowScreen" component={RunningFlowScreen} options={{ headerShown: false }} />
     </StreamsStack.Navigator>
   );
 }
@@ -94,6 +93,7 @@ function ProfileStackScreen() {
     <ProfileStack.Navigator screenOptions={{ headerShown: false }}>
       <ProfileStack.Screen name="ProfileMain" component={Profile} />
       <ProfileStack.Screen name="MyProfile" component={MyProfile} options={{ headerShown: false }} />
+      <ProfileStack.Screen name="RunningFlowScreen" component={RunningFlowScreen} options={{ headerShown: false }} />
     </ProfileStack.Navigator>
   );
 }
@@ -138,6 +138,8 @@ function TabsRoot() {
               alignItems: 'center',
               justifyContent: 'center',
             },
+            // Ensure tabs can always be switched
+            unmountOnBlur: false,
           }}
         >
         <Tabs.Screen
@@ -180,6 +182,38 @@ function TabsRoot() {
             tabBarIcon: ({ focused }: { focused: boolean }) => (
               <StreamsIcon focused={focused} />
             ),
+            listeners: ({ navigation, route }: any) => ({
+              tabPress: (e: any) => {
+                // Reset the StreamsStack to StreamsMain when tab is pressed
+                // This ensures we always show StreamsMain, not RunningFlowScreen or StreamDetail
+                const state = navigation.getState();
+                if (state) {
+                  const streamsTabState = state.routes.find((r: any) => r.name === 'StreamsTab');
+                  if (streamsTabState && streamsTabState.state) {
+                    const streamsStackState = streamsTabState.state;
+                    if (streamsStackState.index > 0) {
+                      // Use setTimeout to ensure reset happens after tab switch completes
+                      setTimeout(() => {
+                        navigation.dispatch(
+                          CommonActions.reset({
+                            index: 0,
+                            routes: [
+                              {
+                                name: 'StreamsTab',
+                                state: {
+                                  routes: [{ name: 'StreamsMain' }],
+                                  index: 0,
+                                },
+                              },
+                            ],
+                          })
+                        );
+                      }, 100);
+                    }
+                  }
+                }
+              },
+            }),
           }}
         />
         <Tabs.Screen
@@ -218,7 +252,37 @@ function TabsRoot() {
                 {t('tabs.profile')}
               </Text>
             ),
-            tabBarIcon: ({ focused }: { focused: boolean }) => <ProfileIcon focused={focused} />
+            tabBarIcon: ({ focused }: { focused: boolean }) => <ProfileIcon focused={focused} />,
+            listeners: ({ navigation }: any) => ({
+              tabPress: (e: any) => {
+                // Ensure Profile tab can be accessed even when other tabs have nested screens
+                // This allows switching tabs even when StreamDetail is open
+                const state = navigation.getState();
+                if (state) {
+                  const profileTabState = state.routes.find((r: any) => r.name === 'ProfileTab');
+                  if (profileTabState && profileTabState.state) {
+                    const profileStackState = profileTabState.state;
+                    if (profileStackState.index > 0) {
+                      // Reset to ProfileMain if we're deeper in the stack
+                      navigation.dispatch(
+                        CommonActions.reset({
+                          index: 0,
+                          routes: [
+                            {
+                              name: 'ProfileTab',
+                              state: {
+                                routes: [{ name: 'ProfileMain' }],
+                                index: 0,
+                              },
+                            },
+                          ],
+                        })
+                      );
+                    }
+                  }
+                }
+              },
+            }),
           }}
         />
         <Tabs.Screen
@@ -334,7 +398,6 @@ export default function RootNavigator() {
           options={{ headerShown: false, presentation: 'modal' }}
         />
         <Stack.Screen name="StreamSession" component={StreamSession} options={{ title: 'Session' }} />
-        <Stack.Screen name="RunningFlowScreen" component={RunningFlowScreen} options={{ headerShown: false }} />
         <Stack.Screen name="NameChargeModal" component={NameChargeModal} options={{ presentation: 'modal', title: 'Charge' }} />
         <Stack.Screen name="StreamAccessModal" component={StreamAccessModal} options={{ presentation: 'modal', title: 'Access' }} />
       </Stack.Navigator>
