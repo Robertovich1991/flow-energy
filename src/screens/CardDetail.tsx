@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView, Alert, Image, ImageBackground, Touc
 import Video from 'react-native-video';
 import RNFS from 'react-native-fs';
 import { useTranslation } from 'react-i18next';
-import { theme } from '../theme';
+import { theme, getFontFamily } from '../theme';
 import { PrimaryButton, GhostButton, SubmitButton } from '../components/Buttons';
 import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -314,7 +314,7 @@ export default function CardDetail() {
                 setDescriptionY(y);
               }}
             >
-              <Text style={styles.desc}>{card.description}</Text>
+              {/* <Text style={styles.desc}>{card.description}</Text> */}
             </View>
           )}
 
@@ -328,12 +328,7 @@ export default function CardDetail() {
               <TouchableOpacity 
                 style={styles.infoButton} 
                 onPress={() => {
-                  if (descriptionY > 0) {
-                    scrollViewRef.current?.scrollTo({ y: descriptionY - 20, animated: true });
-                  } else {
-                    // Fallback: scroll to end if position not measured yet
-                    scrollViewRef.current?.scrollToEnd({ animated: true });
-                  }
+                  nav.navigate('CardInfo', { card });
                 }}
               >
                 <Text style={styles.infoButtonTitle}>INFO</Text>
@@ -473,7 +468,7 @@ export default function CardDetail() {
 const styles = StyleSheet.create({
   container: { backgroundColor: '#161427', flex: 1 },
   scrollContent: { paddingHorizontal: 0, paddingTop: 0, flexGrow: 1 },
-  title: { color: '#fff', fontSize: 24, fontWeight: '600', textAlign: 'center', marginBottom: 12 },
+  title: { color: '#fff', fontSize: 24, fontWeight: '600', fontFamily: getFontFamily('600'), textAlign: 'center', marginBottom: 12 },
   imageWrapper: { borderRadius: 0, overflow: 'hidden', alignSelf: 'stretch', position: 'relative', width: '100%', height: Dimensions.get('window').height, marginTop: 0, top: 0 },
   headerOverlay: {
     position: 'absolute',
@@ -520,7 +515,8 @@ const styles = StyleSheet.create({
   loadingText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '600'
+    fontWeight: '600',
+    fontFamily: getFontFamily('600'),
   },
   modalBackground: {
     flex: 1,
@@ -550,25 +546,30 @@ const styles = StyleSheet.create({
   errorText: {
     color: '#ff6b6b',
     fontSize: 16,
-    fontWeight: '600'
+    fontWeight: '600',
+    fontFamily: getFontFamily('600'),
   },
   // coverTitle: { color:'black', fontSize: 28, fontWeight:'900' },
   desc: { color: theme.colors.subtext, marginTop: 20, fontSize: 16, lineHeight: 24, paddingHorizontal: 16 },
   actionsRow: { justifyContent:'space-between',flexDirection: 'row', gap: 10,  paddingHorizontal: 6, alignItems: 'center', },
   infoButton: {
-    backgroundColor: '#fff',
+    backgroundColor: '#1A1A1A',
     paddingVertical: 8,
     paddingHorizontal: 16,
-    borderRadius: 20,
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
     gap: 6,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
   },
   infoButtonTitle: {
-    color: '#000',
+    color: '#fff',
     fontSize: 16,
     fontWeight: '900',
+    fontFamily: getFontFamily('900'),
+    textTransform: 'uppercase',
   },
  
   infoRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 },
@@ -580,6 +581,7 @@ const styles = StyleSheet.create({
     color: '#B0B0C0',
     fontSize: 16,
     fontWeight: '400',
+    fontFamily: getFontFamily('400'),
     marginTop: 20,
     marginBottom: 8
   },

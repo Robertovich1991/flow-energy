@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme, getFontFamily } from '../theme';
 import { PrimaryButton } from '../components/Buttons';
 import { useNavigation } from '@react-navigation/native';
-  import { PurchaseError, requestSubscription } from 'react-native-iap';
+import { PurchaseError, requestSubscription } from 'react-native-iap';
 import { useSelector, useDispatch } from 'react-redux';
 import { userIdSelector, coinsBalanceSelector } from '../store/selectors/authSelector';
 import { purchaseCoins } from '../store/slices/coinsPurchaseSlice';

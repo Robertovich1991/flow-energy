@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Alert, TouchableOpacity, ImageBackground } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { theme } from '../theme';
+import { theme, getFontFamily } from '../theme';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { coinsBalanceSelector } from '../store/selectors/authSelector';
-import BackgroundWrapper from '../components/BackgroundWrapper';
+import { ownedStreamsListSelector } from '../store/selectors/ownedStreamsSelector';
 import { useDispatch } from 'react-redux';
 import { purchaseStream } from '../store/slices/streamPurchaseSlice';
+import { getOwnedStreamsList } from '../store/slices/ownedStreamsSlice';
 import { Icons } from '../assets/images/svg';
 import CoinsHeader from '../components/CoinsHeader';
+import Svg, { Circle } from 'react-native-svg';
+import GradientButton from '../components/GradientButton';
 
 export default function StreamDetail() {
   const { t } = useTranslation();
@@ -17,6 +20,7 @@ export default function StreamDetail() {
   const route = useRoute<any>();
   const stream = route.params?.stream;
   const coinsBalance = useSelector(coinsBalanceSelector);
+  const ownedStreamsList = useSelector(ownedStreamsListSelector);
   const dispatch = useDispatch();
   const [selectedPrice, setSelectedPrice] = useState<any>(stream.prices?.[0] || null);
 
@@ -32,6 +36,53 @@ export default function StreamDetail() {
     };
     const translationKey = durationMap[normalized];
     return translationKey ? t(translationKey) : durationName;
+  };
+
+  // CircularProgress component showing 00:00
+  const CircularProgress = ({ progress, size = 200, strokeWidth = 10 }: { progress: number, size?: number, strokeWidth?: number }) => {
+    const radius = (size - strokeWidth) / 2;
+    const circumference = 2 * Math.PI * radius;
+    const strokeDashoffset = circumference - (progress / 100) * circumference;
+    const center = size / 2;
+    const progressColor = '#34D399';
+    const bgColor = '#0A3941';
+
+    return (
+      <View style={styles.progressContainer}>
+        <Svg width={size} height={size}>
+          {/* Background circle */}
+          <Circle
+            cx={center}
+            cy={center}
+            r={radius}
+            stroke={bgColor}
+            strokeWidth={strokeWidth}
+            fill="transparent"
+          />
+          {/* Progress circle */}
+          <Circle
+            cx={center}
+            cy={center}
+            r={radius}
+            stroke={progressColor}
+            strokeWidth={strokeWidth}
+            fill="transparent"
+            strokeDasharray={circumference}
+            strokeDashoffset={strokeDashoffset}
+            strokeLinecap="round"
+            transform={`rotate(-90 ${center} ${center})`}
+          />
+        </Svg>
+        <View style={styles.timerTextContainer}>
+          <Text style={[styles.timerText, { color: 'white' }]}>
+            00:00
+          </Text>
+          <Text style={[styles.timerLabel, { color: theme.colors.subtext }]}>
+            {t('common.timeRemaining')}
+          </Text>
+        </View>
+      </View>
+    );
   };
   
   const onStartStream = () => {
@@ -76,9 +127,20 @@ export default function StreamDetail() {
               stream.title, 
               selectedPrice.price_coins, 
               selectedPrice.duration_type_id,
-              () => {
-                Alert.alert(t('common.streamSuccessful'));
-                nav.goBack();
+              async () => {
+                // Refresh owned streams list
+                await dispatch(getOwnedStreamsList() as any);
+                
+                // Wait for Redux state to update, then navigate
+                // RunningFlowScreen will find the stream from the updated list using streamId
+                setTimeout(() => {
+                  nav.navigate('StreamsTab', {
+                    screen: 'RunningFlowScreen',
+                    params: { 
+                      streamId: stream.id
+                    }
+                  });
+                }, 500);
               }
             ) as any);
           }
@@ -96,147 +158,168 @@ export default function StreamDetail() {
     nav.setOptions({ headerShown: false });
   }, [nav]);
 
-  // Determine which image to use
-  const imageSource = stream.image === '/images/default.jpg' 
-    ? require('../assets/images/flowImage.jpg')
-    : { uri: 'http://api.go2winbet.online' + stream.image };
-
   return (
-    <BackgroundWrapper>
+    <ImageBackground 
+      source={require('../assets/images/onboard.png')} 
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
       <CoinsHeader />
       <View style={styles.container}>
-        <Text  style={{color:'white', fontSize: 30, fontWeight: '700'}}>{t('cta.connectToFlows')}</Text>
-     <View style={{backgroundColor:'#101423',paddingTop:40,paddingBottom:32,borderRadius:32}}><Text style={styles.title}>{stream.title}</Text>
+        <Text style={styles.title}>{t('cta.connectToFlows')}</Text>
 
-      {stream.prices && stream.prices.length > 0 && (
-        <>
-          <View style={styles.pricesContainer}>
-            {stream.prices.map((price: any) => {
-              const isSelected = selectedPrice?.id === price.id;
-              return (
-                <TouchableOpacity 
-                  key={price.id} 
-                  style={[
-                    styles.priceButton,
-                    isSelected && styles.priceButtonSelected
-                  ]}
-                  onPress={() => {
-                    setSelectedPrice(price);
-                  }}
-                >
-                  <Text style={[
-                    styles.priceButtonTitle,
-                    isSelected && styles.priceButtonTitleSelected
-                  ]}>
-                    {getDurationTranslation(price.duration_type?.name || '')}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-          {selectedPrice && (
-            <View style={styles.coinsDisplay}>
-              <Icons.Gold width={40} height={40} />
-              {/* <Icon name="coin" size={20} color={theme.colors.primary} /> */}
-              <Text style={styles.coinsText}>{selectedPrice.price_coins}</Text>
+        <View style={styles.streamInfo}>
+          <CircularProgress 
+            progress={0} 
+            size={220} 
+            strokeWidth={12} 
+          />
+
+          <GradientButton 
+            title="START FLOW" 
+            onClickButton={onStartStream}
+            colors={['rgba(0, 198, 255, 1)', 'rgba(0, 114, 255, 1)']}
+            buttonStyle={styles.startButton}
+            icon={<Icons.Flesh width={24} height={24} />}
+            textStyle={{color:'white',fontSize:16,fontWeight:'600',paddingHorizontal:0}}
+          />
+
+          {stream.prices && stream.prices.length > 0 && (
+            <View style={styles.durationButtonsContainer}>
+              {stream.prices.map((price: any, index: number) => {
+                const isSelected = selectedPrice?.id === price.id;
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    style={[
+                      styles.durationButton,
+                      isSelected && styles.durationButtonSelected
+                    ]}
+                    onPress={() => setSelectedPrice(price)}
+                  >
+                    <Text style={[
+                      styles.durationButtonText,
+                      isSelected && styles.durationButtonTextSelected
+                    ]}>
+                      {getDurationTranslation(price.duration_type?.name || price.duration_type) || (price.duration_type?.name || price.duration_type)}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
             </View>
           )}
-        </>
-      )}
 
-      {/* <ImageBackground source={imageSource} style={styles.cover} imageStyle={styles.coverImage}>
-        <View style={{padding: 16, flex: 1, justifyContent: 'space-between'}}>
-          <View style={{flexDirection:'row', alignItems:'center', gap:6}}>
-            <Icon name="play" color="#fff" />
-            <Text style={{color:'#fff'}}>{t('common.stream')}</Text>
-          </View>
-          <Text style={styles.coverTitle}>{stream.title}</Text>
+          {selectedPrice && selectedPrice.price_coins && (
+            <View style={styles.priceContainer}>
+              <Icons.YellowCoins width={24} height={24} />
+              <Text style={styles.priceText}>{selectedPrice.price_coins}</Text>
+            </View>
+          )}
         </View>
-      </ImageBackground> */}
-      {/* <Text style={styles.desc}>{stream.description || 'Experience this powerful stream session designed to enhance your energy and focus.'}</Text> */}
-      {/* <Text style={styles.title}>{stream.use_cases}</Text> */}
-
-      
-      
-      <View style={styles.actionsRow}>
-        <TouchableOpacity style={styles.startButton} onPress={onStartStream}>
-          <Text style={{color:'white', fontSize: 24, fontWeight: '700'}}>{t('cta.buy')}</Text>
-        </TouchableOpacity>
-        {/* <PrimaryButton 
-        
-          leftIcon="play" 
-          rightIcon="arrow-right" 
-          label={t('cta.startStream') + (selectedPrice ? ` · ${selectedPrice.price_coins} coins` : '')} 
-          onPress={onStartStream} 
-        /> */}
-        {/** <GhostButton leftIcon="lock" label={t('cta.getAccess')} onPress={onGetAccess} /> **/}
-      </View></View> 
-      {/* <View style={styles.infoRow}>
-        <View style={styles.infoItem}>
-          <Icon name="clock" size={16} color="#E0E0E6" />
-          <Text style={styles.info}>10–15 мин</Text>
-        </View>
-        <View style={styles.infoItem}>
-          <Icon name="headphones" size={16} color="#E0E0E6" />
-          <Text style={styles.info}>Наушники</Text>
-        </View>
-        <View style={styles.infoItem}>
-          <Icon name="play" size={16} color="#E0E0E6" />
-          <Text style={styles.info}>Онлайн</Text>
-        </View> */}
-      {/* </View> */}
-      <View></View>
       </View>
-    </BackgroundWrapper>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0D0B16', padding: 16, justifyContent:'space-between' },
-  title: { color:'#fff', fontSize: 32, fontWeight: '900' ,textAlign:'center'},
-  pricesContainer: { 
-    flexDirection: 'row', 
-    flexWrap: 'wrap', 
-    gap: 10, 
-    marginTop: 16,
-    marginBottom: 12,
-    paddingHorizontal: 66
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
   },
-  priceButton: {
-    width: '48%',
-    backgroundColor: 'white',
-    borderColor: theme.colors.border,
-  //  borderWidth: 2,
-    borderRadius: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 8,
+  container: {
+    flex: 1,
+    backgroundColor: 'transparent',
+    padding: 16,
+    alignItems: 'center',
+  },
+  title: {
+    color: '#fff',
+    fontSize: 36,
+    fontWeight: '600',
+    fontFamily: getFontFamily('600'),
+    textAlign: 'center',
+    width: '100%',
+  },
+  streamInfo: {
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  progressContainer: {
+    position: 'relative',
     alignItems: 'center',
     justifyContent: 'center',
+    marginVertical: 24,
   },
-  priceButtonSelected: {
-    backgroundColor: '#4A90E2',
-   // borderColor: theme.colors.primary,
+  timerTextContainer: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+    paddingBottom: 0,
   },
-  priceButtonTitle: {
-    color: 'black',
-    fontSize: 18,
-    fontWeight: '500',
-    textAlign: 'center',
+  timerText: {
+    fontSize: 40,
+    fontWeight: '700',
+    fontFamily: getFontFamily('700'),
+  },
+  timerLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    fontFamily: getFontFamily('600'),
   },
   startButton: {
-    flex:1,
-    backgroundColor: '#1ED760',
-  //  width: '100%',
-    borderRadius: 16,
-    paddingVertical: 16,
-    marginHorizontal: 32,
+    marginTop: 24,
+    width: 250,
+    marginBottom: 16,
+    shadowColor: '#00D4FF',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  durationButtonsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    padding: 8,
+    marginTop: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    marginBottom: 12,
+    justifyContent: 'center',
+    backgroundColor: 'rgba(15, 17, 26, 0.5)',
+    borderRadius: 16
+  },
+  durationButton: {
+    backgroundColor: 'rgba(15, 17, 26, 0.5)',
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    minWidth: 80,
   },
-  priceButtonTitleSelected: {
-    color: 'white',
+  durationButtonSelected: {
+    backgroundColor: '#1A1A1A',
+    borderWidth: 1,
+    borderColor: '#00D4C8',
   },
-  coinsDisplay: {
+  durationButtonText: {
+    color: '#9CA3AF',
+    fontSize: 16,
+    fontWeight: '500',
+    fontFamily: getFontFamily('500'),
+    textAlign: 'center',
+  },
+  durationButtonTextSelected: {
+    color: '#FFFFFF',
+  },
+  priceContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -244,35 +327,10 @@ const styles = StyleSheet.create({
     marginTop: 12,
     marginBottom: 8,
   },
-  coinsText: {
+  priceText: {
     color: theme.colors.primary,
-    fontSize: 36,
+    fontSize: 24,
     fontWeight: '700',
+    fontFamily: getFontFamily('700'),
   },
-  cover: { 
-    borderColor: theme.colors.border, 
-    borderWidth:2, 
-    borderRadius: 24, 
-    marginTop: 12, 
-    height: 200, 
-    justifyContent: 'space-between', 
-    overflow: 'hidden'
-  },
-  coverImage: { 
-    borderRadius: 24, 
-    width: '100%', 
-    height: '100%', 
-    resizeMode: 'cover' 
-  },
-  coverTitle: { color:'#fff', fontSize: 28, fontWeight:'900' },
-  desc: { color: theme.colors.subtext, marginTop: 16 },
-  useCasesSection: { marginTop: 16 },
-  useCasesTitle: { color: '#fff', fontSize: 18, fontWeight: '700', marginBottom: 8 },
-  useCaseItem: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 6 },
-  useCaseBullet: { color: theme.colors.primary, fontSize: 16, marginRight: 8, marginTop: 2 },
-  useCaseText: { color: theme.colors.subtext, fontSize: 14, flex: 1, lineHeight: 20 },
-  actionsRow: { flexDirection:'row', gap:10, marginTop: 12 },
-  infoRow: { flexDirection:'row', justifyContent:'space-between', marginTop: 12 },
-  infoItem: { flexDirection:'row', alignItems:'center', gap:6 },
-  info: { color: '#E0E0E6' },
 });

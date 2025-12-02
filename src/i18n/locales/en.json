@@ -114,6 +114,7 @@
     "confirmCardPurchase": "Do you really want to buy this card for ${{price}}?",
     "confirmStreamPurchase": "Do you really want to buy this stream for ${{price}}?",
     "cancel": "Cancel",
+    "confirm": "Confirm",
     "logout": "Logout",
     "confirmLogout": "Are you sure you want to logout?",
     "deleteAccount": "Delete Account",
@@ -151,7 +152,8 @@
     "enterYourSurname": "Enter your surname",
     "surname": "Surname",
     "dateOfBirth": "Date of Birth",
-    "flowIsRunning": "Flow is running"
+    "flowIsRunning": "Flow is running",
+    "appleUser": "Apple user"
   },
   "home": {
     "heroTitle": "«Income Boost» + 10 min «Financial Clarity»"

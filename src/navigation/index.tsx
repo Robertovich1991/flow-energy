@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useRef, createContext, useContext } from 'react';
-import { NavigationContainer, DefaultTheme, DarkTheme, useNavigation } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme, DarkTheme, useNavigation, CommonActions } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -14,6 +14,7 @@ import { setScanMeApiAuthorization } from '../services/instance/MainInstance';
 import Home from '../screens/Home';
 import Cards from '../screens/Cards';
 import CardDetail from '../screens/CardDetail';
+import CardInfoScreen from '../screens/CardInfoScreen';
 import NameChargeModal from '../screens/NameChargeModal';
 import Streams from '../screens/Streams';
 import StreamDetail from '../screens/StreamDetail';
@@ -57,6 +58,7 @@ function HomeStackScreen() {
     <HomeStack.Navigator screenOptions={{ headerShown: false }}>
       <HomeStack.Screen name="HomeMain" component={Home} />
       <HomeStack.Screen name="CardDetail" component={CardDetail} options={{ headerShown: false }} />
+      <HomeStack.Screen name="CardInfo" component={CardInfoScreen} options={{ headerShown: false }} />
     </HomeStack.Navigator>
   );
 }
@@ -67,6 +69,7 @@ function CardsStackScreen() {
     <CardsStack.Navigator screenOptions={{ headerShown: false }}>
       <CardsStack.Screen name="CardsMain" component={Cards} />
       <CardsStack.Screen name="CardDetail" component={CardDetail} options={{ headerShown: false }} />
+      <CardsStack.Screen name="CardInfo" component={CardInfoScreen} options={{ headerShown: false }} />
     </CardsStack.Navigator>
   );
 }
@@ -74,7 +77,10 @@ function CardsStackScreen() {
 const StreamsStack = createNativeStackNavigator();
 function StreamsStackScreen() {
   return (
-    <StreamsStack.Navigator screenOptions={{ headerShown: false }}>
+    <StreamsStack.Navigator 
+      initialRouteName="StreamsMain"
+      screenOptions={{ headerShown: false }}
+    >
       <StreamsStack.Screen name="StreamsMain" component={Streams} />
       <StreamsStack.Screen name="StreamDetail" component={StreamDetail} options={{ headerShown: false }} />
       <StreamsStack.Screen name="RunningFlowScreen" component={RunningFlowScreen} options={{ headerShown: false }} />

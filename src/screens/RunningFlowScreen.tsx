@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Alert, BackHandler } from 'react-native';
+import { useRoute, useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
-import { theme } from '../theme';
+import { theme, getFontFamily } from '../theme';
 import CoinsHeader from '../components/CoinsHeader';
+import { useSelector, useDispatch } from 'react-redux';
+import { coinsBalanceSelector } from '../store/selectors/authSelector';
+import { purchaseStream } from '../store/slices/streamPurchaseSlice';
+import { getOwnedStreamsList } from '../store/slices/ownedStreamsSlice';
+import { getCoinsBalance } from '../store/slices/authSlice';
 import { ownedStreamsListSelector } from '../store/selectors/ownedStreamsSelector';
-import { useSelector } from 'react-redux';
 import Svg, { Circle } from 'react-native-svg';
 import GradientButton from '../components/GradientButton';
 import { Icons } from '../assets/images/svg';
@@ -13,7 +17,19 @@ import { Icons } from '../assets/images/svg';
 export default function RunningFlowScreen() {
   const { t } = useTranslation();
   const route = useRoute<any>();
-  const ownedStream = route.params?.stream;
+  const nav = useNavigation<any>();
+  const coinsBalance = useSelector(coinsBalanceSelector);
+  const dispatch = useDispatch();
+  const ownedStreamsList = useSelector(ownedStreamsListSelector);
+  
+  // Get ownedStream from route params or find it from the refreshed list (prioritize list for updated data)
+  const routeOwnedStream = route.params?.stream;
+  const routeStreamId = route.params?.streamId;
+  
+  // If streamId is provided, find it from the list, otherwise use route params or find by id
+  const ownedStream = routeStreamId 
+    ? ownedStreamsList?.find((stream: any) => stream.stream_id === routeStreamId)
+    : (ownedStreamsList?.find((stream: any) => stream.id === routeOwnedStream?.id) || routeOwnedStream);
   const [isActive, setIsActive] = useState<boolean>(true);
   const [remainingTime, setRemainingTime] = useState<number>(0);
   const [progress, setProgress] = useState<number>(0);
@@ -32,22 +48,66 @@ export default function RunningFlowScreen() {
     return durationMap[normalized] || '';
   };
 
+  // Override back button to always navigate to Profile
+  useLayoutEffect(() => {
+    nav.setOptions({
+      headerLeft: () => null, // Remove default back button
+    });
+
+    // Override navigation back behavior
+    const unsubscribe = nav.addListener('beforeRemove', (e: any) => {
+      // Prevent default behavior
+      e.preventDefault();
+      // Navigate to Profile instead
+      nav.navigate('ProfileTab', { screen: 'ProfileMain' });
+    });
+
+    return unsubscribe;
+  }, [nav]);
+
+  // Handle Android hardware back button to navigate to Profile
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        nav.navigate('ProfileTab', { screen: 'ProfileMain' });
+        return true; // Prevent default back behavior
+      };
+
+      // Add event listener for Android back button
+      const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () => backHandler.remove();
+    }, [nav])
+  );
+
+  // Set default selected duration to "hour" when ownedStream prices are available
   useEffect(() => {
-    console.log('Selected stream:', ownedStream, '..........................duration_hours..........................');
+    if (ownedStream?.stream?.prices && ownedStream.stream.prices.length > 0 && !selectedDuration) {
+      // Find hour duration or default to first price
+      const hourPrice = ownedStream.stream.prices.find((price: any) => {
+        const durationName = price.duration_type?.name || price.duration_type || '';
+        return durationName.toLowerCase().trim() === 'hour';
+      });
+      setSelectedDuration(hourPrice || ownedStream.stream.prices[0]);
+    }
+  }, [ownedStream?.stream?.prices]);
+
+  useEffect(() => {
+    console.log('Selected stream:', ownedStream.created_at, ownedStream.expires_at, '..........................expires_at..........................');
     
-    if (!ownedStream?.created_at || ownedStream?.duration_hours === undefined) return;
+    if (!ownedStream?.created_at || !ownedStream?.expires_at) return;
 
     const updateTimer = () => {
       const startTime = new Date(ownedStream.created_at).getTime();
-      const durationMs = ownedStream.duration_hours * 60 * 60 * 1000;
-      const endTime = startTime + durationMs;
+      const endTime = new Date(ownedStream.expires_at).getTime();
       const currentTime = new Date().getTime();
+      const totalDuration = endTime - startTime;
       const elapsed = currentTime - startTime;
       const remaining = Math.max(0, endTime - currentTime);
       
       setIsActive(currentTime < endTime);
       setRemainingTime(remaining);
-      setProgress(Math.min(100, (elapsed / durationMs) * 100));
+      setProgress(Math.min(100, Math.max(0, (elapsed / totalDuration) * 100)));
     };
 
     // Update immediately
@@ -57,7 +117,7 @@ export default function RunningFlowScreen() {
     const interval = setInterval(updateTimer, 1000);
 
     return () => clearInterval(interval);
-  }, [ownedStream]);
+  }, [ownedStream, ownedStreamsList]);
 
   const formatDate = (dateString: string) => {
     if (!dateString) return '';
@@ -81,6 +141,63 @@ export default function RunningFlowScreen() {
       return `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     }
     return `${minutes}:${String(seconds).padStart(2, '0')}`;
+  };
+
+  const onExtendFlow = () => {
+    // Check if a duration is selected
+    if (!selectedDuration) {
+      Alert.alert(
+        t('common.error'),
+        'Please select a duration option',
+        [{ text: t('common.ok') }]
+      );
+      return;
+    }
+
+    // Check if user has sufficient coins balance
+    if (coinsBalance === 0 || coinsBalance < selectedDuration.price_coins) {
+      Alert.alert(
+        t('common.insufficientCoins'),
+        'You need coins to extend this stream. Would you like to buy coins?',
+        [
+          { text: t('common.cancel'), style: 'cancel' },
+          { 
+            text: t('common.buyCoins'), 
+            onPress: () => nav.navigate('CoinsPurchaseModal')
+          }
+        ]
+      );
+      return;
+    }
+
+    // Show confirmation alert before purchasing
+    Alert.alert(
+      t('common.confirmPurchase'),
+      t('common.confirmStreamPurchase', { price: selectedDuration.price_coins }),
+      [
+        { text: t('common.cancel'), style: 'cancel' },
+        { 
+          text: t('common.yesBuy'), 
+          onPress: () => {
+            // Purchase stream extension
+            if (ownedStream?.stream?.id && ownedStream?.stream?.title) {
+              dispatch(purchaseStream(
+                ownedStream.stream.id, 
+                ownedStream.stream.title, 
+                selectedDuration.price_coins, 
+                selectedDuration.duration_type_id,
+                async () => {
+                  // Refresh owned streams list and coins balance
+                  await dispatch(getOwnedStreamsList() as any);
+                  await dispatch(getCoinsBalance() as any);
+                  Alert.alert(t('common.streamSuccessful'));
+                }
+              ) as any);
+            }
+          }
+        }
+      ]
+    );
   };
 
   const CircularProgress = ({ progress, size = 200, strokeWidth = 10, active, remainingTime: time }: { progress: number, size?: number, strokeWidth?: number, active: boolean, remainingTime: number }) => {
@@ -129,13 +246,17 @@ export default function RunningFlowScreen() {
     );
   };
 
+  const handleBackToProfile = () => {
+    nav.navigate('ProfileTab', { screen: 'ProfileMain' });
+  };
+
   return (
     <ImageBackground 
       source={require('../assets/images/onboard.png')} 
       style={styles.backgroundImage}
       resizeMode="cover"
     >
-      <CoinsHeader />
+      <CoinsHeader onBackPress={handleBackToProfile} />
       <View style={styles.container}>
         <Text style={styles.title}>{t('common.flowIsRunning')}</Text>
 
@@ -164,7 +285,7 @@ export default function RunningFlowScreen() {
 
             <GradientButton 
               title="EXTEND FLOW" 
-              onClickButton={() => {}}
+              onClickButton={onExtendFlow}
               colors={['rgba(0, 198, 255, 1)', 'rgba(0, 114, 255, 1)']}
               buttonStyle={styles.extendButton}
               icon={<Icons.Flesh width={24} height={24} />}
@@ -178,13 +299,17 @@ export default function RunningFlowScreen() {
                     key={index}
                     style={[
                       styles.durationButton,
-                      selectedDuration?.duration_type === price.duration_type && styles.durationButtonSelected
+                      (selectedDuration?.duration_type?.id === price.duration_type?.id || 
+                       selectedDuration?.duration_type_id === price.duration_type_id ||
+                       (selectedDuration?.duration_type === price.duration_type)) && styles.durationButtonSelected
                     ]}
                     onPress={() => setSelectedDuration(price)}
                   >
                     <Text style={[
                       styles.durationButtonText,
-                      selectedDuration?.duration_type === price.duration_type && styles.durationButtonTextSelected
+                      (selectedDuration?.duration_type?.id === price.duration_type?.id || 
+                       selectedDuration?.duration_type_id === price.duration_type_id ||
+                       (selectedDuration?.duration_type === price.duration_type)) && styles.durationButtonTextSelected
                     ]}>
                       {getDurationTranslation(price.duration_type?.name || price.duration_type) ? t(getDurationTranslation(price.duration_type?.name || price.duration_type)) : (price.duration_type?.name || price.duration_type)}
                     </Text>
@@ -247,6 +372,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 36,
     fontWeight: '600',
+    fontFamily: getFontFamily('600'),
     textAlign: 'center',
     width: '100%',
   //  marginBottom: 24,
@@ -259,6 +385,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 24,
     fontWeight: '700',
+    fontFamily: getFontFamily('700'),
     marginBottom: 12,
     textAlign: 'center',
   },
@@ -282,6 +409,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+    fontFamily: getFontFamily('600'),
   },
   durationContainer: {
     marginTop: 16,
@@ -296,6 +424,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+    fontFamily: getFontFamily('600'),
   },
   statusContainer: {
     marginTop: 16,
@@ -313,11 +442,14 @@ gap:16,
   statusText: {
     fontSize: 14,
     fontWeight: '600',
+    fontFamily: getFontFamily('600'),
   },
   statusActive: {
     color: '#34D399',
     borderColor:'rgba(16, 185, 129, 0.2)',
-    fontSize:12,fontWeight:'700'
+    fontSize:12,
+    fontWeight:'700',
+    fontFamily: getFontFamily('700'),
   },
   statusInactive: {
     color: '#FF6B6B',
@@ -327,6 +459,14 @@ gap:16,
     marginTop: 24,
     width:250,
     marginBottom: 16,
+    shadowColor: '#00D4FF',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 8,
    // width: '100%',
   },
   progressContainer: {
@@ -346,11 +486,12 @@ gap:16,
   timerText: {
     fontSize: 40,
     fontWeight: '700',
-    fontFamily: 'monospace',
+    fontFamily: getFontFamily('700'),
   },
   timerLabel: {
     fontSize: 14,
     fontWeight: '600',
+    fontFamily: getFontFamily('600'),
   },
   durationButtonsContainer: {
     flexDirection: 'row',
@@ -383,6 +524,7 @@ gap:16,
     color: '#9CA3AF',
     fontSize: 16,
     fontWeight: '500',
+    fontFamily: getFontFamily('500'),
     textAlign: 'center',
   },
   durationButtonTextSelected: {
@@ -400,6 +542,7 @@ gap:16,
     color: theme.colors.primary,
     fontSize: 24,
     fontWeight: '700',
+    fontFamily: getFontFamily('700'),
   },
 });
 

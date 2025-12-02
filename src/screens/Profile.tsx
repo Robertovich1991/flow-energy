@@ -213,6 +213,7 @@ export default function Profile() {
               <TouchableOpacity
                 style={[profileCardStyles.tile, { maxWidth: 145 }]}
                 onPress={() => nav.navigate('ImageGallery', { 
+                  cardTitle: ownedCard?.card?.title,
                   images: ownedCard.card.video === '/images/default.jpg' 
                     ? [require('../assets/images/flowImage.jpg')]
                     : ['http://api.go2winbet.online' + ownedCard.card.video], 
@@ -452,7 +453,7 @@ const profileCardStyles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 120,
+    height: 180,
     borderRadius: 12,
     marginBottom: 8,
   },

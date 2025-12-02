@@ -11,9 +11,10 @@ import { TabNavigationContext } from '../navigation/index';
 type CoinsHeaderProps = {
   showArrow?: boolean;
   transparent?: boolean;
+  onBackPress?: () => void;
 };
 
-export default function CoinsHeader({ showArrow = true, transparent = false }: CoinsHeaderProps) {
+export default function CoinsHeader({ showArrow = true, transparent = false, onBackPress }: CoinsHeaderProps) {
   const nav = useNavigation<any>();
   const coinsBalance = useSelector(coinsBalanceSelector);
   const insets = useSafeAreaInsets();
@@ -34,7 +35,9 @@ export default function CoinsHeader({ showArrow = true, transparent = false }: C
   };
 
   const handleBackPress = () => {
-    if (nav.canGoBack()) {
+    if (onBackPress) {
+      onBackPress();
+    } else if (nav.canGoBack()) {
       nav.goBack();
     }
   };
@@ -46,7 +49,7 @@ export default function CoinsHeader({ showArrow = true, transparent = false }: C
       <View style={styles.leftSection}>
         {showArrow && (
           <TouchableOpacity onPress={handleBackPress} style={styles.backButton}>
-            <Icons.Arrow width={24} height={24} />
+            <Icons.Arrow width={41} height={41} />
           </TouchableOpacity>
         )}
         <Text style={[styles.headerText, { color: 'white', fontSize: 18, fontWeight: '400', paddingLeft: 20 }]}>Flow up</Text>
@@ -88,7 +91,9 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   backButton: {
-    padding: 4,
+    padding: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerText: {
     fontFamily: getFontFamily('600'),

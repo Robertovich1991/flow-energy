@@ -103,6 +103,7 @@
     "confirmCardPurchase": "Вы действительно хотите купить эту карту за ${{price}}?",
     "confirmStreamPurchase": "Вы действительно хотите купить этот поток за ${{price}}?",
     "cancel": "Отмена",
+    "confirm": "Подтвердить",
     "logout": "Выйти",
     "confirmLogout": "Вы уверены, что хотите выйти?",
     "deleteAccount": "Удалить аккаунт",
@@ -140,7 +141,8 @@
     "enterYourSurname": "Введите вашу фамилию",
     "surname": "Фамилия",
     "dateOfBirth": "Дата рождения",
-    "flowIsRunning": "Поток запущен"
+    "flowIsRunning": "Поток запущен",
+    "appleUser": "Пользователь Apple"
   },
   "home": {
     "heroTitle": "«Повышение дохода» + 10 мин «Финансовая ясность»"

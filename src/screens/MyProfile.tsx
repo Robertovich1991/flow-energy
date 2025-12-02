@@ -154,7 +154,7 @@ export default function MyProfile() {
             <View style={{alignItems:'center', padding: 13, gap: 10, flexDirection: 'row', backgroundColor: 'rgba(255, 255, 255, 0.05)', borderWidth: 1, borderColor: 'rgba(255, 255, 255, 0.05)' }}>
               <Icons.MyEmail />
               <View>
-                <Text style={styles.userInfoText}>{t('profile.emailAddress')} </Text><Text style={styles.userInfoText}>{userEmail}</Text></View></View>
+                <Text style={styles.userInfoText}>{t('profile.emailAddress')} </Text><Text  style={styles.userInfoText}>{userEmail && userEmail.toLowerCase().includes('apple') ? t('common.appleUser') : userEmail}</Text></View></View>
           </View>
         )}
 

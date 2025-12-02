@@ -1,26 +1,32 @@
 import React, { useMemo, useRef, useCallback, useState } from 'react';
-import { View, FlatList, Image, Dimensions, StatusBar, TouchableWithoutFeedback, Animated, TouchableOpacity, Alert, Platform, Share } from 'react-native';
+import { View, FlatList, Image, Dimensions, StatusBar, TouchableWithoutFeedback, Animated, TouchableOpacity, Alert, Platform, Share, Text, StyleSheet } from 'react-native';
 import Video from 'react-native-video';
 import Icon from '../components/Icon';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { theme } from '../theme';
+import { theme, getFontFamily } from '../theme';
+import { Icons } from '../assets/images/svg';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type GalleryRouteParams = {
   ImageGallery: {
     images: (string | number)[]; // Support both URI strings and local image numbers
     initialIndex?: number;
+    cardTitle?: string;
   };
 };
 
 export default function ImageGallery() {
   const route = useRoute<any>();
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
   const listRef = useRef<FlatList<string | number>>(null);
   const { width, height } = Dimensions.get('window');
   const images = useMemo(() => route.params?.images ?? [], [route.params]);
   const initialIndex = route.params?.initialIndex ?? 0;
+  const cardTitle = route.params?.cardTitle;
   const [currentImageIndex, setCurrentImageIndex] = useState(initialIndex);
   const [isDownloading, setIsDownloading] = useState(false);
+console.log(cardTitle,'[[[[[[[[[');
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('gestureEnd', () => {
@@ -97,27 +103,42 @@ export default function ImageGallery() {
     <GalleryPage source={item} width={width} height={height} />
   ), [width, height]);
 
+  const handleClose = () => {
+    navigation.goBack();
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: 'black' }}>
       <StatusBar barStyle="light-content" hidden />
-      <TouchableOpacity
-        onPress={downloadImage}
-        disabled={isDownloading}
-        style={{ 
-          position: 'absolute', 
-          top: 16, 
-          right: 16, 
-          zIndex: 10, 
-          backgroundColor: isDownloading ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.5)', 
-          padding: 10, 
-          borderRadius: 20 
-        }}
-        hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
-        accessibilityRole="button"
-        accessibilityLabel={isDownloading ? "Sharing..." : "Share/Save image"}
-      >
-        <Icon name="download" size={22} color={isDownloading ? "#ccc" : "#fff"} />
-      </TouchableOpacity>
+      
+      {/* Header with title and close button */}
+      <View style={[styles.header, { paddingTop: 10 }]}>
+        <TouchableOpacity
+          onPress={handleClose}
+          style={styles.closeButton}
+          hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
+        >
+          <Icons.Arrow width={32} height={32} />
+        </TouchableOpacity>
+        
+        {cardTitle && (
+          <Text style={styles.cardTitle} numberOfLines={1}>
+            {cardTitle}
+          </Text>
+        )}
+        
+        <TouchableOpacity
+          onPress={downloadImage}
+          disabled={isDownloading}
+          style={styles.downloadButton}
+          hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
+          accessibilityRole="button"
+          accessibilityLabel={isDownloading ? "Sharing..." : "Share/Save image"}
+        >
+          <Icon name="download" size={22} color={isDownloading ? "#ccc" : "#fff"} />
+        </TouchableOpacity>
+      </View>
+      
       <FlatList
         ref={listRef}
         data={images}
@@ -196,4 +217,37 @@ function GalleryPage({ source, width, height }: { source: string | number; width
   );
 }
 
-
+const styles = StyleSheet.create({
+  header: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingBottom: 12,
+    zIndex: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+  },
+  closeButton: {
+    padding: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cardTitle: {
+    flex: 1,
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+    fontFamily: getFontFamily('600'),
+    textAlign: 'center',
+    marginHorizontal: 16,
+  },
+  downloadButton: {
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    padding: 10,
+    borderRadius: 20,
+  },
+});

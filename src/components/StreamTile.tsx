@@ -18,7 +18,7 @@ export const StreamTile: React.FC<Props> = ({ title, price, intensity, colors, u
   const { t } = useTranslation();
 
   return (
-    <View style={[styles.tile, { backgroundColor: '#ffff' }]}>
+    <View style={[styles.tile, { backgroundColor: '#2A263E' }]}>
       {/* <View style={[styles.gradient,{backgroundColor: randomColors[0]}]} /> */}
       <View style={{backgroundColor:'#5ac0d7ff',width:50,height:50,borderRadius:100}}></View>
       <View style={{ flex: 1, marginLeft: 22 }}>
@@ -64,7 +64,7 @@ export const OwnedStreamTile: React.FC<Props> = ({ title, price, intensity, colo
 
 const styles = StyleSheet.create({
   tile: { borderWidth: 0, borderRadius: 12, padding: 13, overflow: 'hidden', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12, width: '100%', alignItems: 'center' },
-  title: { color: 'black', fontSize: 20, fontWeight: '800' },
+  title: { color: '#fff', fontSize: 20, fontWeight: '800' },
   priceContainer: { flexDirection: 'row', alignItems: 'center' },
   priceText: { color: 'black', fontSize: 16, fontWeight: '700' },
   meta: { color: '#090101ff', marginTop: 8, fontSize: 12 },

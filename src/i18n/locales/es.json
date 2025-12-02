@@ -114,6 +114,7 @@
     "confirmCardPurchase": "¿Realmente quieres comprar esta carta por ${{price}}?",
     "confirmStreamPurchase": "¿Realmente quieres comprar este flujo por ${{price}}?",
     "cancel": "Cancelar",
+    "confirm": "Confirmar",
     "logout": "Cerrar sesión",
     "confirmLogout": "¿Estás seguro de que quieres cerrar sesión?",
     "deleteAccount": "Eliminar cuenta",
@@ -151,7 +152,8 @@
     "enterYourSurname": "Ingresa tu apellido",
     "surname": "Apellido",
     "dateOfBirth": "Fecha de nacimiento",
-    "flowIsRunning": "El flujo está corriendo"
+    "flowIsRunning": "El flujo está corriendo",
+    "appleUser": "Usuario de Apple"
   },
   "home": {
     "heroTitle": "«Aumento de ingresos» + 10 min «Claridad financiera»"

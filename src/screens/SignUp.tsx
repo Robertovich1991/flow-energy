@@ -8,7 +8,7 @@ import Icon from '../components/Icon';
 import { Icons } from '../assets/images/svg';
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { ISignUpData } from '../store/types';
-import { register } from '../store/slices/authSlice';
+import { register, login } from '../store/slices/authSlice';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../store/config/configStore';
 
@@ -29,12 +29,32 @@ const dispatch = useDispatch<AppDispatch>()
     try {
       dispatch(
         register(data, () => {
-          Alert.alert('Success', 'User registered successfully! Please login to your account', [
-            {
-              text: 'OK',
-              onPress: () => nav.navigate('Login')
-            }
-          ]);
+          // After successful registration, automatically log in the user
+          dispatch(
+            login(
+              {
+                email: data.email,
+                password: data.password,
+                returnSecureToken: true
+              },
+              (email: string) => {
+                // Navigate to Tabs (Home) when login is successful and reset navigation stack
+                nav.reset({
+                  index: 0,
+                  routes: [{ name: 'Tabs' }],
+                });
+              },
+              (error: string) => {
+                // If auto-login fails, show error and navigate to Login
+                Alert.alert('Registration Successful', 'Account created! Please login to continue.', [
+                  {
+                    text: 'OK',
+                    onPress: () => nav.navigate('Login')
+                  }
+                ]);
+              }
+            )
+          );
         })
       );
     } catch (error) {

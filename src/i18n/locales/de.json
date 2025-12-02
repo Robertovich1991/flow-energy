@@ -114,6 +114,7 @@
     "confirmCardPurchase": "Möchtest du diese Karte wirklich für ${{price}} kaufen?",
     "confirmStreamPurchase": "Möchtest du diesen Stream wirklich für ${{price}} kaufen?",
     "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
     "logout": "Abmelden",
     "confirmLogout": "Bist du sicher, dass du dich abmelden möchtest?",
     "deleteAccount": "Konto löschen",
@@ -151,7 +152,8 @@
     "enterYourSurname": "Gib deinen Nachnamen ein",
     "surname": "Nachname",
     "dateOfBirth": "Geburtsdatum",
-    "flowIsRunning": "Flow läuft"
+    "flowIsRunning": "Flow läuft",
+    "appleUser": "Apple-Benutzer"
   },
   "home": {
     "heroTitle": "«Einkommenssteigerung» + 10 Min «Finanzielle Klarheit»"

@@ -3,7 +3,6 @@ import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme, getFontFamily } from '../theme';
-import { PrimaryButton, GhostButton } from '../components/Buttons';
 import { CardTile } from '../components/CardTile';
 import BackgroundWrapper from '../components/BackgroundWrapper';
 import { useNavigation } from '@react-navigation/native';

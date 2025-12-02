@@ -1,11 +1,11 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme } from '../theme';
 import { StreamTile } from '../components/StreamTile';
 import BackgroundWrapper from '../components/BackgroundWrapper';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import CoinsHeader from '../components/CoinsHeader';
 import { useSelector, useDispatch } from 'react-redux';
 import { streamListSelector } from '../store/selectors/streamSelector';
@@ -24,6 +24,25 @@ export default function Streams() {
   useEffect(() => {
     dispatch(getCategoriesList() as any);
   }, [dispatch]);
+
+  // Reset navigation stack when screen is focused (when tab is pressed)
+  useFocusEffect(
+    useCallback(() => {
+      // When the Streams tab is focused, ensure we're on StreamsMain
+      // This prevents showing RunningFlowScreen when tab is pressed
+      const state = nav.getState();
+      if (state) {
+        const streamsTabState = state.routes.find((r: any) => r.name === 'StreamsTab');
+        if (streamsTabState && streamsTabState.state) {
+          const streamsStackState = streamsTabState.state;
+          if (streamsStackState.index > 0) {
+            // If we're not on the first screen (StreamsMain), navigate back
+            nav.dispatch(CommonActions.navigate('StreamsMain'));
+          }
+        }
+      }
+    }, [nav])
+  );
   
   console.log(streams,'............jjjjj.................');
   console.log('Categories data:', categories);
