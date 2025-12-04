@@ -214,6 +214,9 @@ export default function Profile() {
                 style={[profileCardStyles.tile, { maxWidth: 145 }]}
                 onPress={() => nav.navigate('ImageGallery', { 
                   cardTitle: ownedCard?.card?.title,
+                  cardName: ownedCard?.name,
+                  cardSurname: ownedCard?.surname,
+                  cardBirthday: ownedCard?.birthday,
                   images: ownedCard.card.video === '/images/default.jpg' 
                     ? [require('../assets/images/flowImage.jpg')]
                     : ['http://api.go2winbet.online' + ownedCard.card.video], 

@@ -65,7 +65,17 @@ export default function Home() {
         <ImageBackground source={require('../assets/images/home.png')} style={styles.hero}>
           {/* <Text style={styles.heroSup}>AI • {t('sections.popular')}</Text> */}
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 16 }}><View><Text style={styles.heroTitle}>{t('common.eternalFlame')}</Text>
-            <Text style={{ color: '#D1D5DB', fontSize: 12, fontWeight: '400' }}>{t('common.boostsVitality')}</Text></View>        <Icons.ArrowButton />
+            <Text style={{ color: '#D1D5DB', fontSize: 12, fontWeight: '400' }}>{t('common.boostsVitality')}</Text></View>
+          <TouchableOpacity 
+            onPress={() => {
+              if (cards && cards.length > 0) {
+                nav.navigate('CardDetail', { card: cards[0] });
+              }
+            }}
+            hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
+          >
+            <Icons.ArrowButton />
+          </TouchableOpacity>
           </View>
           <View style={styles.ctaRow}>
             {/* <PrimaryButton leftIcon="sparkle" rightIcon="arrow-right" label={t('cta.viewCard')} onPress={() => nav.navigate('CardsTab')} /> */}
@@ -82,6 +92,7 @@ export default function Home() {
               price={`$${card.price}`}
               intensity={card.intensityPct}
               image={card.image}
+              style={{}}
               onPress={() => nav.navigate('CardDetail', { card: card })}
             />
           ))}

@@ -8,12 +8,16 @@ import { Icons } from '../assets/images/svg';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import RNFS from 'react-native-fs';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
+import { applyOverlay } from 'react-native-video-overlay';
 
 type GalleryRouteParams = {
   ImageGallery: {
     images: (string | number)[]; // Support both URI strings and local image numbers
     initialIndex?: number;
     cardTitle?: string;
+    cardName?: string;
+    cardSurname?: string;
+    cardBirthday?: string; // Format: "2022-10-15T00:00:00.000000Z" or "YYYY-MM-DD"
   };
 };
 
@@ -26,9 +30,27 @@ export default function ImageGallery() {
   const images = useMemo(() => route.params?.images ?? [], [route.params]);
   const initialIndex = route.params?.initialIndex ?? 0;
   const cardTitle = route.params?.cardTitle;
+  const cardName = route.params?.cardName;
+  const cardSurname = route.params?.cardSurname;
+  const cardBirthday = route.params?.cardBirthday;
   const [currentImageIndex, setCurrentImageIndex] = useState(initialIndex);
   const [isDownloading, setIsDownloading] = useState(false);
-console.log(cardTitle,'[[[[[[[[[');
+
+  // Format birthday from "YYYY-MM-DD" or ISO string to "dd/mm/yyyy"
+  const formatBirthday = (birthday?: string): string => {
+    if (!birthday) return '';
+    try {
+      // Handle ISO format like "2022-10-15T00:00:00.000000Z"
+      const dateStr = birthday.split('T')[0]; // Get "YYYY-MM-DD" part
+      const [year, month, day] = dateStr.split('-');
+      return `${day}/${month}/${year}`;
+    } catch (error) {
+      console.error('Error formatting birthday:', error);
+      return '';
+    }
+  };
+
+  const formattedBirthday = formatBirthday(cardBirthday);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('gestureEnd', () => {
@@ -95,7 +117,18 @@ console.log(cardTitle,'[[[[[[[[[');
         : `http://api.go2winbet.online${mediaUrl}`;
       
       // Get file name from URL
-      const fileName = mediaUrl.split('/').pop() || (isVideo ? 'video.mp4' : 'image.jpg');
+      let fileName = mediaUrl.split('/').pop() || (isVideo ? 'video.mp4' : 'image.jpg');
+      
+      // If it's a video and we have name/birthday, include it in the filename
+      if (isVideo && (cardName || formattedBirthday)) {
+        // Build filename from name and birthday
+        const namePart = cardName ? cardName.replace(/[^a-zA-Z0-9\s-_]/g, '').replace(/\s+/g, '_').substring(0, 30) : '';
+        const birthdayPart = formattedBirthday ? formattedBirthday.replace(/\//g, '_') : '';
+        const filenameParts = [namePart, birthdayPart].filter(Boolean);
+        const sanitizedInfo = filenameParts.join('_') || 'video';
+        const fileExtension = fileName.split('.').pop() || 'mp4';
+        fileName = `${sanitizedInfo}_${Date.now()}.${fileExtension}`;
+      }
       
       // Request permissions for Android
       const hasPermission = await requestStoragePermission();
@@ -129,12 +162,68 @@ console.log(cardTitle,'[[[[[[[[[');
           throw new Error('Downloaded file not found');
         }
 
+        let finalVideoPath = downloadPath;
+
+        // If it's a video and we have name/birthday, add text overlay
+        if (isVideo && (cardName || formattedBirthday)) {
+          try {
+            const outputFileName = `video_with_info_${Date.now()}.mp4`;
+            const outputPath = Platform.OS === 'ios'
+              ? `${RNFS.DocumentDirectoryPath}/${outputFileName}`
+              : `${RNFS.DownloadDirectoryPath}/${outputFileName}`;
+
+            // Build overlay text: name and birthday
+            const overlayText = [cardName, formattedBirthday].filter(Boolean).join(' • ');
+
+            // react-native-video-overlay is Android-only, so for iOS we'll save with info in filename
+            if (Platform.OS === 'android') {
+              console.log('Adding text overlay to video...');
+              
+              // Use applyOverlay to add text watermark to video
+              const processedPath = await applyOverlay({
+                inputPath: downloadPath,
+                outputPath: outputPath,
+                overlays: [
+                  {
+                    type: 'text',
+                    text: overlayText,
+                    position: 'bottom-center',
+                    fontSize: 28,
+                    fontColor: 'white',
+                    opacity: 1.0,
+                    backgroundColor: 'rgba(0, 0, 0, 0.6)', // Semi-transparent black background
+                  },
+                ],
+                onProgress: (logLine: string) => {
+                  console.log('[FFmpeg]', logLine);
+                },
+              });
+
+              if (processedPath) {
+                finalVideoPath = processedPath;
+                // Clean up original video
+                RNFS.unlink(downloadPath).catch(err => console.log('Cleanup error:', err));
+                console.log('Video processed successfully with text overlay');
+              } else {
+                console.warn('Video processing returned no path, using original');
+              }
+            } else {
+              // For iOS, include name/birthday in filename since react-native-video-overlay is Android-only
+              console.log('iOS: Name and birthday will be included in filename');
+            }
+          } catch (processingError) {
+            console.error('Video processing error:', processingError);
+            // Continue with original video if processing fails
+            finalVideoPath = downloadPath;
+          }
+        }
+
         // Save to gallery using CameraRoll
         try {
           // Use the path without file:// prefix for CameraRoll
           const fileUri = Platform.OS === 'ios' 
-            ? downloadPath // iOS doesn't need file:// prefix
-            : `file://${downloadPath}`; // Android needs file:// prefix
+            ? finalVideoPath // iOS doesn't need file:// prefix
+            : `file://${finalVideoPath}`; // Android needs file:// prefix
           
           const saveOptions = isVideo 
             ? { type: 'video' as const, album: 'Flow Up' }
@@ -152,7 +241,7 @@ console.log(cardTitle,'[[[[[[[[[');
           );
           
           // Clean up temporary file after saving to gallery
-          RNFS.unlink(downloadPath).catch(err => console.log('Cleanup error:', err));
+          RNFS.unlink(finalVideoPath).catch(err => console.log('Cleanup error:', err));
         } catch (saveError: any) {
           console.error('Save to gallery error:', saveError);
           // Fallback to Share API if CameraRoll fails
@@ -225,11 +314,21 @@ console.log(cardTitle,'[[[[[[[[[');
           <Icons.Arrow width={32} height={32} />
         </TouchableOpacity>
         
-        {cardTitle && (
-          <Text style={styles.cardTitle} numberOfLines={1}>
-            {cardTitle}
-          </Text>
-        )}
+        <View style={styles.titleContainer}>
+          {cardTitle && (
+            <Text style={styles.cardTitle} numberOfLines={1}>
+              {cardTitle}
+            </Text>
+          )}
+          {(cardName || cardSurname || formattedBirthday) && (
+            <View style={styles.cardInfoContainer}>
+              <Text style={styles.cardInfo} numberOfLines={1}>
+                {[cardName, cardSurname].filter(Boolean).join(' ')}
+                {formattedBirthday && ` • ${formattedBirthday}`}
+              </Text>
+            </View>
+          )}
+        </View>
         
         <TouchableOpacity
           onPress={downloadImage}
@@ -340,14 +439,30 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  cardTitle: {
+  titleContainer: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 16,
+  },
+  cardTitle: {
     color: '#fff',
     fontSize: 18,
     fontWeight: '600',
     fontFamily: getFontFamily('600'),
     textAlign: 'center',
-    marginHorizontal: 16,
+  },
+  cardInfoContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 4,
+  },
+  cardInfo: {
+    color: '#B0B0C0',
+    fontSize: 12,
+    fontWeight: '400',
+    fontFamily: getFontFamily('400'),
+    textAlign: 'center',
   },
   downloadButton: {
     backgroundColor: 'rgba(0,0,0,0.5)',

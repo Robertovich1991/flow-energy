@@ -2645,6 +2645,34 @@ PODS:
     - SocketRocket
     - Yoga
   - SocketRocket (0.7.1)
+  - VideoOverlay (0.7.6):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -2732,6 +2760,7 @@ DEPENDENCIES:
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - SocketRocket (~> 0.7.1)
+  - VideoOverlay (from `../node_modules/react-native-video-overlay`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -2905,6 +2934,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
+  VideoOverlay:
+    :path: "../node_modules/react-native-video-overlay"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -2993,6 +3024,7 @@ SPEC CHECKSUMS:
   RNScreens: 3693ec4bbc0065151b843269e50e9807644e9918
   RNSVG: 4a4f7d4897abbfdc6dfe30be5d6cc5ffee23ea43
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
+  VideoOverlay: 780a22a97f0e5336d4c02c6c4d02d4ddfc99e9b7
   Yoga: a3ed390a19db0459bd6839823a6ac6d9c6db198d
 
 PODFILE CHECKSUM: 37b4618f040503c6335bbd840fe247c40a18cc12

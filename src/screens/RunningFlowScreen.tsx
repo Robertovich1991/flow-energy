@@ -57,51 +57,7 @@ export default function RunningFlowScreen() {
   // Function to handle back navigation
   const handleBackNavigation = React.useCallback(() => {
     nav.navigate('ProfileTab', { screen: 'ProfileMain' });
-    // console.log('handleBackNavigation - returnToScreen:', returnToScreen, 'type:', typeof returnToScreen);
-    // console.log('route.params:', route.params);
-    
-    // // Get returnToScreen from route params directly to ensure we have the latest value
-    // const currentReturnToScreen = route.params?.returnToScreen;
-    // console.log('currentReturnToScreen:', currentReturnToScreen);
-    
-    // // Only navigate to MyStreams if explicitly set to 'MyStreams'
-    // if (currentReturnToScreen === 'MyStreams') {
-    //   console.log('Navigating to MyStreams');
-    //   // Navigate to MyStreams using root navigator
-    //   // Get the root navigator (3 levels up: RunningFlowScreen -> ProfileStack -> ProfileTab -> Tabs -> Root)
-    //   const rootNav = nav.getParent()?.getParent()?.getParent()?.getParent();
-    //   if (rootNav) {
-    //     // Navigate to MyStreams in the root stack
-    //     rootNav.navigate('MyStreams');
-    //   } else {
-    //     // Fallback: try navigating through parent navigators
-    //     try {
-    //       const parentNav = nav.getParent();
-    //       if (parentNav) {
-    //         const grandParentNav = parentNav.getParent();
-    //         if (grandParentNav) {
-    //           const greatGrandParentNav = grandParentNav.getParent();
-    //           if (greatGrandParentNav) {
-    //             greatGrandParentNav.navigate('MyStreams');
-    //           } else {
-    //             // Try using CommonActions
-    //             nav.dispatch(CommonActions.navigate({ name: 'MyStreams' }));
-    //           }
-    //         }
-    //       }
-    //     } catch (error) {
-    //       console.log('Navigation error:', error);
-    //     }
-    //   }
-    // } else if (currentReturnToScreen === 'StreamsMain') {
-    //   console.log('Navigating to StreamsMain');
-    //   // If we came from StreamsMain, navigate back to it
-    //   nav.navigate('StreamsTab', { screen: 'StreamsMain' });
-    // } else {
-    //   console.log('Navigating to Profile (default)');
-    //   // Default: navigate to Profile (when returnToScreen is null, undefined, 'Profile', or any other value)
-    //   nav.navigate('ProfileTab', { screen: 'ProfileMain' });
-    // }
+ 
   }, [nav, route.params]);
 
   // Override back button to navigate to the appropriate screen

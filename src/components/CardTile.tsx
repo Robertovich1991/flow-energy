@@ -33,10 +33,23 @@ const generateRandomColor = (): string => {
   return `rgba(${r}, ${g}, ${b}, 0.4)`; // <-- opacity here
 };
 
+// Extract hex color from rgba string for shadow
+const getHexFromRgba = (rgba: string): string => {
+  const match = rgba.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+  if (match) {
+    const r = parseInt(match[1]).toString(16).padStart(2, '0');
+    const g = parseInt(match[2]).toString(16).padStart(2, '0');
+    const b = parseInt(match[3]).toString(16).padStart(2, '0');
+    return `#${r}${g}${b}`;
+  }
+  return '#000000'; // fallback
+};
+
 export const CardTile: React.FC<Props> = ({ title, price, style, intensity, image, onPress }) => {
   const { t } = useTranslation();
 
   const randomBorderColor = useMemo(() => generateRandomColor(), []);
+  const shadowColor = useMemo(() => getHexFromRgba(randomBorderColor), [randomBorderColor]);
 
   const imageSource = image && image !== '/images/default.jpg'
     ? { uri: 'http://api.go2winbet.online' + image }
@@ -60,17 +73,27 @@ export const CardTile: React.FC<Props> = ({ title, price, style, intensity, imag
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[styles.tile, { borderColor: randomBorderColor, ...style }]}
+      style={[
+        styles.tile, 
+        { 
+          borderColor: randomBorderColor,
+          shadowColor: shadowColor,
+          ...style 
+        }
+      ]}
       activeOpacity={0.8}
     >
       {image ? (
-        <View style={{ flex: 1, justifyContent: 'space-between' }}><View style={{  height: '75%', width: '80%', alignSelf: 'center',borderRadius:16,overflow:'hidden', }}><Image
-          source={imageSource}
-          style={styles.imageBackground}
-          // imageStyle={styles.imageStyle}
-          defaultSource={require('../assets/images/flowImage.jpg')}
-          resizeMode="cover"
-        /></View>
+        <View style={{ flex: 1, justifyContent: 'space-between', overflow: 'hidden', borderRadius: 16 }}>
+          <View style={{ height: '75%', width: '80%', alignSelf: 'center', borderRadius: 16, overflow: 'hidden' }}>
+            <Image
+              source={imageSource}
+              style={styles.imageBackground}
+              // imageStyle={styles.imageStyle}
+              defaultSource={require('../assets/images/flowImage.jpg')}
+              resizeMode="cover"
+            />
+          </View>
           <View style={styles.overlay} />
           {content}
         </View>
@@ -88,13 +111,21 @@ const styles = StyleSheet.create({
     minWidth: 145,
     borderWidth: 1,
     borderRadius: 16,
-    overflow: 'hidden',
     marginBottom: 12,
   //  padding:9,
     width: '48%',
     height: 280,
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    padding:9
+    padding:9,
+    // Shadow properties for iOS
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    // Shadow property for Android
+    elevation: 8,
   },
   imageBackground: {
     flex: 1,
